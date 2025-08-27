@@ -22,6 +22,9 @@
 
     <!-- Icons css -->
     <link href="{{ asset('backend') }}/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('backend') }}/assets/css/toastr.css" rel="stylesheet" type="text/css" />
+
+    @stack('styles')
 </head>
 
 <body>
@@ -79,6 +82,28 @@
 
     <!-- Projects Analytics Dashboard App js -->
     <script src="{{ asset('backend') }}/assets/js/pages/dashboard-sales.js"></script>
+    <script src="{{ asset('backend') }}/assets/js/toastr.min.js"></script>
+
+
+    <script>
+        @if (session('success'))
+            toastr.success("{{ session('success') }}");
+        @endif
+
+        @if (session('error'))
+            toastr.error("{{ session('error') }}");
+        @endif
+
+        @if (session('warning'))
+            toastr.warning("{{ session('warning') }}");
+        @endif
+
+        @if (session('info'))
+            toastr.info("{{ session('info') }}");
+        @endif
+    </script>
+
+    @stack('scripts')
 
 </body>
 
