@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CostController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\CostCategoryController;
+use App\Http\Controllers\Admin\FieldOfCostController;
 
 Route::get('/', [App\Http\Controllers\Admin\AdminLoginPageController::class, 'index'])->name('admin.login');
 
@@ -24,6 +25,17 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::delete('/{id}', 'destroy')->name('destroy');
     });
 
+        // Field of Cost Management
+    Route::controller(FieldOfCostController::class)->prefix('field-of-cost')->name('field-of-cost.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/', 'store')->name('store');
+        Route::get('/{id}/edit', 'edit')->name('edit');
+        Route::put('/{id}', 'update')->name('update');
+        Route::delete('/{id}', 'destroy')->name('destroy');
+        
+    });
+
     // Cost Management
     Route::controller(CostController::class)->prefix('cost')->name('cost.')->group(function () {
         Route::get('/', 'index')->name('index');
@@ -34,6 +46,8 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::delete('/{id}', 'destroy')->name('destroy');
         
     });
+
+
 
 });     
 

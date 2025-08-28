@@ -141,7 +141,7 @@
                             </a>
                         </li>
                         <li class="side-nav-item">
-                            <a href="apps-cost-field-of-cost.html" class="side-nav-link">
+                            <a href="{{ route('admin.field-of-cost.index') }}" class="side-nav-link">
                                 <span class="menu-text">Field Of Cost</span>
                             </a>
                         </li>

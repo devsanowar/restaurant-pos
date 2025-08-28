@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Cost Category')
+@section('title', 'Field Of Cost')
 @push('styles')
     <link rel="stylesheet" href="{{ asset('backend') }}/assets/css/sweetalert2.min.css">
 @endpush
@@ -8,7 +8,7 @@
         <div class="page-container">
             <div class="page-title-head d-flex align-items-sm-center flex-sm-row flex-column gap-2">
                 <div class="flex-grow-1">
-                    <h4 class="fs-18 fw-semibold mb-0">Cost Categories</h4>
+                    <h4 class="fs-18 fw-semibold mb-0">Field Of Costs</h4>
                 </div>
 
                 <div class="text-end">
@@ -17,7 +17,7 @@
 
                         <li class="breadcrumb-item"><a href="javascript: void(0);">Restaurant POS</a></li>
 
-                        <li class="breadcrumb-item active">Cost Categories</li>
+                        <li class="breadcrumb-item active">Fiel of costs</li>
                     </ol>
                 </div>
             </div>
@@ -28,11 +28,11 @@
                         <!-- Header -->
                         <div
                             class="card-header d-flex align-items-center justify-content-between border-bottom border-light">
-                            <h4 class="header-title mb-0">Category List</h4>
+                            <h4 class="header-title mb-0">Field Of Cost List</h4>
                             <div>
                                 <a href="javascript:void(0)" class="btn btn-success bg-gradient" data-bs-toggle="modal"
-                                    data-bs-target="#addCategoryModal">
-                                    <i class="ti ti-plus me-1"></i> Add Category
+                                    data-bs-target="#addFieldOfCostModal">
+                                    <i class="ti ti-plus me-1"></i>Add Field Of Cost
                                 </a>
 
                                 <a href="#" class="btn btn-secondary bg-gradient">
@@ -50,23 +50,23 @@
                                             <input type="checkbox" class="form-check-input" id="selectAll">
                                         </th>
                                         <th>S/N</th>
-                                        <th>Category Name</th>
+                                        <th>Field Name</th>
                                         <th>Status</th>
                                         <th class="text-center" style="width: 120px;">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- Category Row -->
-                                    @forelse ($categories as $key => $category)
-                                        <tr id="category-row-{{ $category->id }}">
+                                    <!-- Field Of Cost Row -->
+                                    @forelse ($fieldOfCosts as $key => $fieldOfCost)
+                                        <tr id="fieldOfCost-row-{{ $fieldOfCost->id }}">
                                             <td class="ps-3"><input type="checkbox" class="form-check-input"></td>
                                             <td>{{ $key + 1 }}</td>
                                             <td>
                                                 <span
-                                                    class="text-dark fw-medium">{{ $category->category_name ?? '' }}</span>
+                                                    class="text-dark fw-medium">{{ $fieldOfCost->field_name ?? '' }}</span>
                                             </td>
                                             <td>
-                                                @if ($category->is_active == 0)
+                                                @if ($fieldOfCost->is_active == 0)
                                                     <span class="badge bg-danger">Deactive</span>
                                                 @else
                                                     <span class="badge bg-success">Active</span>
@@ -77,21 +77,21 @@
 
 
                                                     <a href="javascript:void(0);"
-                                                        class="btn btn-soft-success btn-icon btn-sm rounded-circle editCategoryBtn"
-                                                        data-id="{{ $category->id }}" title="Edit">
+                                                        class="btn btn-soft-success btn-icon btn-sm rounded-circle editFieldOfCostBtn"
+                                                        data-id="{{ $fieldOfCost->id }}" title="Edit">
                                                         <i class="ti ti-edit fs-16"></i>
                                                     </a>
 
 
                                                     <form class="deleteFounder d-inline-block" method="POST"
-                                                        action="{{ route('admin.cost-category.destroy', $category->id) }}">
+                                                        action="{{ route('admin.field-of-cost.destroy', $fieldOfCost->id) }}">
                                                         @csrf
                                                         @method('DELETE')
 
                                                         <button type="submit"
                                                             class="btn btn-soft-danger btn-icon btn-sm rounded-circle show_confirm"
                                                             title="Delete"
-                                                            data-id="{{ $category->id }}">
+                                                            data-id="{{ $fieldOfCost->id }}">
                                                             <i class="ti ti-trash"></i>
                                                         </button>
                                                     </form>
@@ -103,7 +103,7 @@
                                     @empty
 
                                         <tr>
-                                            <td colspan="4" class="text-center text-danger">No Category Found</td>
+                                            <td colspan="4" class="text-center text-danger">No Field Of Cost Found</td>
                                         </tr>
                                     @endforelse
 
@@ -113,7 +113,7 @@
 
                         <div class="card-footer">
                             <div class="d-flex justify-content-end">
-                                {!! $categories->links() !!}
+                                {!! $fieldOfCosts->links() !!}
                             </div>
                         </div>
 
@@ -121,7 +121,7 @@
                 </div>
             </div>
 
-            @include('admin.layouts.pages.cost.cost-category.modal')
+            @include('admin.layouts.pages.cost.field-of-cost.modal')
 
         </div>
     </div>
@@ -132,45 +132,45 @@
     <script>
         $(document).ready(function() {
             // Handle click on edit button
-            $('.editCategoryBtn').on('click', function() {
-                var categoryId = $(this).data('id');
+            $('.editFieldOfCostBtn').on('click', function() {
+                var fieldOfCostId = $(this).data('id');
 
-                // Send AJAX request to get category data
+                // Send AJAX request to get field of cost data
                 $.ajax({
-                    url: '/admin/cost-category/' + categoryId + '/edit',
+                    url: '/admin/field-of-cost/' + fieldOfCostId + '/edit',
                     type: 'GET',
                     success: function(response) {
                         // Update modal title
-                        $('#addCategoryModalLabel').text('Edit Category');
+                        $('#addFieldOfCostModalLabel').text('Edit Field Of Cost');
 
                         // Fill form inputs
-                        $('#categoryName').val(response.category_name);
+                        $('#fieldName').val(response.field_name);
                         $('#is_active').val(response.is_active);
 
                         // Change form action to update route
-                        $('#categoryForm').attr('action', '/admin/cost-category/' + categoryId);
+                        $('#fieldOfCostForm').attr('action', '/admin/field-of-cost/' + fieldOfCostId);
 
                         // Add hidden input for method spoofing (PUT)
-                        if ($('#categoryForm input[name="_method"]').length === 0) {
-                            $('#categoryForm').append(
+                        if ($('#fieldOfCostForm input[name="_method"]').length === 0) {
+                            $('#fieldOfCostForm').append(
                                 '<input type="hidden" name="_method" value="PUT">');
                         }
 
                         // Show the modal
-                        $('#addCategoryModal').modal('show');
+                        $('#addFieldOfCostModal').modal('show');
                     },
                     error: function(xhr) {
-                        alert('Something went wrong while fetching the category.');
+                        alert('Something went wrong while fetching the Field of cost data.');
                     }
                 });
             });
 
             // Optional: Reset form on modal close
-            $('#addCategoryModal').on('hidden.bs.modal', function() {
-                $('#addCategoryModalLabel').text('Add New Category');
-                $('#categoryForm').trigger('reset');
-                $('#categoryForm').attr('action', '{{ route('admin.cost-category.store') }}');
-                $('#categoryForm input[name="_method"]').remove();
+            $('#addFieldOfCostModal').on('hidden.bs.modal', function() {
+                $('#addFieldOfCostModalLabel').text('Add New Field Of Cost');
+                $('#fieldOfCostForm').trigger('reset');
+                $('#fieldOfCostForm').attr('action', '{{ route('admin.field-of-cost.store') }}');
+                $('#fieldOfCostForm input[name="_method"]').remove();
             });
         });
 
@@ -182,7 +182,7 @@
 
             let button = $(this);
             let form = button.closest('form');
-            let categoryId = button.data('id');
+            let fieldOfCostId = button.data('id');
             let actionUrl = form.attr('action');
 
             Swal.fire({
