@@ -146,7 +146,7 @@
                             </a>
                         </li>
                         <li class="side-nav-item">
-                            <a href="apps-cost-all-cost.html" class="side-nav-link">
+                            <a href="{{ route('admin.cost.index') }}" class="side-nav-link">
                                 <span class="menu-text">All Cost</span>
                             </a>
                         </li>
