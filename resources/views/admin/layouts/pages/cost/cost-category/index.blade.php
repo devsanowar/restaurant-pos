@@ -1,5 +1,8 @@
 @extends('admin.layouts.app')
 @section('title', 'Add Category')
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('backend') }}/assets/css/sweetalert2.min.css">
+@endpush
 @section('admin_content')
     <div class="page-content">
         <div class="page-container">
@@ -55,36 +58,45 @@
                                 <tbody>
                                     <!-- Category Row -->
                                     @forelse ($categories as $key => $category)
-                                        <tr>
+                                        <tr id="category-row-{{ $category->id }}">
                                             <td class="ps-3"><input type="checkbox" class="form-check-input"></td>
-                                            <td>{{ $key+1 }}</td>
+                                            <td>{{ $key + 1 }}</td>
                                             <td>
-                                                <span class="text-dark fw-medium">{{ $category->category_name ?? '' }}</span>
+                                                <span
+                                                    class="text-dark fw-medium">{{ $category->category_name ?? '' }}</span>
                                             </td>
                                             <td>
-                                                @if ($category->is_active == 0) 
+                                                @if ($category->is_active == 0)
                                                     <span class="badge bg-danger">Deactive</span>
-                                                @else 
+                                                @else
                                                     <span class="badge bg-success">Active</span>
                                                 @endif
                                             </td>
                                             <td class="pe-3">
                                                 <div class="hstack gap-1 justify-content-end">
+
+
                                                     <a href="javascript:void(0);"
-                                                        class="btn btn-soft-primary btn-icon btn-sm rounded-circle"
-                                                        title="View">
-                                                        <i class="ti ti-eye"></i>
-                                                    </a>
-                                                    <a href="javascript:void(0);"
-                                                        class="btn btn-soft-success btn-icon btn-sm rounded-circle"
-                                                        title="Edit">
+                                                        class="btn btn-soft-success btn-icon btn-sm rounded-circle editCategoryBtn"
+                                                        data-id="{{ $category->id }}" title="Edit">
                                                         <i class="ti ti-edit fs-16"></i>
                                                     </a>
-                                                    <a href="javascript:void(0);"
-                                                        class="btn btn-soft-danger btn-icon btn-sm rounded-circle"
-                                                        title="Delete">
-                                                        <i class="ti ti-trash"></i>
-                                                    </a>
+
+
+                                                    <form class="deleteFounder d-inline-block" method="POST"
+                                                        action="{{ route('admin.cost-category.destroy', $category->id) }}">
+                                                        @csrf
+                                                        @method('DELETE')
+
+                                                        <button type="submit"
+                                                            class="btn btn-soft-danger btn-icon btn-sm rounded-circle show_confirm"
+                                                            title="Delete"
+                                                            data-id="{{ $category->id }}">
+                                                            <i class="ti ti-trash"></i>
+                                                        </button>
+                                                    </form>
+
+
                                                 </div>
                                             </td>
                                         </tr>
@@ -99,35 +111,111 @@
                             </table>
                         </div>
 
-                        <!-- Pagination -->
                         <div class="card-footer">
                             <div class="d-flex justify-content-end">
-                                <ul class="pagination mb-0">
-                                    <li class="page-item disabled">
-                                        <a href="#" class="page-link"><i class="ti ti-chevrons-left"></i></a>
-                                    </li>
-                                    <li class="page-item active">
-                                        <a href="#" class="page-link">1</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a href="#" class="page-link">2</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a href="#" class="page-link"><i class="ti ti-chevrons-right"></i></a>
-                                    </li>
-                                </ul>
+                                {!! $categories->links() !!}
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
 
-            @include('admin.layouts.pages.cost.cost-category.create')
+            @include('admin.layouts.pages.cost.cost-category.modal')
 
         </div>
     </div>
 @endsection
 
 @push('scripts')
-    <script></script>
+    <script src="{{ asset('backend') }}/assets/js/sweetalert2.all.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Handle click on edit button
+            $('.editCategoryBtn').on('click', function() {
+                var categoryId = $(this).data('id');
+
+                // Send AJAX request to get category data
+                $.ajax({
+                    url: '/admin/cost-category/' + categoryId + '/edit',
+                    type: 'GET',
+                    success: function(response) {
+                        // Update modal title
+                        $('#addCategoryModalLabel').text('Edit Category');
+
+                        // Fill form inputs
+                        $('#categoryName').val(response.category_name);
+                        $('#is_active').val(response.is_active);
+
+                        // Change form action to update route
+                        $('#categoryForm').attr('action', '/admin/cost-category/' + categoryId);
+
+                        // Add hidden input for method spoofing (PUT)
+                        if ($('#categoryForm input[name="_method"]').length === 0) {
+                            $('#categoryForm').append(
+                                '<input type="hidden" name="_method" value="PUT">');
+                        }
+
+                        // Show the modal
+                        $('#addCategoryModal').modal('show');
+                    },
+                    error: function(xhr) {
+                        alert('Something went wrong while fetching the category.');
+                    }
+                });
+            });
+
+            // Optional: Reset form on modal close
+            $('#addCategoryModal').on('hidden.bs.modal', function() {
+                $('#addCategoryModalLabel').text('Add New Category');
+                $('#categoryForm').trigger('reset');
+                $('#categoryForm').attr('action', '{{ route('admin.cost-category.store') }}');
+                $('#categoryForm input[name="_method"]').remove();
+            });
+        });
+
+
+        // Delete with ajax
+    $(document).ready(function () {
+        $('.show_confirm').on('click', function (e) {
+            e.preventDefault();
+
+            let button = $(this);
+            let form = button.closest('form');
+            let categoryId = button.data('id');
+            let actionUrl = form.attr('action');
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "This action cannot be undone!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: actionUrl,
+                        type: 'POST',
+                        data: {
+                            _token: form.find('input[name="_token"]').val(),
+                            _method: 'DELETE',
+                        },
+                        success: function (response) {
+                            toastr.success(response.message || 'Deleted successfully!');
+                            // Row remove (assuming the button is inside a <tr>)
+                            form.closest('tr').remove();
+                        },
+                        error: function (xhr) {
+                            toastr.error(xhr.responseJSON?.message || 'Something went wrong!');
+                        }
+                    });
+                }
+            });
+        });
+    });
+
+
+    </script>
 @endpush

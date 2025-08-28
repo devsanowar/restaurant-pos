@@ -10,11 +10,9 @@ class CostCategoryController extends Controller
 {
     public function index()
     {
-        $categories = CostCategory::latest()->get();
+        $categories = CostCategory::latest()->paginate(20);
         return view('admin.layouts.pages.cost.cost-category.index', compact('categories'));
     }
-
-
 
     public function store(Request $request)
     {
@@ -30,16 +28,32 @@ class CostCategoryController extends Controller
 
     public function edit($id)
     {
-        // Logic to show form for editing an existing cost category
+        $category = CostCategory::findOrFail($id);
+        return response()->json($category);
     }
 
     public function update(Request $request, $id)
     {
-        // Logic to update an existing cost category
+        $request->validate([
+            'category_name' => 'required|string|max:255',
+            'is_active' => 'required|boolean',
+        ]);
+
+        $category = CostCategory::findOrFail($id);
+        $category->update($request->only('category_name', 'is_active'));
+
+        return redirect()->back()->with('success', 'Category updated successfully.');
     }
 
     public function destroy($id)
     {
-        // Logic to delete an existing cost category
-    }   
+        $category = CostCategory::findOrFail($id);
+        $category->delete();
+
+        if (request()->ajax()) {
+            return response()->json(['message' => 'Category deleted successfully.']);
+        }
+
+        return redirect()->back()->with('success', 'Category deleted.');
+    }
 }

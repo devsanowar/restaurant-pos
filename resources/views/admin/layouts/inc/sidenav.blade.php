@@ -136,7 +136,7 @@
                 <div class="collapse" id="sidebarInvoice">
                     <ul class="sub-menu">
                         <li class="side-nav-item">
-                            <a href="apps-cost-category.html" class="side-nav-link">
+                            <a href="{{ route('admin.cost-category.index') }}" class="side-nav-link">
                                 <span class="menu-text">Cost Category</span>
                             </a>
                         </li>
