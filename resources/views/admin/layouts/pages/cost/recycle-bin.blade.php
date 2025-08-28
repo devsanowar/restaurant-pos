@@ -28,8 +28,8 @@
                         <div
                             class="card-header d-flex align-items-center justify-content-between border-bottom border-light">
                             <h4 class="header-title mb-0">Deleted Cost List <span>
-                                    <a href="#" class="btn btn-danger bg-gradient">
-                                        <i class="ti ti-delete me-1"></i> Recycle Bin
+                                    <a href="{{ route('admin.cost.index') }}" class="btn btn-danger bg-gradient">
+                                        <i class="ti ti-delete me-1"></i> All Cost
                                     </a>
                                 </span>
                             </h4>
@@ -93,7 +93,7 @@
 
                                                     <!-- Delete -->
                                                     <form class="deleteCost d-inline-block" method="POST"
-                                                        action="{{ route('admin.cost.destroy', $cost->id) }}">
+                                                        action="{{ route('admin.cost.destroy-data', $cost->id) }}">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit"

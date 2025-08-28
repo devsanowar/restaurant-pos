@@ -44,7 +44,6 @@ class CostController extends Controller
         return response()->json($cost);
     }
 
-
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -87,7 +86,17 @@ class CostController extends Controller
     {
         $categories = CostCategory::select(['id', 'category_name'])->get();
         $fields = FieldOfCost::select(['id', 'field_name'])->get();
-        $costs = Cost::with(['category:id,category_name', 'field:id,field_name'])->onlyTrashed()->get();
-        return view('admin.layouts.pages.cost.recycle-bin', compact('costs','categories','fields'));
+        $costs = Cost::with(['category:id,category_name', 'field:id,field_name'])
+            ->onlyTrashed()
+            ->get();
+        return view('admin.layouts.pages.cost.recycle-bin', compact('costs', 'categories', 'fields'));
+    }
+
+    public function forceDeleteData($id)
+    {
+        $cost = Cost::withTrashed()->where('id', $id)->first();
+        $cost->forceDelete();
+
+        return redirect()->back()->with('success', 'Cost permanently deleted.');
     }
 }
