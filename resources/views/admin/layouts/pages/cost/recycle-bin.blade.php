@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Field Of Cost')
+@section('title', 'All Cost - Recycle Bin')
 @push('styles')
     <link rel="stylesheet" href="{{ asset('backend') }}/assets/css/sweetalert2.min.css">
 @endpush
@@ -8,7 +8,7 @@
         <div class="page-container">
             <div class="page-title-head d-flex align-items-sm-center flex-sm-row flex-column gap-2">
                 <div class="flex-grow-1">
-                    <h4 class="fs-18 fw-semibold mb-0">Field Of Costs</h4>
+                    <h4 class="fs-18 fw-semibold mb-0"> Cost - Recycle bin </h4>
                 </div>
 
                 <div class="text-end">
@@ -27,18 +27,13 @@
                         <!-- Header -->
                         <div
                             class="card-header d-flex align-items-center justify-content-between border-bottom border-light">
-                            <h4 class="header-title mb-0">All Cost List <span><a href="{{ route('admin.cost.deleted-data') }}" class="btn btn-danger bg-gradient">
-                                <i class="ti ti-delete me-1"></i> Recycle Bin
-                            </a></span></h4>
-                            <div>
-                                <!-- Add Cost Button -->
-                                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                                    data-bs-target="#addCostModal">
-                                    <i class="ti ti-plus me-1"></i> Add Cost
-                                </button>
-                                
-                            </div>
-                            
+                            <h4 class="header-title mb-0">Deleted Cost List <span>
+                                    <a href="#" class="btn btn-danger bg-gradient">
+                                        <i class="ti ti-delete me-1"></i> Recycle Bin
+                                    </a>
+                                </span>
+                            </h4>
+
                         </div>
 
                         <!-- Table -->
@@ -95,20 +90,6 @@
                                             <td class="pe-3">
                                                 <div class="hstack gap-1 justify-content-end">
                                                     <!-- Edit -->
-                                                    <a href="javascript:void(0);"
-                                                        class="btn btn-soft-success btn-icon btn-sm rounded-circle editCostBtn"
-                                                        data-id="{{ $cost->id }}"
-                                                        data-date="{{ \Carbon\Carbon::parse($cost->date)->format('Y-m-d') }}"
-                                                        data-category="{{ $cost->category_id }}"
-                                                        data-field="{{ $cost->field_id }}"
-                                                        data-branch="{{ $cost->branch_name }}"
-                                                        data-amount="{{ $cost->amount }}"
-                                                        data-spend="{{ $cost->spend_by }}"
-                                                        data-description="{{ $cost->description }}" title="Edit">
-                                                        <i class="ti ti-edit fs-16"></i>
-                                                    </a>
-
-
 
                                                     <!-- Delete -->
                                                     <form class="deleteCost d-inline-block" method="POST"
@@ -135,11 +116,11 @@
                         </div>
 
                         <!-- Pagination -->
-                        <div class="card-footer">
+                        {{-- <div class="card-footer">
                             <div class="d-flex justify-content-end">
                                 {!! $costs->links() !!}
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>
@@ -154,28 +135,6 @@
 
 @push('scripts')
     <script src="{{ asset('backend') }}/assets/js/sweetalert2.all.min.js"></script>
-
-
-    <script>
-        $(document).on('click', '.editCostBtn', function() {
-            let id = $(this).data('id');
-            $('#edit_cost_id').val(id);
-
-            // set form action dynamically
-            $('#editCostForm').attr('action', '/admin/cost/' + id);
-
-            // fill other fields
-            $('#edit_date').val($(this).data('date')); // YYYY-MM-DD
-            $('#edit_category_id').val($(this).data('category'));
-            $('#edit_field_id').val($(this).data('field'));
-            $('#edit_branch_name').val($(this).data('branch'));
-            $('#edit_amount').val($(this).data('amount'));
-            $('#edit_spend_by').val($(this).data('spend'));
-            $('#edit_description').val($(this).data('description'));
-
-            $('#editCostModal').modal('show');
-        });
-    </script>
 
 
 

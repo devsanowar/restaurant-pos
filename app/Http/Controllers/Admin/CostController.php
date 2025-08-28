@@ -82,4 +82,12 @@ class CostController extends Controller
             'message' => 'Cost deleted successfully!',
         ]);
     }
+
+    public function trashedData()
+    {
+        $categories = CostCategory::select(['id', 'category_name'])->get();
+        $fields = FieldOfCost::select(['id', 'field_name'])->get();
+        $costs = Cost::with(['category:id,category_name', 'field:id,field_name'])->onlyTrashed()->get();
+        return view('admin.layouts.pages.cost.recycle-bin', compact('costs','categories','fields'));
+    }
 }
