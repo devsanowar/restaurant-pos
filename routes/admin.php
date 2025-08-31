@@ -3,18 +3,25 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CostController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminSettingController;
 use App\Http\Controllers\Admin\CostCategoryController;
 use App\Http\Controllers\Admin\FieldOfCostController;
 
 Route::get('/', [App\Http\Controllers\Admin\AdminLoginPageController::class, 'index'])->name('admin.login');
 
-
-
 Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
+
     
     // Admin Dashboard
     Route::get('dashboard', [AdminDashboardController::class, 'index'])
         ->name('dashboard');
+
+    //Admin Settings
+    Route::controller(AdminSettingController::class)->prefix('profile')->name('profile.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/change-password',  'changePassword')->name('password.change');
+        Route::post('/image/update',  'updateImage')->name('image.update');
+    });
 
     // Cost Category Management
     Route::controller(CostCategoryController::class)->prefix('cost-category')->name('cost-category.')->group(function () {
