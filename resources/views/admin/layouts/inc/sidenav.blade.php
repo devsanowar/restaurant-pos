@@ -183,11 +183,28 @@
             </li>
             <!-- SMS-->
             <li class="side-nav-item">
-                <a href="apps-sms.html" class="side-nav-link">
+                <a data-bs-toggle="collapse" href="#smsApiSetting" aria-expanded="false" aria-controls="smsApiSetting"
+                    class="side-nav-link">
                     <span class="menu-icon"><i class="ti ti-message"></i></span>
-                    <span class="menu-text"> SMS </span>
+                    <span class="menu-text"> SMS</span>
+                    <span class="menu-arrow"></span>
                 </a>
+                <div class="collapse" id="smsApiSetting">
+                    <ul class="sub-menu">
+                        <li class="side-nav-item">
+                            <a href="{{ route('admin.sms-api.settings.index') }}" class="side-nav-link">
+                                <span class="menu-text">SMS Api Settings</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="apps-prodcut-add-new.html" class="side-nav-link">
+                                <span class="menu-text">SMS</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </li>
+
             <!-- User Management-->
             <li class="side-nav-item">
                 <a href="apps-user-management.html" class="side-nav-link">

@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminSettingController;
 use App\Http\Controllers\Admin\CostCategoryController;
 use App\Http\Controllers\Admin\FieldOfCostController;
+use App\Http\Controllers\Admin\SmsApiSettingsController;
 
 Route::get('/', [App\Http\Controllers\Admin\AdminLoginPageController::class, 'index'])->name('admin.login');
 
@@ -21,6 +22,12 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::get('/', 'index')->name('index');
         Route::post('/change-password',  'changePassword')->name('password.change');
         Route::post('/image/update',  'updateImage')->name('image.update');
+    });
+
+    // SMS Api Settings Management
+    Route::controller(SmsApiSettingsController::class)->prefix('sms-api-settings')->name('sms-api.settings.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::put('/update', 'update')->name('update');
     });
 
     // Cost Category Management
