@@ -117,6 +117,13 @@
 
 
                                 <div class="col-md-12">
+                                    <label for="total_sms" class="form-label">SMS balance</label>
+                                    <input type="number" class="form-control" id="total_sms" name="total_sms"
+                                        placeholder="Enter total sms" value="{{ $smsApiSetting->total_sms ?? '' }}">
+                                </div>
+
+
+                                <div class="col-md-12">
                                     <label for="active_status" class="form-label">Status</label>
                                     <select class="form-select" id="active_status" name="status">
                                         <option value="1"

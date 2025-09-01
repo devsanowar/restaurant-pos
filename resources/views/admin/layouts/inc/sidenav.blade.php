@@ -29,7 +29,7 @@
             <li class="side-nav-title">Dash</li>
 
             <li class="side-nav-item">
-                <a href="index.html" class="side-nav-link">
+                <a href="{{ route('admin.dashboard') }}" class="side-nav-link">
                     <span class="menu-icon"><i class="ti ti-dashboard"></i></span>
                     <span class="menu-text"> Dashboard </span>
                     <span class="badge bg-success rounded-pill">5</span>
@@ -85,7 +85,7 @@
             </li>
             <!-- Supplier -->
             <li class="side-nav-item">
-                <a href="apps-supplier.html" class="side-nav-link">
+                <a href="{{ route('admin.supplier.index') }}" class="side-nav-link">
                     <span class="menu-icon"><i class="ti ti-message"></i></span>
                     <span class="menu-text"> Supplier </span>
                 </a>
@@ -197,8 +197,14 @@
                             </a>
                         </li>
                         <li class="side-nav-item">
-                            <a href="apps-prodcut-add-new.html" class="side-nav-link">
-                                <span class="menu-text">SMS</span>
+                            <a href="{{ route('admin.send.custom.sms') }}" class="side-nav-link">
+                                <span class="menu-text">Send Custom SMS</span>
+                            </a>
+                        </li>
+                        
+                        <li class="side-nav-item">
+                            <a href="{{ route('admin.sms.index') }}" class="side-nav-link">
+                                <span class="menu-text">SMS Report</span>
                             </a>
                         </li>
                     </ul>

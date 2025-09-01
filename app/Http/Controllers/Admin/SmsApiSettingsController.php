@@ -20,8 +20,8 @@ class SmsApiSettingsController extends Controller
             'api_key' => 'required|string|max:255',
             'api_secret' => 'nullable|string|max:255',
             'sender_id' => 'nullable|string|max:100',
-            'request_type' => 'required|in:GET,POST',
             'message_type' => 'required|in:TEXT,UNICODE,FLASH,WAPPUSH',
+            'total_sms' => 'nullable|string',
             'default_message' => 'nullable|string',
             'status' => 'required|boolean',
         ]);
@@ -37,8 +37,8 @@ class SmsApiSettingsController extends Controller
         $smsApiSetting->api_key = $request->api_key;
         $smsApiSetting->api_secret = $request->api_secret;
         $smsApiSetting->sender_id = $request->sender_id;
-        $smsApiSetting->request_type = $request->request_type;
         $smsApiSetting->message_type = $request->message_type;
+        $smsApiSetting->total_sms = $request->total_sms;
         $smsApiSetting->default_message = $request->default_message;
         $smsApiSetting->status = $request->status;
         $smsApiSetting->save();

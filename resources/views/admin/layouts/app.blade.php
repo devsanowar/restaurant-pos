@@ -71,7 +71,8 @@
     </div>
     <!-- END wrapper -->
 
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+        <!-- Vendor js -->
+    <script src="{{ asset('backend') }}/assets/js/jquery-3.7.0.min.js"></script>
 
     <!-- Vendor js -->
     <script src="{{ asset('backend') }}/assets/js/vendor.min.js"></script>
