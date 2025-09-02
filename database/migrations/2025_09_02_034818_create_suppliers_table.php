@@ -19,8 +19,11 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->text('address')->nullable();
             $table->decimal('opening_balance', 15, 2)->default(0);
+            $table->decimal('current_balance', 10, 2)->default(0);
+            $table->enum('balance_type',['payable', 'receivable']);
             $table->tinyInteger('is_active')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
