@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\SmsController;
 use App\Http\Controllers\Admin\CostController;
 use App\Http\Controllers\Admin\SmsLogController;
+use App\Http\Controllers\Admin\WaiterController;
 use App\Http\Controllers\Admin\ResTableController;
 use App\Http\Controllers\Admin\SupplierController;
 use App\Http\Controllers\Admin\FieldOfCostController;
@@ -78,6 +79,16 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
 
     // Restaurant Table Management
     Route::controller(ResTableController::class)->prefix('res-table')->name('res-table.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/', 'store')->name('store');
+        Route::get('/{id}/edit', 'edit')->name('edit');
+        Route::put('/{id}', 'update')->name('update');
+        Route::delete('/{id}', 'destroy')->name('destroy');
+    });
+
+    // Waiter Management
+    Route::controller(WaiterController::class)->prefix('waiter')->name('waiter.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
         Route::post('/', 'store')->name('store');

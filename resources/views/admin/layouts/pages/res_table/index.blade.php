@@ -126,7 +126,11 @@
                         </div>
 
                         <!-- Pagination -->
-                        <!-- Pagination -->
+                        <div class="card-footer">
+                            <div class="d-flex justify-content-end">
+                                {!! $resTables->links() !!}
+                            </div>
+                        </div>
 
                     </div>
                 </div>

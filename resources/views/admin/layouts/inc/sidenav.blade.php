@@ -120,7 +120,7 @@
             </li>
             <!-- Waiter-->
             <li class="side-nav-item">
-                <a href="apps-waiter.html" class="side-nav-link">
+                <a href="{{ route('admin.waiter.index') }}" class="side-nav-link">
                     <span class="menu-icon"><i class="ti ti-message"></i></span>
                     <span class="menu-text"> Waiter </span>
                 </a>
