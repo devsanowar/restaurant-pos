@@ -1,5 +1,8 @@
 @extends('admin.layouts.app')
 @section('title', 'Supplier')
+@push('styles')
+    <link href="{{ asset('backend') }}/assets/css/sweetalert2.min.css" rel="stylesheet" type="text/css" />
+@endpush
 @section('admin_content')
     <div class="page-content">
 
@@ -80,7 +83,7 @@
                                 </thead>
                                 <tbody>
                                     @forelse ($suppliers as $supplier)
-                                        <tr>
+                                        <tr id="row_{{ $supplier->id }}">
                                             <td class="ps-3"><input type="checkbox" class="form-check-input"></td>
                                             <td>
                                                 {{ $loop->iteration }}
@@ -121,10 +124,11 @@
                                                     </a>
 
                                                     <a href="javascript:void(0);"
-                                                        class="btn btn-soft-danger btn-icon btn-sm rounded-circle"
-                                                        title="Delete">
+                                                        class="btn btn-soft-danger btn-icon btn-sm rounded-circle deleteBtn"
+                                                        data-id="{{ $supplier->id }}" title="Delete">
                                                         <i class="ti ti-trash"></i>
                                                     </a>
+
                                                 </div>
                                             </td>
                                         </tr>
@@ -183,38 +187,100 @@
 @endsection
 
 @push('scripts')
+    <script src="{{ asset('backend') }}/assets/js/sweetalert2.all.min.js"></script>
+
     <script>
-    $(document).on('click', '.editSupplierBtn', function() {
-        let supplierId = $(this).data('id');
+        $(document).on('click', '.deleteBtn', function() {
+            let id = $(this).data('id');
+            let url = "/admin/supplier/" + id;
 
-        // প্রথমে form clear করে দিচ্ছি
-        $('#editSupplierForm')[0].reset();
-        $('#edit_id').val('');
-        $('#editSupplierForm').attr('action', '#');
-
-        // Optionally একটি loading text দেখাতে পারেন
-        $('#edit_supplierName').val('Loading...');
-        
-        $.ajax({
-            url: "/admin/supplier/" + supplierId + "/edit",
-            type: "GET",
-            success: function(response) {
-                // Fill form fields with fresh data
-                $('#edit_id').val(response.id);
-                $('#edit_supplierName').val(response.supplier_name);
-                $('#edit_contactPerson').val(response.contact_person);
-                $('#edit_phone').val(response.phone);
-                $('#edit_email').val(response.email);
-                $('#edit_address').val(response.address);
-                $('#edit_opening_balance').val(response.opening_balance);
-                $('#edit_balance_type').val(response.balance_type).trigger('change');
-                $('#edit_is_active').val(response.is_active).trigger('change');
-
-                // Update form action URL
-                $('#editSupplierForm').attr('action', '/admin/supplier/' + response.id);
-            }
+            Swal.fire({
+                title: "Are you sure?",
+                text: "This record will be permanently deleted!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "Cancel",
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: url,
+                        type: "DELETE",
+                        data: {
+                            _token: "{{ csrf_token() }}"
+                        },
+                        success: function(response) {
+                            Swal.fire("Deleted!", response.message, "message");
+                            $("#row_" + id).remove();
+                            location.reload();
+                        },
+                        error: function(xhr) {
+                            Swal.fire("Error!", "Something went wrong.", "error");
+                        }
+                    });
+                }
+            });
         });
-    });
-</script>
+    </script>
 
+
+    <script>
+        $(document).ready(function() {
+            // Delete confirmation for dynamically loaded content
+            $(document).on('click', '.show_confirm', function(event) {
+                event.preventDefault();
+                let form = $(this).closest("form");
+
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, delete it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
+        $(document).on('click', '.editSupplierBtn', function() {
+            let supplierId = $(this).data('id');
+
+            // প্রথমে form clear করে দিচ্ছি
+            $('#editSupplierForm')[0].reset();
+            $('#edit_id').val('');
+            $('#editSupplierForm').attr('action', '#');
+
+            // Optionally একটি loading text দেখাতে পারেন
+            $('#edit_supplierName').val('Loading...');
+
+            $.ajax({
+                url: "/admin/supplier/" + supplierId + "/edit",
+                type: "GET",
+                success: function(response) {
+                    // Fill form fields with fresh data
+                    $('#edit_id').val(response.id);
+                    $('#edit_supplierName').val(response.supplier_name);
+                    $('#edit_contactPerson').val(response.contact_person);
+                    $('#edit_phone').val(response.phone);
+                    $('#edit_email').val(response.email);
+                    $('#edit_address').val(response.address);
+                    $('#edit_opening_balance').val(response.opening_balance);
+                    $('#edit_balance_type').val(response.balance_type).trigger('change');
+                    $('#edit_is_active').val(response.is_active).trigger('change');
+
+                    // Update form action URL
+                    $('#editSupplierForm').attr('action', '/admin/supplier/' + response.id);
+                }
+            });
+        });
+    </script>
 @endpush
