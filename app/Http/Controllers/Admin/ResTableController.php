@@ -45,7 +45,6 @@ class ResTableController extends Controller
 
     public function update(Request $request, $id)
     {
-
         $request->validate([
             'table_number' => ['required', Rule::unique('res_tables', 'table_number')->ignore($id, 'id')],
             'table_capacity' => 'required|integer|min:1',
@@ -62,22 +61,24 @@ class ResTableController extends Controller
     }
 
     public function destroy($id)
-{
-    $table = ResTable::find($id);
+    {
+        $table = ResTable::find($id);
 
-    if (!$table) {
+        if (!$table) {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => 'No Restaurant Table Found',
+                ],
+                404,
+            );
+        }
+
+        $table->delete();
+
         return response()->json([
-            'status' => 'error',
-            'message' => 'No Restaurant Table Found',
-        ], 404);
+            'status' => 'success',
+            'message' => 'Table deleted successfully.',
+        ]);
     }
-
-    $table->delete();
-
-    return response()->json([
-        'status' => 'success',
-        'message' => 'Table deleted successfully.',
-    ]);
-}
-
 }
