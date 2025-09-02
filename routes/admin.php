@@ -11,13 +11,13 @@ use App\Http\Controllers\Admin\FieldOfCostController;
 use App\Http\Controllers\Admin\AdminSettingController;
 use App\Http\Controllers\Admin\CostCategoryController;
 use App\Http\Controllers\Admin\AdminDashboardController;
-use App\Http\Controllers\Admin\SmsApiSettingsController;
+use App\Http\Controllers\Admin\SmsSettingController;
+use App\Http\Controllers\Admin\SmsReportController;
 
 Route::get('/', [App\Http\Controllers\Admin\AdminLoginPageController::class, 'index'])->name('admin.login');
 
 Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
 
-    
     // Admin Dashboard
     Route::get('dashboard', [AdminDashboardController::class, 'index'])
         ->name('dashboard');
@@ -28,7 +28,6 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::post('/change-password',  'changePassword')->name('password.change');
         Route::post('/image/update',  'updateImage')->name('image.update');
     });
-
 
     // Cost Category Management
     Route::controller(CostCategoryController::class)->prefix('cost-category')->name('cost-category.')->group(function () {
@@ -47,7 +46,6 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::get('/{id}/edit', 'edit')->name('edit');
         Route::put('/{id}', 'update')->name('update');
         Route::delete('/{id}', 'destroy')->name('destroy');
-        
     });
 
     // Cost Management
@@ -61,7 +59,6 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::get('/trashed-data', 'trashedData')->name('deleted-data');
         Route::delete('/permanantly-destroy-data/{id}', 'forceDeleteData')->name('destroy-data');
     });
-
 
     // Supplier Management
     Route::controller(SupplierController::class)->prefix('supplier')->name('supplier.')->group(function () {
@@ -97,27 +94,20 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::delete('/{id}', 'destroy')->name('destroy');
     });
 
+    // SMS Settings
+    Route::get('sms-settings', [SmsSettingController::class, 'edit'])->name('sms-settings.edit');
+    Route::put('sms-settings', [SmsSettingController::class, 'update'])->name('sms-settings.update');
 
-    // SMS Api Settings Management
-    Route::controller(SmsApiSettingsController::class)->prefix('sms-api-settings')->name('sms-api.settings.')->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::put('/update', 'update')->name('update');
+    Route::post('/send-message', [SmsController::class, 'send'])->name('send.message');
+    Route::get('/custom-sms', [SmsController::class, 'customSms'])->name('custom.sms');
+
+    // Sms Report
+    Route::prefix('sms-report')->group(function () {
+        Route::get('sms-report', [SmsReportController::class, 'index'])->name('sms-report.index');
+        Route::delete('destroy/{id}', [SmsReportController::class, 'destroy'])->name('sms-report.destroy');
     });
 
-    // Sms Management
-    Route::controller(SmsController::class)->prefix('sms')->group(function () {
-        Route::get('/', 'index')->name('sms.index');
-        Route::get('/custom', 'customeSms')->name('send.custom.sms');
-        Route::post('/send-custom-sms/send', 'sendCustomSms')->name('send.custom.sms.send');
-        Route::get('/sms-summary', 'getSmsSummary')->name('sms.summary');
-    });
-
-   
-    
-
-
-
-});     
+});
 
 
 

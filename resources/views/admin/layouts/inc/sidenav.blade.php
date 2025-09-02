@@ -36,7 +36,6 @@
                 </a>
             </li>
 
-
             <!-- Category -->
             <li class="side-nav-item">
                 <a data-bs-toggle="collapse" href="#posCategory" aria-expanded="false" aria-controls="posCategory"
@@ -192,19 +191,25 @@
                 <div class="collapse" id="smsApiSetting">
                     <ul class="sub-menu">
                         <li class="side-nav-item">
-                            <a href="{{ route('admin.sms-api.settings.index') }}" class="side-nav-link">
-                                <span class="menu-text">SMS Api Settings</span>
+                            <a href="{{ route('admin.sms-settings.edit') }}" class="side-nav-link">
+                                <span class="menu-text">Send SMS</span>
                             </a>
                         </li>
                         <li class="side-nav-item">
-                            <a href="{{ route('admin.send.custom.sms') }}" class="side-nav-link">
+                            <a href="{{ route('admin.custom.sms') }}" class="side-nav-link">
                                 <span class="menu-text">Send Custom SMS</span>
                             </a>
                         </li>
-                        
+
                         <li class="side-nav-item">
-                            <a href="{{ route('admin.sms.index') }}" class="side-nav-link">
+                            <a href="{{ route('admin.sms-report.index') }}" class="side-nav-link">
                                 <span class="menu-text">SMS Report</span>
+                            </a>
+                        </li>
+
+                        <li class="side-nav-item">
+                            <a href="{{ route('admin.sms-settings.edit') }}" class="side-nav-link">
+                                <span class="menu-text">SMS Settings</span>
                             </a>
                         </li>
                     </ul>
@@ -220,7 +225,7 @@
             </li>
             <!-- User Management-->
             <li class="side-nav-item">
-               
+
                 <form method="POST" action="{{ route('logout') }}" style="padding:10px 15px">
                     @csrf
 

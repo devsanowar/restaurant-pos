@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class SmsApiSetting extends Model
+class SmsSetting extends Model
 {
     protected $guarded = ['id'];
 }
