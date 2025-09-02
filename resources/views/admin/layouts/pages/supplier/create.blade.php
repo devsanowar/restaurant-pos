@@ -45,7 +45,7 @@
                         <div class="col-md-12">
                             <label for="opening_balance" class="form-label">Opening Balance</label>
                             <input type="number" class="form-control" name="opening_balance" id="opening_balance"
-                                placeholder="example@mail.com" required>
+                                placeholder="0.00" required>
                         </div>
 
 

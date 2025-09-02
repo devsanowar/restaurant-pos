@@ -17,7 +17,9 @@ class SupplierController extends Controller
             ->latest()
             ->simplePaginate(20);
 
-        return view('admin.layouts.pages.supplier.index', compact('suppliers'));
+        $deletedSupplierCount = Supplier::onlyTrashed()->count();
+
+        return view('admin.layouts.pages.supplier.index', compact('suppliers', 'deletedSupplierCount'));
     }
 
     public function create()
@@ -34,7 +36,7 @@ class SupplierController extends Controller
             'email' => $request->email,
             'address' => $request->address,
             'opening_balance' => $request->opening_balance ?? 0,
-            'current_balance' => $request->opening_balance ?? 0,
+            'current_balance' => $request->current_balance ?? 0,
             'balance_type' => $request->balance_type,
             'is_active' => $request->is_active,
         ]);
@@ -58,6 +60,7 @@ class SupplierController extends Controller
             'email' => $request->email,
             'address' => $request->address,
             'opening_balance' => $request->opening_balance,
+            'current_balance' => $request->current_balance ?? 0,
             'balance_type' => $request->balance_type,
             'is_active' => $request->is_active,
         ]);
@@ -68,12 +71,78 @@ class SupplierController extends Controller
     public function destroy($id)
     {
         $supplier = Supplier::findOrFail($id);
+        if (!$supplier) {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => 'No Supplier Found',
+                ],
+                404,
+            );
+        }
+
         $supplier->delete();
+
+        $deletedCount = Supplier::onlyTrashed()->count();
         return response()->json([
             'status' => 'success',
             'message' => 'Supplier deleted successfully.',
+            'deletedCount' => $deletedCount,
         ]);
     }
 
-    
+    public function trashedData()
+    {
+        $suppliers = Supplier::onlyTrashed()->get();
+        $deletedCount = $suppliers->count();
+        return view('admin.layouts.pages.supplier.trashed', compact('suppliers', 'deletedCount'));
+    }
+
+    public function restoreData(Request $request)
+    {
+        $supplier = Supplier::onlyTrashed()->where('id', $request->id)->first();
+
+        if ($supplier) {
+            $supplier->restore();
+
+            $deletedCount = Supplier::onlyTrashed()->count(); // restore করার পর নতুন count
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Supplier Restored Successfully.',
+                'deletedCount' => $deletedCount,
+            ]);
+        }
+
+        return response()->json(
+            [
+                'status' => 'error',
+                'message' => 'No Supplier Found',
+            ],
+            404,
+        );
+    }
+
+public function forceDelete($id)
+{
+    $supplier = Supplier::onlyTrashed()->where('id', $id)->first();
+
+    if ($supplier) {
+        $supplier->forceDelete();
+        $deletedCount = Supplier::onlyTrashed()->count();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Supplier permanently deleted!',
+            'deletedCount' => $deletedCount
+        ]);
+    }
+
+    return response()->json([
+        'status' => 'error',
+        'message' => 'Supplier not found'
+    ], 404);
+}
+
+
 }
