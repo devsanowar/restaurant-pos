@@ -2,12 +2,13 @@
 @section('title', __('Send Custom SMS'))
 @section('admin_content')
 
-
     @php
-        $sms = \App\Models\SmsApiSetting::first();
-        $total = $sms->total_sms;
-        $used = $sms->used_sms;
-        $remaining = $total - $used;
+        use App\Models\SmsLog;
+
+        $totalSms = config('sms.total_sms_limit');
+        $totalSendSms = SmsLog::sum('total_message');
+        $totalSentSms = SmsLog::where('delivery_report', 'success')->sum('total_message');
+        $remainingSms = max(0, $totalSms - $totalSentSms);
     @endphp
 
     <div class="page-content">
@@ -28,24 +29,29 @@
                 </div>
             </div>
 
-
             <div class="row">
                 <div class="col-xl-12 col-lg-12">
                     <div class="card">
                         <div class="card-body">
                             <h4 class="card-title mb-3">Send Custom Sms</h4>
+                            @if (session('success'))
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    {{ session('success') }}
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            @endif
                             <div class="border border-dashed bg-light bg-opacity-10 p-3 rounded">
                                 <div id="smsSummary" class="alert alert-info">
-                                    Total SMS: 0 | Sent: 0 | Remaining: 0
+                                    Total SMS: 2500 | Sent: <strong>{{ $totalSendSms }}</strong> | Remaining: <strong>{{ $remainingSms }}</strong>
                                 </div>
 
-                                {{-- <div id="smsSummary" class="mt-3 alert alert-info"></div> --}}
-
-                                <form id="customSmsForm" style="margin-bottom: 50px ">
+                                <form action="{{ route('admin.send.message') }}" method="POST" id="customSmsForm" style="margin-bottom: 50px ">
                                     @csrf
                                     <div class="mb-2">
-                                        <label for="phone_numbers" class="form-label">Phone Number(s)</label>
-                                        <textarea name="phone_numbers" class="form-control" rows="3" placeholder="017...,018..."></textarea>
+                                        <label for="mobile_numbers" class="form-label">Mobile Number(s)</label>
+                                        <textarea name="mobile_numbers" id="mobile_numbers" class="form-control" rows="3" placeholder="017...,018..."></textarea>
                                     </div>
 
                                     <div class="mb-2">
@@ -125,62 +131,60 @@
         }
     </script>
 
-   <script>
-    function loadSmsSummary() {
-        $.ajax({
-            url: "{{ route('admin.sms.summary') }}",
-            type: "GET",
-            success: function(response) {
-                $('#smsSummary').html(
-                    `Total SMS: ${response.total} | Sent: ${response.sent} | Remaining: ${response.remaining}`
-                );
-            }
-        });
-    }
+    <script>
+        $(document).ready(function() {
+            function updateCharacterCount() {
+                let message = $("#message").val();
+                let totalCharacters = message.length;
+                let totalMessages;
 
-    $(document).ready(function() {
-        loadSmsSummary();
+                // Check if the message contains non-ASCII characters (indicating UCS2 encoding)
+                let isUCS2 = /[^\x00-\x7F]/.test(message);  // Checks for non-ASCII characters
 
-        // SMS পাঠানোর form
-        $('#customSmsForm').on('submit', function(e) {
-            e.preventDefault();
+                if (isUCS2) {
+                    // UCS2 Encoding (63 characters per SMS)
+                    totalMessages = Math.ceil(totalCharacters / 63);
+                } else {
+                    // GSM-7 Encoding (160 characters per SMS)
+                    totalMessages = Math.ceil(totalCharacters / 160);
+                }
 
-            $.ajax({
-                url: "{{ route('admin.send.custom.sms.send') }}",
-                type: "POST",
-                data: $(this).serialize(),
-                success: function(response) {
-                    let resultDiv = $('#smsResult');
-                    resultDiv.html(`<div class="alert alert-success">${response.message}</div>`);
-                    $('#customSmsForm')[0].reset();
+                // Limit the message length to 1080 characters
+                if (totalCharacters > 1080) {
+                    alert("Maximum character limit exceeded!");
+                    $("#message").val(message.substring(0, 1080)); // Trim characters to 1080
+                    totalCharacters = 1080;
 
-                    setTimeout(() => {
-                        resultDiv.fadeOut('slow', function() {
-                            $(this).html('').show();
-                        });
-                    }, 3000);
-
-                    // Send করার পর summary refresh
-                    loadSmsSummary();
-                },
-                error: function(xhr) {
-                    if (xhr.status === 422) {
-                        let errors = xhr.responseJSON.errors;
-                        let errorMsg = '';
-                        $.each(errors, function(key, value) {
-                            errorMsg += `<div>${value[0]}</div>`;
-                        });
-                        $('#smsResult').html(`<div class="alert alert-danger">${errorMsg}</div>`);
-                        setTimeout(() => {
-                            $('#smsResult').fadeOut('slow', function() {
-                                $(this).html('').show();
-                            });
-                        }, 3000);
+                    // Recalculate the message parts based on UCS2 encoding (63 characters per part)
+                    if (isUCS2) {
+                        totalMessages = Math.ceil(totalCharacters / 63);
+                    } else {
+                        totalMessages = Math.ceil(totalCharacters / 160);
                     }
                 }
-            });
+
+                // Update character and message count in the UI
+                $("#total_characters").val(totalCharacters);
+                $("#total_messages").val(totalMessages);
+            }
+
+            function updateTotalNumbers() {
+                let numbers = $("#mobile_numbers").val();
+                let cleanNumbers = numbers.replace(/\s+/g, ''); // Remove spaces
+                let numberList = cleanNumbers.split(',').filter(num => num.trim() !== ""); // Convert to array, remove empty
+                $("#total_numbers").val(numberList.length);
+            }
+
+            // Run on input for message
+            $("#message").on("input", updateCharacterCount);
+
+            // Run on input for mobile numbers
+            $("#mobile_numbers").on("input", updateTotalNumbers);
+
+            // Run when page loads (if fields have pre-filled values)
+            updateCharacterCount();
+            updateTotalNumbers();
         });
-    });
-</script>
+    </script>
 
 @endpush
