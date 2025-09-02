@@ -113,7 +113,7 @@
             </li>
             <!-- Table-->
             <li class="side-nav-item">
-                <a href="apps-table.html" class="side-nav-link">
+                <a href="{{ route('admin.res-table.index') }}" class="side-nav-link">
                     <span class="menu-icon"><i class="ti ti-message"></i></span>
                     <span class="menu-text"> Table </span>
                 </a>

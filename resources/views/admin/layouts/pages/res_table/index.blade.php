@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Supplier')
+@section('title', 'Resturant POS | Table List')
 @push('styles')
     <link href="{{ asset('backend') }}/assets/css/sweetalert2.min.css" rel="stylesheet" type="text/css" />
 @endpush
@@ -11,32 +11,31 @@
 
             <div class="page-title-head d-flex align-items-sm-center flex-sm-row flex-column gap-2">
                 <div class="flex-grow-1">
-                    <h4 class="fs-18 fw-semibold mb-0">Supplier</h4>
+                    <h4 class="fs-18 fw-semibold mb-0">Table List</h4>
                 </div>
 
                 <div class="text-end">
                     <ol class="breadcrumb m-0 py-0">
                         <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
 
-                        <li class="breadcrumb-item active">Supplier</li>
+                        <li class="breadcrumb-item active">Restaurant Table</li>
                     </ol>
                 </div>
             </div>
 
-            <!-- All Suppliers Data -->
-            <!-- All Suppliers Data -->
+            <!-- All res table Data -->
             <div class="row">
                 <div class="col-12">
                     <div class="card">
                         <!-- Header -->
                         <div
                             class="card-header d-flex align-items-center justify-content-between border-bottom border-light">
-                            <h4 class="header-title mb-0">Supplier List <span>| <a href="{{ route('admin.supplier.deleted-data') }}">Recycle Bin (<span id="recycleCount">{{ $deletedSupplierCount }}</span>)</a></span></h4>
+                            <h4 class="header-title mb-0">Restaurant Table List </h4>
                             <div class="d-flex gap-2">
-                                <!-- Add Supplier Button -->
+                                <!-- Add Restaurant Button -->
                                 <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                                    data-bs-target="#addSupplierModal">
-                                    <i class="ti ti-plus me-1"></i> Add Supplier
+                                    data-bs-target="#addResTableModal">
+                                    <i class="ti ti-plus me-1"></i> Add new
                                 </button>
 
                                 <!-- Import Button with File Input -->
@@ -68,64 +67,48 @@
                                 <thead class="bg-light-subtle">
                                     <tr>
                                         <th class="ps-3" style="width: 50px;">
-                                            <input type="checkbox" class="form-check-input" id="selectAllSuppliers">
+                                            <input type="checkbox" class="form-check-input" id="selectAllrestables">
                                         </th>
                                         <th>S/N</th>
-                                        <th>Supplier Name</th>
-                                        <th>Person</th>
-                                        <th>Phone</th>
-                                        <th>Opening balance</th>
-                                        <th>Current balance</th>
-                                        <th>balance Type</th>
+                                        <th>Table Number</th>
+                                        <th>Table capacity</th>
                                         <th>Status</th>
                                         <th class="text-center" style="width: 150px;">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse ($suppliers as $supplier)
-                                        <tr id="row_{{ $supplier->id }}">
+
+                                    @forelse ($resTables as $restable)
+                                        <tr id="row_{{ $restable->id }}">
                                             <td class="ps-3"><input type="checkbox" class="form-check-input"></td>
                                             <td>
                                                 {{ $loop->iteration }}
                                             </td>
-                                            <td>{{ $supplier->supplier_name ?? '' }}</td>
+                                            <td>{{ $restable->table_number ?? '' }}</td>
                                             <td><span
-                                                    class="text-dark fw-medium">{{ $supplier->contact_person ?? '' }}</span>
+                                                    class="text-dark fw-medium">{{ $restable->table_capacity ?? '' }}</span>
                                             </td>
-                                            <td>{{ $supplier->phone ?? '' }}</td>
-                                            <td>{{ $supplier->opening_balance ?? '0.00' }}</td>
-                                            <td>{{ $supplier->current_balance ?? '0.00' }}</td>
+
                                             <td>
-                                                @if ($supplier->balance_type == 'receivable')
-                                                    <span class="badge bg-success">Receivable</span>
-                                                @elseif ($supplier->balance_type == 'payable')
-                                                    <span class="badge bg-danger">Payable</span>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @if ($supplier->is_active == 0)
+                                                @if ($restable->is_active == 0)
                                                     <span class="badge bg-danger">DeActive</span>
-                                                @else
+                                                @elseif ($restable->is_active == 1)
                                                     <span class="badge bg-success">Active</span>
                                                 @endif
                                             </td>
                                             <td class="pe-3">
                                                 <div class="hstack gap-1 justify-content-end">
+
                                                     <a href="javascript:void(0);"
-                                                        class="btn btn-soft-primary btn-icon btn-sm rounded-circle"
-                                                        title="View">
-                                                        <i class="ti ti-eye"></i>
-                                                    </a>
-                                                    <a href="javascript:void(0);"
-                                                        class="btn btn-soft-success btn-icon btn-sm rounded-circle editSupplierBtn"
-                                                        data-id="{{ $supplier->id }}" data-bs-toggle="modal"
-                                                        data-bs-target="#editSupplierModal" title="Edit">
+                                                        class="btn btn-soft-success btn-icon btn-sm rounded-circle editrestableBtn"
+                                                        data-id="{{ $restable->id }}" data-bs-toggle="modal"
+                                                        data-bs-target="#editrestableModal" title="Edit">
                                                         <i class="ti ti-edit fs-16"></i>
                                                     </a>
 
                                                     <a href="javascript:void(0);"
                                                         class="btn btn-soft-danger btn-icon btn-sm rounded-circle deleteBtn"
-                                                        data-id="{{ $supplier->id }}" title="Delete">
+                                                        data-id="{{ $restable->id }}" title="Delete">
                                                         <i class="ti ti-trash"></i>
                                                     </a>
 
@@ -134,29 +117,24 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="10" class="text-center">No suppliers found.</td>
+                                            <td colspan="10" class="text-center">No restables found.</td>
                                         </tr>
                                     @endforelse
 
-                                    <!-- Repeat similar rows dynamically -->
                                 </tbody>
                             </table>
                         </div>
 
                         <!-- Pagination -->
                         <!-- Pagination -->
-                        <div class="card-footer">
-                            <div class="d-flex justify-content-end">
-                                {!! $suppliers->links() !!}
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </div>
 
-            <!-- Add Supplier Modal -->
-            @include('admin.layouts.pages.supplier.create')
-            @include('admin.layouts.pages.supplier.edit')
+            <!-- Add restable Modal -->
+            @include('admin.layouts.pages.res_table.create')
+            @include('admin.layouts.pages.res_table.edit')
 
         </div> <!-- container -->
 
@@ -190,45 +168,47 @@
     <script src="{{ asset('backend') }}/assets/js/sweetalert2.all.min.js"></script>
 
 
-        <script>
-        $(document).on('click', '.editSupplierBtn', function() {
-            let supplierId = $(this).data('id');
+    <script>
+    $(document).on('click', '.editrestableBtn', function() {
+        let tableId = $(this).data('id');
 
-            // প্রথমে form clear করে দিচ্ছি
-            $('#editSupplierForm')[0].reset();
-            $('#edit_id').val('');
-            $('#editSupplierForm').attr('action', '#');
+        // প্রথমে form clear করে দিচ্ছি
+        $('#editrestableForm')[0].reset();
+        $('#edit_table_id').val('');
+        $('#editrestableForm').attr('action', '#'); // default খালি রাখা হলো
 
-            // Optionally একটি loading text দেখাতে পারেন
-            $('#edit_supplierName').val('Loading...');
+        // Optionally একটি loading text দেখাতে পারেন
+        $('#edit_table_number').val('Loading...');
 
-            $.ajax({
-                url: "/admin/supplier/" + supplierId + "/edit",
-                type: "GET",
-                success: function(response) {
-                    // Fill form fields with fresh data
-                    $('#edit_id').val(response.id);
-                    $('#edit_supplierName').val(response.supplier_name);
-                    $('#edit_contactPerson').val(response.contact_person);
-                    $('#edit_phone').val(response.phone);
-                    $('#edit_email').val(response.email);
-                    $('#edit_address').val(response.address);
-                    $('#edit_opening_balance').val(response.opening_balance);
-                    $('#edit_balance_type').val(response.balance_type).trigger('change');
-                    $('#edit_is_active').val(response.is_active).trigger('change');
+        $.ajax({
+            url: '/admin/res-table/' + tableId + '/edit',
+            type: "GET",
+            success: function(response) {
 
-                    // Update form action URL
-                    $('#editSupplierForm').attr('action', '/admin/supplier/' + response.id);
+                // Fill input fields
+                $('#edit_table_id').val(response.id);
+                $('#edit_table_number').val(response.table_number);
+                $('#edit_table_capacity').val(response.table_capacity);
+                $('#edit_is_active').val(response.is_active).trigger('change');
+
+                // Update form action (with ID)
+                if (response.id) {
+                    $('#editrestableForm').attr('action', '/admin/res-table/' + response.id);
                 }
-            });
+            },
+            error: function(xhr) {
+                alert("Something went wrong while fetching data!");
+            }
         });
-    </script>
+    });
+</script>
 
-    
+
+
     <script>
         $(document).on('click', '.deleteBtn', function() {
             let id = $(this).data('id');
-            let url = "/admin/supplier/" + id;
+            let url = "/admin/res-table/" + id;
 
             Swal.fire({
                 title: "Are you sure?",
@@ -286,6 +266,4 @@
             });
         });
     </script>
-
-
 @endpush
