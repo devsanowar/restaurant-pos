@@ -34,7 +34,7 @@
                             <h4 class="header-title mb-0">SMS Delivery Report ({{ $totalSmsCount }})</h4>
                         </div>
 
-                    <!-- Table -->
+                        <!-- Table -->
                         <div class="table-responsive">
 
                             <form method="GET" action="" class="row justify-content-center mb-4 mt-3">
