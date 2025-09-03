@@ -61,7 +61,6 @@
                             </div>
                         @endif
 
-
                         <!-- Table -->
                         <div class="table-responsive">
                             <table class="table table-nowrap mb-0">
@@ -222,7 +221,7 @@
         });
     </script>
 
-    
+
     <script>
         $(document).on('click', '.deleteBtn', function() {
             let id = $(this).data('id');
