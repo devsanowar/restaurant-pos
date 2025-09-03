@@ -14,7 +14,7 @@
                     <h4 class="fs-18 fw-semibold mb-0">
                         <i class="ti ti-user-check me-2"></i> Waiter Management
                     </h4>
-                    <p class="text-muted mb-0">Manage and assign waiters for your restaurant service.</p>
+
                 </div>
 
                 <div class="text-end">
@@ -26,7 +26,7 @@
             </div>
 
             <!-- Waiter Management Card -->
-            <div class="card mt-4">
+            <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0"><i class="ti ti-users me-2"></i> All Waiters</h5>
                     <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addWaiterModal">
@@ -39,19 +39,23 @@
                     <div class="d-flex align-items-center mb-3 gap-3 flex-wrap">
 
                         <!-- Search Box -->
+                        <!-- Search Box -->
                         <div class="flex-grow-1" style="max-width: 400px;">
                             <div class="input-group">
                                 <span class="input-group-text"><i class="ti ti-search"></i></span>
-                                <input type="text" class="form-control" placeholder="Search waiter...">
+                                <input type="text" id="searchWaiter" class="form-control" placeholder="Search waiter...">
                             </div>
                         </div>
 
+
+                        <!-- Filter Dropdown -->
+
                         <!-- Filter Dropdown -->
                         <div style="min-width: 180px;">
-                            <select class="form-select">
+                            <select id="filterStatus" class="form-select">
                                 <option value="">Filter by Status</option>
-                                <option value="active">Active</option>
-                                <option value="inactive">Inactive</option>
+                                <option value="1">Active</option>
+                                <option value="0">Inactive</option>
                             </select>
                         </div>
 
@@ -81,7 +85,7 @@
                                     <th class="text-end"><i class="ti ti-settings"></i> Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody  id="waiterTableBody">
                                 @forelse ($waiters as $key => $waiter)
                                     <tr id="row_{{ $waiter->id }}">
                                         <td>{{ $key + 1 }}</td>
@@ -92,7 +96,7 @@
                                             @if ($waiter->is_active == 1)
                                                 <span class="badge bg-success">Active</span>
                                             @elseif ($waiter->is_active == 0)
-                                                <span class="badge bg-danger">DeActive</span>
+                                                <span class="badge bg-danger">Inactive</span>
                                             @endif
 
                                         </td>
@@ -166,8 +170,7 @@
 
 
 @push('scripts')
-
-        <script src="{{ asset('backend') }}/assets/js/sweetalert2.all.min.js"></script>
+    <script src="{{ asset('backend') }}/assets/js/sweetalert2.all.min.js"></script>
 
     <script>
         $(document).on('click', '.editWaiterBtn', function() {
@@ -191,7 +194,7 @@
         });
     </script>
 
-        <script>
+    <script>
         $(document).on('click', '.deleteBtn', function() {
             let id = $(this).data('id');
             let url = "/admin/waiter/" + id;
@@ -228,4 +231,31 @@
         });
     </script>
 
+    <script>
+        document.getElementById("searchWaiter").addEventListener("keyup", function() {
+            let value = this.value.toLowerCase();
+            document.querySelectorAll("tbody tr").forEach(function(row) {
+                let name = row.querySelector("td:nth-child(2)").textContent
+                    .toLowerCase(); // waiter_name column
+                row.style.display = name.includes(value) ? "" : "none";
+            });
+        });
+
+        // 🔽 Filter by Status
+        document.getElementById("filterStatus").addEventListener("change", function() {
+            let value = this.value;
+            document.querySelectorAll("#waiterTableBody tr").forEach(function(row) {
+                let status = row.querySelector("td:nth-child(5)").textContent.trim();
+                if (value === "") {
+                    row.style.display = "";
+                } else if (value === "1" && status === "Active") {
+                    row.style.display = "";
+                } else if (value === "0" && status === "Inactive") {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        });
+    </script>
 @endpush

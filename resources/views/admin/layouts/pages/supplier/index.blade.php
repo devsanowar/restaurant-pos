@@ -29,8 +29,7 @@
                 <div class="col-12">
                     <div class="card">
                         <!-- Header -->
-                        <div
-                            class="card-header d-flex align-items-center justify-content-between border-bottom border-light">
+                        <div class="card-header d-flex align-items-center justify-content-between border-bottom border-light">
                             <h4 class="header-title mb-0">Supplier List <span>| <a href="{{ route('admin.supplier.deleted-data') }}">Recycle Bin (<span id="recycleCount">{{ $deletedSupplierCount }}</span>)</a></span></h4>
                             <div class="d-flex gap-2">
                                 <!-- Add Supplier Button -->
