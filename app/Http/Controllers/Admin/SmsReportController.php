@@ -42,6 +42,6 @@ class SmsReportController extends Controller
         $sms_report = SmsReport::findOrFail($id);
 
         $sms_report->delete();
-        return redirect()->route('sms-report.index')->with('message', 'Report deleted successfully.');
+        return redirect()->route('admin.sms-report.index')->with('message', 'Report deleted successfully.');
     }
 }

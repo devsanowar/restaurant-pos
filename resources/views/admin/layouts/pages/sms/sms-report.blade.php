@@ -17,7 +17,6 @@
                 <div class="text-end">
                     <ol class="breadcrumb m-0 py-0">
                         <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
-
                         <li class="breadcrumb-item active">SMS Report</li>
                     </ol>
                 </div>
@@ -34,122 +33,121 @@
                             <h4 class="header-title mb-0">SMS Delivery Report ({{ $totalSmsCount }})</h4>
                         </div>
 
-                    <!-- Table -->
+                        <form method="GET" action="" class="row justify-content-center mb-4 mt-3">
+                            <div class="col-md-3">
+                                <label for="start_date"><b>Start Date</b></label>
+                                <input type="date" name="start_date" id="start_date" class="form-control" value="{{ request('start_date') }}">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="end_date"><b>End Date</b></label>
+                                <input type="date" name="end_date" id="end_date" class="form-control" value="{{ request('end_date') }}">
+                            </div>
+                            <div class="col-md-1 d-flex align-items-end">
+                                <button type="submit" class="btn btn-success" style="margin-right: 5px">Filter</button>
+                                <a href="{{ url()->current() }}" class="btn btn-danger">Reset</a>
+                            </div>
+                        </form>
+
+                        <!-- Table -->
                         <div class="table-responsive">
+                            <table class="table table-nowrap mb-0">
+                                <thead class="bg-light-subtle">
+                                <tr>
+                                    <th class="ps-3" style="width: 50px;">
+                                        <input type="checkbox" class="form-check-input" id="selectAllSuppliers">
+                                    </th>
+                                    <th>SL No</th>
+                                    <th>Name</th>
+                                    <th>Phone</th>
+                                    <th>Used SMS</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th class="text-center" style="width: 150px;">Action</th>
+                                </tr>
+                                </thead>
 
-                            <form method="GET" action="" class="row justify-content-center mb-4 mt-3">
-                                <div class="col-md-3">
-                                    <label for="start_date"><b>Start Date</b></label>
-                                    <input type="date" name="start_date" id="start_date" class="form-control" value="{{ request('start_date') }}">
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="end_date"><b>End Date</b></label>
-                                    <input type="date" name="end_date" id="end_date" class="form-control" value="{{ request('end_date') }}">
-                                </div>
-                                <div class="col-md-1 d-flex align-items-end">
-                                    <button type="submit" class="btn btn-success" style="margin-right: 5px">Filter</button>
-                                    <a href="{{ url()->current() }}" class="btn btn-danger">Reset</a>
-                                </div>
-                            </form>
+                                @php
+                                    $totalSmsCount = 0;
+                                @endphp
 
-                            <!-- Table -->
-                            <div class="table-responsive">
-                                <table class="table table-nowrap mb-0">
-                                    <thead class="bg-light-subtle">
-                                    <tr>
-                                        <th class="ps-3" style="width: 50px;">
-                                            <input type="checkbox" class="form-check-input" id="selectAllSuppliers">
-                                        </th>
-                                        <th>SL No</th>
-                                        <th>Name</th>
-                                        <th>Phone</th>
-                                        <th>Used SMS</th>
-                                        <th>Date</th>
-                                        <th>Status</th>
-                                        <th class="text-center" style="width: 150px;">Action</th>
-                                    </tr>
-                                    </thead>
+                                <tbody>
+                                @forelse ($sms_reports as $sms_report)
 
                                     @php
-                                        $totalSmsCount = 0;
+                                        $message = $sms_report->message_body;
+                                        $charCount = mb_strlen($message, 'UTF-8');
+
+                                        $isUnicode = preg_match('/[^\x00-\x7F]/', $message);
+                                        $segmentSize = $isUnicode ? 70 : 160;
+
+                                        $smsCount = ceil($charCount / $segmentSize);
+                                        if ($sms_report->success == 1) {
+                                            $totalSmsCount += $smsCount;
+                                        }
                                     @endphp
 
-                                    <tbody>
-                                    @forelse ($sms_reports as $sms_report)
+                                    <tr id="row_{{ $sms_report->id }}">
+                                        <td class="ps-3"><input type="checkbox" class="form-check-input"></td>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $sms_report->order?->name ?? 'Custom Number' }}</td>
+                                        <td>{{ $sms_report->mobile }}</td>
+                                        <td>{{ $smsCount }} SMS</td>
+                                        <td>{{ $sms_report->created_at->format('d-m-Y h:i A') }}</td>
+                                        <td>
+                                            @if($sms_report->success == 1)
+                                                <span class="badge bg-success">Success</span>
+                                            @else
+                                                <span class="badge bg-danger">Failed</span>
+                                            @endif
+                                        </td>
+                                        <td class="pe-3">
+                                            <div class="hstack gap-1 justify-content-center">
+{{--                                                <a href="javascript:void(0);"--}}
+{{--                                                   class="btn btn-soft-primary btn-icon btn-sm rounded-circle"--}}
+{{--                                                   title="View">--}}
+{{--                                                    <i class="ti ti-eye"></i>--}}
+{{--                                                </a>--}}
+{{--                                                <a href="javascript:void(0);"--}}
+{{--                                                   class="btn btn-soft-success btn-icon btn-sm rounded-circle editSupplierBtn"--}}
+{{--                                                   data-id="{{ $sms_report->id }}" data-bs-toggle="modal"--}}
+{{--                                                   data-bs-target="#editSupplierModal" title="Edit">--}}
+{{--                                                    <i class="ti ti-edit fs-16"></i>--}}
+{{--                                                </a>--}}
 
-                                        @php
-                                            $message = $sms_report->message_body;
-                                            $charCount = mb_strlen($message, 'UTF-8');
+                                                <form class="d-inline-block" action="{{ route('admin.sms-report.destroy', $sms_report->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-soft-danger btn-icon btn-sm rounded-circle show_confirm"><i class="ti ti-trash"></i></button>
+                                                </form>
 
-                                            $isUnicode = preg_match('/[^\x00-\x7F]/', $message);
-                                            $segmentSize = $isUnicode ? 70 : 160;
-
-                                            $smsCount = ceil($charCount / $segmentSize);
-                                            if ($sms_report->success == 1) {
-                                                $totalSmsCount += $smsCount;
-                                            }
-                                        @endphp
-
-                                        <tr id="row_{{ $sms_report->id }}">
-                                            <td class="ps-3"><input type="checkbox" class="form-check-input"></td>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $sms_report->order?->name ?? 'Custom Number' }}</td>
-                                            <td>{{ $sms_report->mobile }}</td>
-                                            <td>{{ $smsCount }} SMS</td>
-                                            <td>{{ $sms_report->created_at->format('d-m-Y h:i A') }}</td>
-                                            <td>
-                                                @if($sms_report->success == 1)
-                                                    <a href="" class="btn btn-success">Success</a>
-                                                @else
-                                                    <a href="" class="btn btn-danger">Failed</a>
-                                                @endif
-                                            </td>
-                                            <td class="pe-3">
-                                                <div class="hstack gap-1 justify-content-end">
-                                                    <a href="javascript:void(0);"
-                                                       class="btn btn-soft-primary btn-icon btn-sm rounded-circle"
-                                                       title="View">
-                                                        <i class="ti ti-eye"></i>
-                                                    </a>
-                                                    <a href="javascript:void(0);"
-                                                       class="btn btn-soft-success btn-icon btn-sm rounded-circle editSupplierBtn"
-                                                       data-id="{{ $sms_report->id }}" data-bs-toggle="modal"
-                                                       data-bs-target="#editSupplierModal" title="Edit">
-                                                        <i class="ti ti-edit fs-16"></i>
-                                                    </a>
-
-                                                    <a href="javascript:void(0);"
-                                                       class="btn btn-soft-danger btn-icon btn-sm rounded-circle deleteBtn"
-                                                       data-id="{{ $sms_report->id }}" title="Delete">
-                                                        <i class="ti ti-trash"></i>
-                                                    </a>
-
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="10" class="text-center">No suppliers found.</td>
-                                        </tr>
-                                    @endforelse
-
-                                    </tbody>
-                                    <tfoot>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
                                     <tr>
-                                        <td colspan="4" class="text-right"><strong>Total Used SMS =</strong></td>
+                                        <td colspan="10" class="text-center">No suppliers found.</td>
+                                    </tr>
+                                @endforelse
+
+                                </tbody>
+
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="4" class="text-end"><strong>Total Used SMS =</strong></td>
                                         <td colspan="4"><strong>{{ $totalSmsCount }} SMS</strong></td>
                                     </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                            <!-- Pagination -->
-                            <div class="card-footer">
-                                <div class="d-flex justify-content-end">
-                                    {!! $sms_reports->links() !!}
-                                </div>
-                            </div>
+                                </tfoot>
 
+                            </table>
                         </div>
+
+                        <!-- Pagination -->
+                        <div class="card-footer">
+                            <div class="d-flex justify-content-end">
+                                {!! $sms_reports->links() !!}
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
