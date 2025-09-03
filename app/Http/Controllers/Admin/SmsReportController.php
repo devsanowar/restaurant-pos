@@ -20,7 +20,7 @@ class SmsReportController extends Controller
             $query->whereDate('created_at', '<=', $request->end_date);
         }
 
-        $sms_reports = $query->latest()->get();
+        $sms_reports = $query->latest()->paginate(15);
 
         $totalSmsCount = 0;
 
