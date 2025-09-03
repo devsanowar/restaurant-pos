@@ -5,13 +5,13 @@
     <meta charset="utf-8" />
     <title> @yield('title') </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="A fully restaurant pos basis theme" name="description" />
-    <meta content="Freelance It theme" name="author" />
+    <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
+    <meta content="Coderthemes" name="author" />
 
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{ asset('backend') }}/assets/images/favicon.ico">
 
-        <!-- Theme Config Js -->
+    <!-- Theme Config Js -->
     <script src="{{ asset('backend') }}/assets/js/config.js"></script>
 
     <!-- Vendor css -->
@@ -61,7 +61,7 @@
         <!-- ============================================================== -->
         <!-- Start Page Content here -->
         <!-- ============================================================== -->
-
+        
         @yield('admin_content')
 
         <!-- ============================================================== -->
@@ -71,7 +71,7 @@
     </div>
     <!-- END wrapper -->
 
-    <!-- Vendor js -->
+        <!-- Vendor js -->
     <script src="{{ asset('backend') }}/assets/js/jquery-3.7.0.min.js"></script>
 
     <!-- Vendor js -->
@@ -85,7 +85,6 @@
 
     <!-- Projects Analytics Dashboard App js -->
     <script src="{{ asset('backend') }}/assets/js/pages/dashboard-sales.js"></script>
-
     <script src="{{ asset('backend') }}/assets/js/toastr.min.js"></script>
 
 
@@ -105,7 +104,6 @@
         @if (session('info'))
             toastr.info("{{ session('info') }}");
         @endif
-
     </script>
 
     @stack('scripts')

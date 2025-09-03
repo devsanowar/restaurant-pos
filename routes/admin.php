@@ -11,6 +11,8 @@ use App\Http\Controllers\Admin\FieldOfCostController;
 use App\Http\Controllers\Admin\AdminSettingController;
 use App\Http\Controllers\Admin\CostCategoryController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\IncomeCategoryController;
+use App\Http\Controllers\Admin\IncomeController;
 use App\Http\Controllers\Admin\SmsSettingController;
 use App\Http\Controllers\Admin\SmsReportController;
 
@@ -86,6 +88,28 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
 
     // Waiter Management
     Route::controller(WaiterController::class)->prefix('waiter')->name('waiter.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/', 'store')->name('store');
+        Route::get('/{id}/edit', 'edit')->name('edit');
+        Route::put('/{id}', 'update')->name('update');
+        Route::delete('/{id}', 'destroy')->name('destroy');
+    });
+
+
+    //Income category Management route
+    Route::controller(IncomeCategoryController::class)->prefix('income-category')->name('income.category.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/', 'store')->name('store');
+        Route::get('/{id}/edit', 'edit')->name('edit');
+        Route::put('/{id}', 'update')->name('update');
+        Route::delete('/{id}', 'destroy')->name('destroy');
+    });
+
+
+    //Income Management route
+    Route::controller(IncomeController::class)->prefix('income')->name('income.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
         Route::post('/', 'store')->name('store');

@@ -153,12 +153,32 @@
                 </div>
             </li>
             <!-- Income-->
-            <li class="side-nav-item">
-                <a href="apps-income.html" class="side-nav-link">
-                    <span class="menu-icon"><i class="ti ti-message"></i></span>
-                    <span class="menu-text"> Income </span>
+
+             <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#sidebarIncomeCategory" aria-expanded="false"
+                    aria-controls="sidebarIncomeCategory" class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-file-invoice"></i></span>
+                    <span class="menu-text"> Incomes</span>
+                    <span class="menu-arrow"></span>
                 </a>
+                <div class="collapse" id="sidebarIncomeCategory">
+                    <ul class="sub-menu">
+                        <li class="side-nav-item">
+                            <a href="{{ route('admin.income.category.index') }}" class="side-nav-link">
+                                <span class="menu-text">Income Category</span>
+                            </a>
+                        </li>
+
+                        <li class="side-nav-item">
+                            <a href="{{ route('admin.income.index') }}" class="side-nav-link">
+                                <span class="menu-text">All Income</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </li>
+
+
             <!-- Payroll-->
             <li class="side-nav-item">
                 <a href="apps-payroll.html" class="side-nav-link">
