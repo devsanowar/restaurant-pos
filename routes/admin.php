@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\SmsController;
 use App\Http\Controllers\Admin\CostController;
-use App\Http\Controllers\Admin\SmsLogController;
 use App\Http\Controllers\Admin\WaiterController;
 use App\Http\Controllers\Admin\ResTableController;
 use App\Http\Controllers\Admin\SupplierController;
@@ -15,6 +14,7 @@ use App\Http\Controllers\Admin\IncomeCategoryController;
 use App\Http\Controllers\Admin\IncomeController;
 use App\Http\Controllers\Admin\SmsSettingController;
 use App\Http\Controllers\Admin\SmsReportController;
+use App\Http\Controllers\Admin\ProductCategoryController;
 
 Route::get('/', [App\Http\Controllers\Admin\AdminLoginPageController::class, 'index'])->name('admin.login');
 
@@ -136,7 +136,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::delete('destroy/{id}', [SmsReportController::class, 'destroy'])->name('sms-report.destroy');
     });
 
+    // Product Category
+    Route::resource('product-category', ProductCategoryController::class);
+
 });
-
-
-

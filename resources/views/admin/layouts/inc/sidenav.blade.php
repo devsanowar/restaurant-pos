@@ -70,6 +70,11 @@
                 <div class="collapse" id="posProduct">
                     <ul class="sub-menu">
                         <li class="side-nav-item">
+                            <a href="{{ route('admin.product-category.index') }}" class="side-nav-link">
+                                <span class="menu-text">Product Category</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
                             <a href="apps-product-all-products.html" class="side-nav-link">
                                 <span class="menu-text">All Product</span>
                             </a>
@@ -243,9 +248,9 @@
                     <span class="menu-text"> User Management </span>
                 </a>
             </li>
+
             <!-- User Management-->
             <li class="side-nav-item">
-
                 <form method="POST" action="{{ route('logout') }}" style="padding:10px 15px">
                     @csrf
 
