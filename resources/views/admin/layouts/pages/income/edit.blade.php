@@ -11,8 +11,9 @@
             </div>
 
             <div class="modal-body">
-                <form id="incomeForm">
+                <form id="incomeUpdateForm">
                     @csrf
+
                     <input type="hidden" id="incomeId" name="id">
 
                     <div class="mb-3">
@@ -54,7 +55,7 @@
                         <input type="text" class="form-control" id="incomeByInput" name="income_by"
                             placeholder="Enter person/organization name (optional)">
                     </div>
-                </form>
+
 
             </div>
 

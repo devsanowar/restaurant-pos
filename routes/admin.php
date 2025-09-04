@@ -59,7 +59,8 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::put('/{id}', 'update')->name('update');
         Route::delete('/{id}', 'destroy')->name('destroy');
         Route::get('/trashed-data', 'trashedData')->name('deleted-data');
-        Route::delete('/permanantly-destroy-data/{id}', 'forceDeleteData')->name('destroy-data');
+        Route::post('/restore-data', 'restoreData')->name('restore-data');
+        Route::delete('/permanantly-destroy-data/{id}', 'forceDelete')->name('forceDelete');
     });
 
     // Supplier Management
@@ -116,6 +117,9 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::get('/{id}/edit', 'edit')->name('edit');
         Route::put('/{id}', 'update')->name('update');
         Route::delete('/{id}', 'destroy')->name('destroy');
+        Route::get('/trashed-data', 'trashedData')->name('deleted-data');
+        Route::post('/restore-data', 'restoreData')->name('restore-data');
+        Route::delete('/permanantly-destroy-data/{id}', 'forceDelete')->name('forceDelete');
     });
 
     // SMS Settings

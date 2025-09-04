@@ -56,7 +56,7 @@ class IncomeCategoryController extends Controller
             return response()->json(
                 [
                     'status' => 'error',
-                    'message' => 'No waiter Found',
+                    'message' => 'No income category Found',
                 ],
                 404,
             );

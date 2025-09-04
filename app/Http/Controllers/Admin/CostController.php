@@ -18,7 +18,10 @@ class CostController extends Controller
             ->latest()
             ->paginate(10);
 
-        return view('admin.layouts.pages.cost.index', compact('categories', 'fields', 'costs'));
+
+        $deletedCostCount = Cost::onlyTrashed()->count();
+
+        return view('admin.layouts.pages.cost.index', compact('categories', 'fields', 'costs','deletedCostCount'));
     }
 
     public function store(Request $request)
@@ -71,32 +74,87 @@ class CostController extends Controller
         return redirect()->route('admin.cost.index')->with('success', 'Cost updated successfully!');
     }
 
+
     public function destroy($id)
     {
         $cost = Cost::findOrFail($id);
+        if (!$cost) {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => 'No cost Found',
+                ],
+                404,
+            );
+        }
+
         $cost->delete();
 
+        $deletedCount = Cost::onlyTrashed()->count();
         return response()->json([
-            'success' => true,
-            'message' => 'Cost deleted successfully!',
+            'status' => 'success',
+            'message' => 'Cost deleted successfully.',
+            'deletedCount' => $deletedCount,
         ]);
     }
 
     public function trashedData()
     {
-        $categories = CostCategory::select(['id', 'category_name'])->get();
-        $fields = FieldOfCost::select(['id', 'field_name'])->get();
-        $costs = Cost::with(['category:id,category_name', 'field:id,field_name'])
+        $costs = Cost::with(['category:id,category_name'])
             ->onlyTrashed()
             ->get();
-        return view('admin.layouts.pages.cost.recycle-bin', compact('costs', 'categories', 'fields'));
+        $deletedCount = $costs->count();
+        return view('admin.layouts.pages.cost.recycle-bin', compact('costs', 'deletedCount'));
     }
 
-    public function forceDeleteData($id)
-    {
-        $cost = Cost::withTrashed()->where('id', $id)->first();
-        $cost->forceDelete();
 
-        return redirect()->back()->with('success', 'Cost permanently deleted.');
+
+    public function restoreData(Request $request)
+    {
+        $cost = Cost::onlyTrashed()->where('id', $request->id)->first();
+
+        if ($cost) {
+            $cost->restore();
+
+            $deletedCount = Cost::onlyTrashed()->count();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Cost Restored Successfully.',
+                'deletedCount' => $deletedCount,
+            ]);
+        }
+
+        return response()->json(
+            [
+                'status' => 'error',
+                'message' => 'No Cost Found',
+            ],
+            404,
+        );
+    }
+
+    public function forceDelete($id)
+    {
+        $cost = Cost::onlyTrashed()->where('id', $id)->first();
+
+        if ($cost) {
+            $cost->forceDelete();
+            $deletedCount = Cost::onlyTrashed()->count();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Cost permanently deleted!',
+                'deletedCount' => $deletedCount,
+            ]);
+        }
+
+        return response()->json(
+            [
+                'status' => 'error',
+                'message' => 'Cost not found',
+            ],
+            404,
+        );
     }
 }

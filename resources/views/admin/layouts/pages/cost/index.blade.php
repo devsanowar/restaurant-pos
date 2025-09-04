@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Field Of Cost')
+@section('title', 'All Cost')
 @push('styles')
     <link rel="stylesheet" href="{{ asset('backend') }}/assets/css/sweetalert2.min.css">
 @endpush
@@ -8,7 +8,7 @@
         <div class="page-container">
             <div class="page-title-head d-flex align-items-sm-center flex-sm-row flex-column gap-2">
                 <div class="flex-grow-1">
-                    <h4 class="fs-18 fw-semibold mb-0">Field Of Costs</h4>
+                    <h4 class="fs-18 fw-semibold mb-0">All Costs</h4>
                 </div>
 
                 <div class="text-end">
@@ -17,7 +17,7 @@
 
                         <li class="breadcrumb-item"><a href="javascript: void(0);">Restaurant POS</a></li>
 
-                        <li class="breadcrumb-item active">Fiel of costs</li>
+                        <li class="breadcrumb-item active">costs</li>
                     </ol>
                 </div>
             </div>
@@ -25,20 +25,17 @@
                 <div class="col-12">
                     <div class="card">
                         <!-- Header -->
-                        <div
-                            class="card-header d-flex align-items-center justify-content-between border-bottom border-light">
-                            <h4 class="header-title mb-0">All Cost List <span><a href="{{ route('admin.cost.deleted-data') }}" class="btn btn-danger bg-gradient">
-                                <i class="ti ti-delete me-1"></i> Recycle Bin
-                            </a></span></h4>
+                        <div class="card-header d-flex align-items-center justify-content-between border-bottom border-light">
+                            <h4 class="header-title mb-0">Cost List <span> | <a href="{{ route('admin.cost.deleted-data') }}">Recycle Bin (<span id="recycleCount">{{ $deletedCostCount }}</span>)</a></span></h4>
                             <div>
                                 <!-- Add Cost Button -->
                                 <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
                                     data-bs-target="#addCostModal">
                                     <i class="ti ti-plus me-1"></i> Add Cost
                                 </button>
-                                
+
                             </div>
-                            
+
                         </div>
 
                         <!-- Table -->
@@ -212,6 +209,8 @@
                                     'Deleted successfully!');
                                 // Row remove (assuming the button is inside a <tr>)
                                 form.closest('tr').remove();
+
+                                $("#recycleCount").text(response.deletedCount);
                             },
                             error: function(xhr) {
                                 toastr.error(xhr.responseJSON?.message ||

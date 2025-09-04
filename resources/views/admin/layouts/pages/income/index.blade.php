@@ -28,7 +28,7 @@
             <!-- Income Management Card -->
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="card-title mb-0"><i class="ti ti-users me-2"></i> Income lists</h5>
+                    <h4 class="header-title mb-0">Income List <span>| <a href="{{ route('admin.income.deleted-data') }}">Recycle Bin (<span id="recycleCount">{{ $deletedIncomeCount }}</span>)</a></span></h4>
                     <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addIncomeModal">
                         <i class="ti ti-plus me-1"></i> Add New Income
                     </button>
@@ -193,51 +193,97 @@
                     $('#incomeByInput').val(income.income_by);
 
                     // Set form action for update
-                    $('#incomeForm').attr('action', '/admin/income/' + income.id);
-                    $('#incomeForm').attr('method', 'POST'); // Required for Laravel
-                    $('#incomeForm').append('<input type="hidden" name="_method" value="PUT">');
+                    $('#incomeUpdateForm').attr('action', '/admin/income/' + income.id);
+                    $('#incomeUpdateForm').attr('method', 'POST'); // Required for Laravel
+                    $('#incomeUpdateForm').append('<input type="hidden" name="_method" value="PUT">');
 
                     // Show modal
-                    $('#incomeModal').modal('show');
+                    $('#editIncomeModal').modal('show');
                 }
             });
         });
 
+    </script>
 
 
-        // update data
-
-        $('#saveIncomeBtn').click(function(e) {
+    <script>
+        $(document).on('click', '#saveIncomeBtn', function(e) {
             e.preventDefault();
 
-            let form = $('#incomeForm');
-            let id = $('#incomeId').val(); // if empty, it's a new record
-            let url = id ? '/admin/income/' + id : '/admin/income';
-            let method = id ? 'PUT' : 'POST';
+            let form = $('#incomeUpdateForm');
+            let actionUrl = form.attr('action');
+            let formData = form.serialize();
 
             $.ajax({
-                url: url,
-                type: 'POST', // always POST for Laravel
-                data: form.serialize() + (id ? '&_method=PUT' : ''),
+                url: actionUrl,
+                type: 'POST',
+                data: formData,
                 success: function(response) {
-                    alert(response.message); // or use toastr
-                    $('#incomeModal').modal('hide');
-                    // Optionally, update table row dynamically
-                    location.reload(); // simple reload method
+                    // Close modal
+                    $('#editIncomeModal').modal('hide');
+
+                    // Show success message
+                    toastr.success(response.message);
+
+                    // Get updated values from the form
+                    let incomeId = $('#incomeId').val();
+                    let incomeDate = $('#incomeDateInput').val();
+                    let incomeSource = $('#incomeSourceInput').val();
+                    let incomeCategory = $('#incomeCategorySelect option:selected').text();
+                    let amount = $('#incomeAmountInput').val();
+                    let incomeBy = $('#incomeByInput').val();
+                    let status = $('#incomeStatusSelect').val();
+
+                    // Build status badge
+                    let statusBadge = '';
+                    if(status === 'received') {
+                        statusBadge = '<span class="badge bg-success">Received</span>';
+                    } else if(status === 'pending') {
+                        statusBadge = '<span class="badge bg-danger">Pending</span>';
+                    }
+
+                    // Update the row dynamically
+                    let updatedRow = `
+                        <td>${response.key + 1}</td>
+                        <td>${incomeDate}</td>
+                        <td>${incomeSource}</td>
+                        <td>${incomeCategory}</td>
+                        <td>${amount}</td>
+                        <td>${incomeBy}</td>
+                        <td>${statusBadge}</td>
+                        <td class="text-end">
+                            <a href="javascript:void(0);"
+                                class="btn btn-soft-success btn-icon btn-sm rounded-circle editIncomeBtn"
+                                data-id="${incomeId}" data-bs-toggle="modal" data-bs-target="#editIncomeModal" title="Edit">
+                                <i class="ti ti-edit fs-16"></i>
+                            </a>
+                            <a href="javascript:void(0);"
+                                class="btn btn-soft-danger btn-icon btn-sm rounded-circle deleteBtn"
+                                data-id="${incomeId}" title="Delete">
+                                <i class="ti ti-trash"></i>
+                            </a>
+                        </td>
+                    `;
+
+                    // Replace the old row content
+                    $('#row_' + incomeId).html(updatedRow);
                 },
-                error: function(xhr) {
-                    console.log(xhr.responseJSON);
-                    alert('Something went wrong!');
+                error: function(xhr, status, error) {
+                    console.log(xhr.responseText);
+                    alert('Something went wrong. Please try again.');
                 }
             });
         });
     </script>
 
 
+
+
+
     <script>
         $(document).on('click', '.deleteBtn', function() {
             let id = $(this).data('id');
-            let url = "/admin/waiter/" + id;
+            let url = "/admin/income/" + id;
 
             Swal.fire({
                 title: "Are you sure?",
@@ -260,7 +306,7 @@
                             Swal.fire("Deleted!", response.message, "message");
                             $("#row_" + id).remove();
                             // location.reload();
-                            $("#recycleCount").text(response.deletedCount);
+                             $("#recycleCount").text(response.deletedCount);
                         },
                         error: function(xhr) {
                             Swal.fire("Error!", "Something went wrong.", "error");

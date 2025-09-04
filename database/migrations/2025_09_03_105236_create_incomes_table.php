@@ -21,6 +21,7 @@ return new class extends Migration
             $table->enum('status',['received','pending'])->default('pending');
             $table->string('income_by')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
