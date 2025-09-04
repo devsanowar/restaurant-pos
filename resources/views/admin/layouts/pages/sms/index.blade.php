@@ -1,8 +1,10 @@
 @extends('admin.layouts.app')
-@section('title', 'SMS Report')
+@section('title', 'Send SMS')
+
 @push('styles')
-    <link href="{{ asset('backend') }}/assets/css/sweetalert2.min.css" rel="stylesheet" type="text/css" />
+
 @endpush
+
 @section('admin_content')
 
     @php
@@ -59,7 +61,7 @@
 
                                 <!-- Table -->
                                 <div class="table-responsive">
-                                    <table class="table table-nowrap mb-0" id="customerTable">
+                                    <table class="table table-nowrap mb-0 dataTable" id="customerTable">
                                         <thead class="bg-light-subtle">
                                         <tr>
                                             <th class="ps-3" style="width: 50px;">
@@ -69,7 +71,6 @@
                                             <th>Customer Name</th>
                                             <th>Mobile</th>
                                             <th>Address</th>
-                                            <th class="text-center" style="width: 150px;">Action</th>
                                         </tr>
                                         </thead>
 
@@ -82,18 +83,6 @@
                                                 <td style="text-align: left">{{ $customer->name }}</td>
                                                 <td>{{ $customer->phone }}</td>
                                                 <td style="text-align: left">{{ $customer->address }}</td>
-                                                <td class="pe-3">
-                                                    <div class="hstack gap-1 justify-content-center">
-
-                                                        {{--                                                <form class="d-inline-block" action="{{ route('admin.customer.destroy', $customer->id) }}" method="POST">--}}
-                                                        {{--                                                    @csrf--}}
-                                                        {{--                                                    @method('DELETE')--}}
-                                                        {{--                                                    <button type="submit" class="btn btn-soft-danger btn-icon btn-sm rounded-circle show_confirm"><i class="ti ti-trash"></i></button>--}}
-                                                        {{--                                                </form>--}}
-
-                                                        <button type="button" class="btn btn-soft-danger btn-icon btn-sm rounded-circle show_confirm"><i class="ti ti-trash"></i></button>
-                                                    </div>
-                                                </td>
                                             </tr>
                                         @empty
                                             <tr>
@@ -197,68 +186,11 @@
         });
     </script>
 
-{{--    <script>--}}
-{{--        document.addEventListener('DOMContentLoaded', function () {--}}
-{{--            const mobileBox = document.getElementById('mobile-box');--}}
-{{--            const selectAll = document.getElementById('selectAll');--}}
-
-{{--            $('#customerTable').on('change', '.row-checkbox', function () {--}}
-{{--                const phone = this.dataset.phone.trim();--}}
-{{--                let numbers = mobileBox.value.split(',').map(num => num.trim()).filter(num => num);--}}
-
-{{--                if (this.checked) {--}}
-{{--                    if (!numbers.includes(phone)) {--}}
-{{--                        numbers.push(phone);--}}
-{{--                    }--}}
-{{--                } else {--}}
-{{--                    numbers = numbers.filter(num => num !== phone);--}}
-{{--                }--}}
-
-{{--                const uniqueNumbers = Array.from(new Set(numbers));--}}
-{{--                mobileBox.value = uniqueNumbers.join(', ');--}}
-{{--            });--}}
-
-{{--            if (selectAll) {--}}
-{{--                selectAll.addEventListener('change', function () {--}}
-{{--                    const allRows = window.customerTable.rows({ search: 'applied' }).nodes();--}}
-{{--                    const checkboxes = $('input.row-checkbox', allRows);--}}
-{{--                    let numbers = mobileBox.value.split(',').map(num => num.trim()).filter(num => num);--}}
-
-{{--                    checkboxes.each(function () {--}}
-{{--                        const phone = this.dataset.phone.trim();--}}
-{{--                        this.checked = selectAll.checked;--}}
-
-{{--                        if (selectAll.checked) {--}}
-{{--                            if (!numbers.includes(phone)) {--}}
-{{--                                numbers.push(phone);--}}
-{{--                            }--}}
-{{--                        } else {--}}
-{{--                            numbers = numbers.filter(num => num !== phone);--}}
-{{--                        }--}}
-{{--                    });--}}
-
-{{--                    const uniqueNumbers = Array.from(new Set(numbers));--}}
-{{--                    mobileBox.value = uniqueNumbers.join(', ');--}}
-{{--                });--}}
-{{--            }--}}
-{{--        });--}}
-{{--    </script>--}}
-
-{{--    <script>--}}
-{{--        document.getElementById('selectAll').addEventListener('change', function () {--}}
-{{--            const checked = this.checked;--}}
-{{--            document.querySelectorAll('.row-checkbox').forEach(checkbox => {--}}
-{{--                checkbox.checked = checked;--}}
-{{--            });--}}
-{{--        });--}}
-{{--    </script>--}}
-
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const mobileBox = document.getElementById('mobile-box');
             const selectAll = document.getElementById('selectAll');
 
-            // Single row selection
             $('#customerTable').on('change', '.row-checkbox', function () {
                 const phone = this.dataset.phone.trim();
                 let numbers = mobileBox.value.split(',').map(num => num.trim()).filter(num => num);
@@ -275,53 +207,40 @@
                 mobileBox.value = uniqueNumbers.join(', ');
             });
 
-            // Select all rows
             if (selectAll) {
                 selectAll.addEventListener('change', function () {
                     const allRows = window.customerTable.rows({ search: 'applied' }).nodes();
                     const checkboxes = $('input.row-checkbox', allRows);
-                    let numbers = [];
+                    let numbers = mobileBox.value.split(',').map(num => num.trim()).filter(num => num);
 
                     checkboxes.each(function () {
                         const phone = this.dataset.phone.trim();
                         this.checked = selectAll.checked;
 
                         if (selectAll.checked) {
-                            numbers.push(phone);
+                            if (!numbers.includes(phone)) {
+                                numbers.push(phone);
+                            }
+                        } else {
+                            numbers = numbers.filter(num => num !== phone);
                         }
                     });
 
                     const uniqueNumbers = Array.from(new Set(numbers));
-                    mobileBox.value = selectAll.checked ? uniqueNumbers.join(', ') : '';
+                    mobileBox.value = uniqueNumbers.join(', ');
                 });
             }
         });
     </script>
 
-    <script src="{{ asset('backend') }}/assets/js/sweetalert2.all.min.js"></script>
-
     <script>
-        $(document).ready(function() {
-            // Delete confirmation for dynamically loaded content
-            $(document).on('click', '.show_confirm', function(event) {
-                event.preventDefault();
-                let form = $(this).closest("form");
-
-                Swal.fire({
-                    title: "Are you sure?",
-                    text: "You won't be able to revert this!",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Yes, delete it!"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        form.submit();
-                    }
-                });
+        document.getElementById('selectAll').addEventListener('change', function () {
+            const checked = this.checked;
+            document.querySelectorAll('.row-checkbox').forEach(checkbox => {
+                checkbox.checked = checked;
             });
         });
     </script>
 
 @endpush
+
