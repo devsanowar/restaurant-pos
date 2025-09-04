@@ -91,6 +91,19 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     });
 
 
+    // Stock Management
+    Route::controller(StockController::class)->prefix('stock')->name('stock.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/', 'store')->name('store');
+        Route::get('/{id}/edit', 'edit')->name('edit');
+        Route::put('/{id}', 'update')->name('update');
+        Route::delete('/{id}', 'destroy')->name('destroy');
+        // Route::get('/trashed-data', 'trashedData')->name('deleted-data');
+        // Route::post('/restore-data', 'restoreData')->name('restore-data');
+        // Route::delete('/permanantly-destroy-data/{id}', 'forceDelete')->name('forceDelete');
+    });
+
+
 
     // Restaurant Table Management
     Route::controller(ResTableController::class)->prefix('res-table')->name('res-table.')->group(function () {

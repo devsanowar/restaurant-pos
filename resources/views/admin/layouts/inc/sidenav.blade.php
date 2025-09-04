@@ -112,15 +112,11 @@
                             </a>
                         </li>
                         <li class="side-nav-item">
-                            <a href="{{ route('admin.field-of-cost.index') }}" class="side-nav-link">
+                            <a href="{{ route('admin.stock.index') }}" class="side-nav-link">
                                 <span class="menu-text">Stock</span>
                             </a>
                         </li>
-                        <li class="side-nav-item">
-                            <a href="{{ route('admin.cost.index') }}" class="side-nav-link">
-                                <span class="menu-text">All Cost</span>
-                            </a>
-                        </li>
+
                     </ul>
                 </div>
             </li>
