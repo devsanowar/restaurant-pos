@@ -20,22 +20,6 @@ class SmsController extends Controller
         return view('admin.layouts.pages.sms.index', compact('customers', 'sms_setting'));
     }
 
-    private function extractSmartName($fullName)
-    {
-        $parts = preg_split('/\s+/', trim($fullName));
-        $count = count($parts);
-
-        if ($count >= 3) {
-            return $parts[intdiv($count, 2)];
-        }
-
-        if ($count === 2) {
-            return strlen($parts[0]) >= strlen($parts[1]) ? $parts[0] : $parts[1];
-        }
-
-        return $parts[0] ?? '';
-    }
-
     public function send(Request $request)
     {
         $sms_setting = SmsSetting::where('is_active', true)->first();
@@ -47,7 +31,7 @@ class SmsController extends Controller
         $request->validate([
             'message'        => 'required|string',
             'selected'       => 'nullable|array',
-            'selected.*'     => 'integer|exists:applications,id',
+            'selected.*'     => 'integer|exists:orders,id',
             'mobile_numbers' => 'nullable|string',
         ]);
 
@@ -60,8 +44,8 @@ class SmsController extends Controller
             $customers = Order::whereIn('id', $request->selected)->get();
         }
 
-        foreach ($customers as $app) {
-            $phone = $app->phone;
+        foreach ($customers as $customer) {
+            $phone = $customer->phone;
 
             $today = Carbon::today();
 
@@ -74,35 +58,25 @@ class SmsController extends Controller
             }
 
             try {
-                $personalizedMessage = str_replace(
-                    ['{{id}}', '{{total_price}}'],
-                    [
-                        $this->extractSmartName($app->name),
-                        $app->order->id,
-                        $app->order->total_price,
-
-                    ],
-                    $request->message
-                );
-
-                SendSmsJob::dispatch($phone, $personalizedMessage, [
+                SendSmsJob::dispatch($phone, $request->message, [
                     'api_url'    => $sms_setting->api_url,
                     'api_key'    => $sms_setting->api_key,
                     'api_secret' => $sms_setting->api_secret,
                     'sender'     => $sms_setting->sender_id,
-                ], $app->id);
+                ], $customer->id);
 
                 $successCount++;
                 $sentToNumbers[] = $phone;
-            } catch (\Exception $e) {
+            }
+            catch (\Exception $e) {
                 \Log::error("Failed to send SMS to {$phone}", ['error' => $e->getMessage()]);
                 SmsReport::create([
-                    'application_id' => $app->id,
-                    'mobile'         => $phone,
-                    'message_body'   => $request->message,
-                    'status_code'    => null,
-                    'api_response'   => $e->getMessage(),
-                    'success'        => false,
+                    'customer_id'  => $customer->id,
+                    'mobile'       => $phone,
+                    'message_body' => $request->message,
+                    'status_code'  => null,
+                    'api_response' => $e->getMessage(),
+                    'success'      => false,
                 ]);
                 $failCount++;
             }
@@ -123,7 +97,7 @@ class SmsController extends Controller
                 ->exists();
 
             if ($alreadySentToday) {
-                continue; // skip if already sent today
+                continue;
             }
 
             try {
@@ -136,15 +110,16 @@ class SmsController extends Controller
 
                 $successCount++;
                 $sentToNumbers[] = $number;
-            } catch (\Exception $e) {
+            }
+            catch (\Exception $e) {
                 \Log::error("Failed to send SMS to {$number}", ['error' => $e->getMessage()]);
                 SmsReport::create([
-                    'application_id' => null,
-                    'mobile'         => $number,
-                    'message_body'   => $request->message,
-                    'status_code'    => null,
-                    'api_response'   => $e->getMessage(),
-                    'success'        => false,
+                    'customer_id'  => null,
+                    'mobile'       => $number,
+                    'message_body' => $request->message,
+                    'status_code'  => null,
+                    'api_response' => $e->getMessage(),
+                    'success'      => false,
                 ]);
                 $failCount++;
             }
@@ -152,8 +127,8 @@ class SmsController extends Controller
 
         $seeReportUrl = route('admin.sms-report.index');
 
-        $appNumbers = $customers->pluck('phone')->toArray();
-        $totalNumbers = array_unique(array_merge($appNumbers, $customNumbers));
+        $customerNumbers = $customers->pluck('phone')->toArray();
+        $totalNumbers = array_unique(array_merge($customerNumbers, $customNumbers));
 
         $totalCount = count($totalNumbers);
         $skipCount = $totalCount - ($successCount + $failCount);
@@ -166,9 +141,7 @@ class SmsController extends Controller
 
         if ($insufficientBalance) {
             $statusMessage .= "<span class='text-danger'>Insufficient Balance, Please recharge.</span><br>";
-        }
-
-        else
+        } else
             $statusMessage .= "
                             <span class='text-success'>{$successCount} SMS Successful </span>,
                             <span class='text-danger'>{$failCount} SMS Failed </span>,
