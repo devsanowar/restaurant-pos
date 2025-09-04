@@ -11,6 +11,8 @@ use App\Http\Controllers\Admin\FieldOfCostController;
 use App\Http\Controllers\Admin\AdminSettingController;
 use App\Http\Controllers\Admin\CostCategoryController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\IncomeCategoryController;
+use App\Http\Controllers\Admin\IncomeController;
 use App\Http\Controllers\Admin\SmsSettingController;
 use App\Http\Controllers\Admin\SmsReportController;
 
@@ -57,7 +59,8 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::put('/{id}', 'update')->name('update');
         Route::delete('/{id}', 'destroy')->name('destroy');
         Route::get('/trashed-data', 'trashedData')->name('deleted-data');
-        Route::delete('/permanantly-destroy-data/{id}', 'forceDeleteData')->name('destroy-data');
+        Route::post('/restore-data', 'restoreData')->name('restore-data');
+        Route::delete('/permanantly-destroy-data/{id}', 'forceDelete')->name('forceDelete');
     });
 
     // Supplier Management
@@ -92,6 +95,31 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::get('/{id}/edit', 'edit')->name('edit');
         Route::put('/{id}', 'update')->name('update');
         Route::delete('/{id}', 'destroy')->name('destroy');
+    });
+
+
+    //Income category Management route
+    Route::controller(IncomeCategoryController::class)->prefix('income-category')->name('income.category.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/', 'store')->name('store');
+        Route::get('/{id}/edit', 'edit')->name('edit');
+        Route::put('/{id}', 'update')->name('update');
+        Route::delete('/{id}', 'destroy')->name('destroy');
+    });
+
+
+    //Income Management route
+    Route::controller(IncomeController::class)->prefix('income')->name('income.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/', 'store')->name('store');
+        Route::get('/{id}/edit', 'edit')->name('edit');
+        Route::put('/{id}', 'update')->name('update');
+        Route::delete('/{id}', 'destroy')->name('destroy');
+        Route::get('/trashed-data', 'trashedData')->name('deleted-data');
+        Route::post('/restore-data', 'restoreData')->name('restore-data');
+        Route::delete('/permanantly-destroy-data/{id}', 'forceDelete')->name('forceDelete');
     });
 
     // SMS Settings

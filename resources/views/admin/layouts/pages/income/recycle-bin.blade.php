@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', 'Trashed Supplier List')
+@section('title', 'Trashed Income List')
 @push('styles')
     <link href="{{ asset('backend') }}/assets/css/sweetalert2.min.css" rel="stylesheet" type="text/css" />
 @endpush
@@ -11,35 +11,34 @@
 
             <div class="page-title-head d-flex align-items-sm-center flex-sm-row flex-column gap-2">
                 <div class="flex-grow-1">
-                    <h4 class="fs-18 fw-semibold mb-0">Supplier</h4>
+                    <h4 class="fs-18 fw-semibold mb-0">Income deleted list</h4>
                 </div>
 
                 <div class="text-end">
                     <ol class="breadcrumb m-0 py-0">
                         <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
 
-                        <li class="breadcrumb-item active">Supplier</li>
+                        <li class="breadcrumb-item active">Income</li>
                     </ol>
                 </div>
             </div>
 
-            <!-- All Suppliers Data -->
-            <!-- All Suppliers Data -->
+            <!-- All income Data -->
             <div class="row">
                 <div class="col-12">
                     <div class="card">
                         <!-- Header -->
                         <div
                             class="card-header d-flex align-items-center justify-content-between border-bottom border-light">
-                            <h4 class="header-title mb-0">Supplier List <span>| <a
-                                        href="{{ route('admin.supplier.deleted-data') }}">Recycle Bin (<span
+                            <h4 class="header-title mb-0">Income List <span>| <a
+                                        href="{{ route('admin.income.deleted-data') }}">Recycle Bin (<span
                                             id="recycleCount">{{ $deletedCount }}</span>)</a></span>
 
                             </h4>
                             <div class="d-flex gap-2">
                                 <!-- All Supplier Button -->
-                                <a href="{{ route('admin.supplier.index') }}" class="btn btn-primary btn-sm">All
-                                    Supplier</a>
+                                <a href="{{ route('admin.income.index') }}" class="btn btn-primary btn-sm">All
+                                    Income</a>
                             </div>
                         </div>
 
@@ -63,46 +62,47 @@
                                             <input type="checkbox" class="form-check-input" id="selectAllSuppliers">
                                         </th>
                                         <th>S/N</th>
-                                        <th>Supplier Name</th>
-                                        <th>Person</th>
-                                        <th>Opening balance</th>
-                                        <th>Current balance</th>
-                                        <th>balance Type</th>
-                                        <th class="text-center" style="width:180px">Action</th>
+                                        <th><i class="ti ti-user"></i> Date</th>
+                                        <th><i class="ti ti-user"></i> Income Source</th>
+                                        <th><i class="ti ti-mail"></i> Category</th>
+                                        <th><i class="ti ti-phone"></i> Amount</th>
+                                        <th><i class="ti ti-phone"></i> Income By</th>
+                                        <th><i class="ti ti-check"></i> Status</th>
+                                        <th class="text-center" style="width:60px">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse ($suppliers as $supplier)
-                                        <tr id="row_{{ $supplier->id }}">
+                                    @forelse ($incomes as $income)
+                                        <tr id="row_{{ $income->id }}">
                                             <td class="ps-3"><input type="checkbox" class="form-check-input"></td>
                                             <td>
                                                 {{ $loop->iteration }}
                                             </td>
-                                            <td>{{ $supplier->supplier_name ?? '' }}</td>
-                                            <td><span
-                                                    class="text-dark fw-medium">{{ $supplier->contact_person ?? '' }}</span>
-                                            </td>
-                                            <td>{{ $supplier->opening_balance ?? '0.00' }}</td>
-                                            <td>{{ $supplier->current_balance ?? '0.00' }}</td>
+                                            <td>{{ $income->income_date ?? '' }}</td>
+                                            <td>{{ $income->income_source }}</td>
+                                            <td>{{ $income->incomeCategory->income_category_name }}</td>
+                                            <td>{{ $income->amount }}</td>
+                                            <td>{{ $income->income_by }}</td>
                                             <td>
-                                                @if ($supplier->balance_type == 'receivable')
-                                                    <span class="badge bg-success">Receivable</span>
-                                                @elseif ($supplier->balance_type == 'payable')
-                                                    <span class="badge bg-danger">Payable</span>
+                                                @if ($income->status == 'received')
+                                                    <span class="badge bg-success">Received</span>
+                                                @elseif ($income->status == 'pending')
+                                                    <span class="badge bg-danger">Pending</span>
                                                 @endif
+
                                             </td>
 
                                             <td class="pe-3">
                                                 <div class="hstack gap-1 justify-content-end">
                                                     <a href="javascript:void(0);"
                                                         class="btn btn-soft-primary btn-sm restoreBtn"
-                                                        data-id="{{ $supplier->id }}" title="Restore">
+                                                        data-id="{{ $income->id }}" title="Restore">
                                                         Restore
                                                     </a>
 
                                                     <a href="javascript:void(0);"
                                                         class="btn btn-soft-danger btn-sm forceDeleteBtn"
-                                                        data-id="{{ $supplier->id }}">
+                                                        data-id="{{ $income->id }}">
                                                         Parmanently Delete
                                                     </a>
 
@@ -111,7 +111,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="10" class="text-center">No suppliers found.</td>
+                                            <td colspan="10" class="text-center">No incomes found.</td>
                                         </tr>
                                     @endforelse
 
@@ -134,11 +134,11 @@
         <script>
             $(document).on('click', '.restoreBtn', function() {
                 let id = $(this).data('id');
-                let url = "{{ route('admin.supplier.restore-data') }}";
+                let url = "{{ route('admin.income.restore-data') }}";
 
                 Swal.fire({
                     title: "Are you sure?",
-                    text: "Do you want to restore this supplier?",
+                    text: "Do you want to restore this income?",
                     icon: "question",
                     showCancelButton: true,
                     confirmButtonText: "Yes, restore it!",
@@ -182,7 +182,7 @@
         <script>
             $(document).on('click', '.forceDeleteBtn', function() {
                 let id = $(this).data('id');
-                let url = "/admin/supplier/permanantly-destroy-data/" + id;
+                let url = "/admin/income/permanantly-destroy-data/" + id;
 
                 Swal.fire({
                     title: "Are you sure?",

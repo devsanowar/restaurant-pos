@@ -27,12 +27,15 @@
                         <!-- Header -->
                         <div
                             class="card-header d-flex align-items-center justify-content-between border-bottom border-light">
-                            <h4 class="header-title mb-0">Deleted Cost List <span>
-                                    <a href="{{ route('admin.cost.index') }}" class="btn btn-danger bg-gradient">
-                                        <i class="ti ti-delete me-1"></i> All Cost
-                                    </a>
-                                </span>
+                            <h4 class="header-title mb-0">Deleted Cost List <span>| <a href="#">Recycle Bin (<span
+                                            id="recycleCount">{{ $deletedCount }}</span>)</a></span>
                             </h4>
+
+                            <div class="d-flex gap-2">
+                                <!-- All Supplier Button -->
+                                <a href="{{ route('admin.cost.index') }}" class="btn btn-primary btn-sm">All
+                                    Cost</a>
+                            </div>
 
                         </div>
 
@@ -58,7 +61,7 @@
                                 </thead>
                                 <tbody>
                                     @forelse ($costs as $key => $cost)
-                                        <tr id="cost-row-{{ $cost->id }}">
+                                        <tr id="row_{{ $cost->id }}">
                                             <td class="ps-3">
                                                 <input type="checkbox" class="form-check-input">
                                             </td>
@@ -89,19 +92,18 @@
                                             <!-- Action -->
                                             <td class="pe-3">
                                                 <div class="hstack gap-1 justify-content-end">
-                                                    <!-- Edit -->
+                                                    <a href="javascript:void(0);"
+                                                        class="btn btn-soft-primary btn-sm restoreBtn"
+                                                        data-id="{{ $cost->id }}" title="Restore">
+                                                        Restore
+                                                    </a>
 
-                                                    <!-- Delete -->
-                                                    <form class="deleteCost d-inline-block" method="POST"
-                                                        action="{{ route('admin.cost.destroy-data', $cost->id) }}">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit"
-                                                            class="btn btn-soft-danger btn-icon btn-sm rounded-circle show_confirm"
-                                                            title="Delete" data-id="{{ $cost->id }}">
-                                                            <i class="ti ti-trash"></i>
-                                                        </button>
-                                                    </form>
+                                                    <a href="javascript:void(0);"
+                                                        class="btn btn-soft-danger btn-sm forceDeleteBtn"
+                                                        data-id="{{ $cost->id }}">
+                                                        Parmanently Delete
+                                                    </a>
+
                                                 </div>
                                             </td>
                                         </tr>
@@ -125,10 +127,6 @@
                 </div>
             </div>
 
-
-            @include('admin.layouts.pages.cost.create')
-            @include('admin.layouts.pages.cost.edit')
-
         </div>
     </div>
 @endsection
@@ -139,46 +137,95 @@
 
 
     <script>
-        // Delete with ajax
-        $(document).ready(function() {
-            $('.show_confirm').on('click', function(e) {
-                e.preventDefault();
+        $(document).on('click', '.restoreBtn', function() {
+            let id = $(this).data('id');
+            let url = "{{ route('admin.cost.restore-data') }}";
 
-                let button = $(this);
-                let form = button.closest('form');
-                let fieldOfCostId = button.data('id');
-                let actionUrl = form.attr('action');
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Do you want to restore this cost?",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonText: "Yes, restore it!",
+                cancelButtonText: "Cancel",
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: url,
+                        type: "POST",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            id: id
+                        },
+                        success: function(response) {
+                            if (response.status === 'success') {
+                                // Row remove from recycle bin list
+                                $("#row_" + id).fadeOut(500, function() {
+                                    $(this).remove();
+                                });
 
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "This action cannot be undone!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: actionUrl,
-                            type: 'POST',
-                            data: {
-                                _token: form.find('input[name="_token"]').val(),
-                                _method: 'DELETE',
-                            },
-                            success: function(response) {
-                                toastr.success(response.message ||
-                                    'Deleted successfully!');
-                                // Row remove (assuming the button is inside a <tr>)
-                                form.closest('tr').remove();
-                            },
-                            error: function(xhr) {
-                                toastr.error(xhr.responseJSON?.message ||
-                                    'Something went wrong!');
+                                // Update recycle bin count
+                                $("#recycleCount").text(response.deletedCount);
+
+                                Swal.fire("Restored!", response.message, "success");
+                            } else {
+                                Swal.fire("Error!", response.message, "error");
                             }
-                        });
-                    }
-                });
+                        },
+                        error: function() {
+                            Swal.fire("Error!", "Something went wrong.", "error");
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+
+
+    <script>
+        $(document).on('click', '.forceDeleteBtn', function() {
+            let id = $(this).data('id');
+            let url = "/admin/cost/permanantly-destroy-data/" + id;
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: "This record will be permanently deleted!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "Cancel",
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: url,
+                        type: "DELETE",
+                        data: {
+                            _token: "{{ csrf_token() }}"
+                        },
+                        success: function(response) {
+                            if (response.status === 'success') {
+                                // Row remove with fade out
+                                $("#row_" + id).fadeOut(500, function() {
+                                    $(this).remove();
+                                });
+
+                                // Update recycle bin count
+                                $("#recycleCount").text(response.deletedCount);
+
+                                Swal.fire("Deleted!", response.message, "success");
+                            } else {
+                                Swal.fire("Error!", response.message, "error");
+                            }
+                        },
+                        error: function(xhr) {
+                            Swal.fire("Error!", "Something went wrong.", "error");
+                        }
+                    });
+                }
             });
         });
     </script>

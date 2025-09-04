@@ -123,26 +123,27 @@ class SupplierController extends Controller
         );
     }
 
-public function forceDelete($id)
-{
-    $supplier = Supplier::onlyTrashed()->where('id', $id)->first();
+    public function forceDelete($id)
+    {
+        $supplier = Supplier::onlyTrashed()->where('id', $id)->first();
 
-    if ($supplier) {
-        $supplier->forceDelete();
-        $deletedCount = Supplier::onlyTrashed()->count();
+        if ($supplier) {
+            $supplier->forceDelete();
+            $deletedCount = Supplier::onlyTrashed()->count();
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Supplier permanently deleted!',
-            'deletedCount' => $deletedCount
-        ]);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Supplier permanently deleted!',
+                'deletedCount' => $deletedCount,
+            ]);
+        }
+
+        return response()->json(
+            [
+                'status' => 'error',
+                'message' => 'Supplier not found',
+            ],
+            404,
+        );
     }
-
-    return response()->json([
-        'status' => 'error',
-        'message' => 'Supplier not found'
-    ], 404);
-}
-
-
 }
