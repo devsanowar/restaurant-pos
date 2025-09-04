@@ -3,18 +3,20 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\SmsController;
 use App\Http\Controllers\Admin\CostController;
+use App\Http\Controllers\Admin\StockController;
+use App\Http\Controllers\Admin\IncomeController;
 use App\Http\Controllers\Admin\SmsLogController;
 use App\Http\Controllers\Admin\WaiterController;
 use App\Http\Controllers\Admin\ResTableController;
 use App\Http\Controllers\Admin\SupplierController;
+use App\Http\Controllers\Admin\SmsReportController;
+use App\Http\Controllers\Admin\StockItemController;
+use App\Http\Controllers\Admin\SmsSettingController;
 use App\Http\Controllers\Admin\FieldOfCostController;
 use App\Http\Controllers\Admin\AdminSettingController;
 use App\Http\Controllers\Admin\CostCategoryController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\IncomeCategoryController;
-use App\Http\Controllers\Admin\IncomeController;
-use App\Http\Controllers\Admin\SmsSettingController;
-use App\Http\Controllers\Admin\SmsReportController;
 
 Route::get('/', [App\Http\Controllers\Admin\AdminLoginPageController::class, 'index'])->name('admin.login');
 
@@ -75,6 +77,19 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::post('/restore-data', 'restoreData')->name('restore-data');
         Route::delete('/permanantly-destroy-data/{id}', 'forceDelete')->name('forceDelete');
     });
+
+    // Stock item Management
+    Route::controller(StockItemController::class)->prefix('stock-item')->name('stock.item.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/', 'store')->name('store');
+        Route::get('/{id}/edit', 'edit')->name('edit');
+        Route::put('/{id}', 'update')->name('update');
+        Route::delete('/{id}', 'destroy')->name('destroy');
+        Route::get('/trashed-data', 'trashedData')->name('deleted-data');
+        Route::post('/restore-data', 'restoreData')->name('restore-data');
+        Route::delete('/permanantly-destroy-data/{id}', 'forceDelete')->name('forceDelete');
+    });
+
 
 
     // Restaurant Table Management
