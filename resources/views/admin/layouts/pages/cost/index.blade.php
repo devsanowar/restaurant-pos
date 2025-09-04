@@ -65,30 +65,14 @@
                                                 <input type="checkbox" class="form-check-input">
                                             </td>
                                             <td>{{ $key + 1 }}</td>
-
-                                            <!-- Date -->
                                             <td>{{ \Carbon\Carbon::parse($cost->date)->format('d M, Y') }}
                                             </td>
-
-                                            <!-- Category Name (relation) -->
                                             <td>{{ $cost->category->category_name ?? 'N/A' }}</td>
-
-                                            <!-- Field Name (relation) -->
                                             <td>{{ $cost->field->field_name ?? 'N/A' }}</td>
-
-                                            <!-- Branch -->
                                             <td>{{ $cost->branch_name ?? '-' }}</td>
-
-                                            <!-- Amount -->
                                             <td>{{ number_format($cost->amount, 2) }}</td>
-
-                                            <!-- Spent By -->
                                             <td>{{ $cost->spend_by }}</td>
-
-                                            <!-- Description -->
                                             <td>{{ $cost->description ?? '-' }}</td>
-
-                                            <!-- Action -->
                                             <td class="pe-3">
                                                 <div class="hstack gap-1 justify-content-end">
                                                     <!-- Edit -->
