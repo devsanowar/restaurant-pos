@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\AdminSettingController;
 use App\Http\Controllers\Admin\CostCategoryController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\IncomeCategoryController;
+use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\UserManagementController;
 
 Route::get('/', [App\Http\Controllers\Admin\AdminLoginPageController::class, 'index'])->name('admin.login');
@@ -159,6 +160,11 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::get('/{id}/edit', 'edit')->name('edit');
         Route::put('/{id}', 'update')->name('update');
         Route::delete('/{id}', 'destroy')->name('destroy');
+    });
+
+    Route::controller(SettingsController::class)->prefix('setting')->name('setting.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::put('/update', 'update')->name('update');
     });
 
     // SMS Settings

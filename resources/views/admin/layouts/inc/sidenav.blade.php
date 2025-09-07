@@ -221,7 +221,7 @@
             </li>
             <!-- Settings-->
             <li class="side-nav-item">
-                <a href="apps-settings.html" class="side-nav-link">
+                <a href="{{ route('admin.setting.index') }}" class="side-nav-link">
                     <span class="menu-icon"><i class="ti ti-message"></i></span>
                     <span class="menu-text"> Settings </span>
                 </a>
