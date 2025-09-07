@@ -15,7 +15,7 @@ class SettingsController extends Controller
         $general = GeneralSetting::first();
         $pos = PosSetting::first();
         $notification = NotificationSetting::first();
-        return view('admin.layouts.pages.setting.index', compact('general','pos','notification'));
+        return view('admin.layouts.pages.setting.index', compact('general', 'pos', 'notification'));
     }
 
     public function update(Request $request)
@@ -36,8 +36,10 @@ class SettingsController extends Controller
         if ($request->hasFile('restaurant_logo')) {
             $logo = $request->file('restaurant_logo');
             $filename = time() . '.' . $logo->getClientOriginalExtension();
-            $logo->move(public_path('uploads/logo'), $filename);
-            $general->restaurant_logo = $filename;
+            $path = public_path('uploads/logo');
+
+            $logo->move($path, $filename);
+            $general->restaurant_logo = 'uploads/logo/' . $filename;
         }
 
         $general->save();
