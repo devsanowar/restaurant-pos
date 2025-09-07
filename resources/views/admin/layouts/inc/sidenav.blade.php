@@ -206,12 +206,31 @@
 
 
             <!-- Payroll-->
+
             <li class="side-nav-item">
-                <a href="apps-payroll.html" class="side-nav-link">
+                <a data-bs-toggle="collapse" href="#posProduct" aria-expanded="false" aria-controls="posProduct"
+                    class="side-nav-link">
                     <span class="menu-icon"><i class="ti ti-message"></i></span>
-                    <span class="menu-text"> Payroll </span>
+                    <span class="menu-text"> Payroll</span>
+                    <span class="menu-arrow"></span>
                 </a>
+                <div class="collapse" id="posProduct">
+                    <ul class="sub-menu">
+                        <li class="side-nav-item">
+                            <a href="{{ route('admin.restaurant.branch.index') }}" class="side-nav-link">
+                                <span class="menu-text">All Retaurant</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="apps-prodcut-add-new.html" class="side-nav-link">
+                                <span class="menu-text">Add New Product</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </li>
+
+
             <!-- Reports-->
             <li class="side-nav-item">
                 <a href="apps-reports.html" class="side-nav-link">
