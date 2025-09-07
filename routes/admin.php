@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\AdminSettingController;
 use App\Http\Controllers\Admin\CostCategoryController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\IncomeCategoryController;
+use App\Http\Controllers\Admin\UserManagementController;
 
 Route::get('/', [App\Http\Controllers\Admin\AdminLoginPageController::class, 'index'])->name('admin.login');
 
@@ -148,6 +149,16 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::get('/trashed-data', 'trashedData')->name('deleted-data');
         Route::post('/restore-data', 'restoreData')->name('restore-data');
         Route::delete('/permanantly-destroy-data/{id}', 'forceDelete')->name('forceDelete');
+    });
+
+
+        //User Management route
+    Route::controller(UserManagementController::class)->prefix('user-management')->name('user.management.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/', 'store')->name('store');
+        Route::get('/{id}/edit', 'edit')->name('edit');
+        Route::put('/{id}', 'update')->name('update');
+        Route::delete('/{id}', 'destroy')->name('destroy');
     });
 
     // SMS Settings

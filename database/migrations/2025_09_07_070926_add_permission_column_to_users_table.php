@@ -12,7 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->enum('assign_permission',['view','add','edit','delete'])->nullable()->after('system_admin');
+            $table->boolean('can_view')->default(0);
+            $table->boolean('can_add')->default(0);
+            $table->boolean('can_edit')->default(0);
+            $table->boolean('can_delete')->default(0);
         });
     }
 
@@ -22,7 +25,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('assign_permission');
+            $table->dropColumn(['can_view','can_add','can_edit','can_delete']);
         });
     }
 };

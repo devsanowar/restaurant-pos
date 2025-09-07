@@ -264,7 +264,7 @@
 
             <!-- User Management-->
             <li class="side-nav-item">
-                <a href="apps-user-management.html" class="side-nav-link">
+                <a href="{{ route('admin.user.management.index') }}" class="side-nav-link">
                     <span class="menu-icon"><i class="ti ti-message"></i></span>
                     <span class="menu-text"> User Management </span>
                 </a>

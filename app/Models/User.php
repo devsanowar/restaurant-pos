@@ -21,7 +21,19 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'system_admin',
+        'phone',
+        'image',
+        'can_view',
+        'can_add',
+        'can_edit',
+        'can_delete',
     ];
+
+    public static function system_admins(): array
+    {
+        return ['supper_admin', 'admin', 'manager', 'sales_man','user'];
+    }
 
     /**
      * The attributes that should be hidden for serialization.
