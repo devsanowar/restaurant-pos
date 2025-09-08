@@ -168,11 +168,36 @@
             $('.editBtn').click(function() {
                 let id = $(this).data('id');
 
-                // AJAX call to get restaurant data
                 $.get('/admin/restaurant-branch/' + id + '/edit', function(data) {
+                    // Fill form
                     $('#editRestaurantId').val(data.id);
-                    $('#editRestaurantName').val(data.name);
-                    // onno fields
+                    $('#editRestaurantName').val(data
+                    .restaurant_branch_name); // JSON property match
+                    $('#editRestaurantStatus').val(data.status); // select field
+                });
+            });
+
+            // Update form submit
+            $('#editRestaurantForm').submit(function(e) {
+                e.preventDefault();
+
+                let id = $('#editRestaurantId').val();
+                let formData = $(this).serialize();
+
+                $.ajax({
+                    url: '/admin/restaurant-branch/' + id,
+                    type: 'PUT',
+                    data: formData,
+                    success: function(res) {
+                        toastr.success(res.message);
+                        $('#editRestaurantForm')[0].reset();
+                        $('#editRestaurantModal').modal('hide');
+                        location.reload();
+                    },
+                    error: function(err) {
+                        console.log(err);
+                        alert('Something went wrong!');
+                    }
                 });
             });
         });

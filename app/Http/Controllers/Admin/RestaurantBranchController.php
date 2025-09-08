@@ -39,26 +39,16 @@ class RestaurantBranchController extends Controller
         return response()->json($branch);
     }
 
+    // Update
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'restaurant_branch_name' => 'required|string',
-            'status' => 'required|in:1,0',
-        ]);
+        $branch = RestaurantBranch::find($id);
+        $branch->restaurant_branch_name = $request->restaurant_branch_name;
+        $branch->status = $request->status;
+        $branch->save();
 
-        $restaurant = RestaurantBranch::findOrFail($id);
-        $restaurant->update([
-            'restaurant_branch_name' => $request->restaurant_branch_name,
-            'status' => $request->status,
-        ]);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Restaurant updated successfully.',
-            'data' => $restaurant,
-        ]);
+        return response()->json(['success' => true, 'message' => 'Restaurant updated']);
     }
-
 
     public function destroy($id)
     {
@@ -74,13 +64,9 @@ class RestaurantBranchController extends Controller
         }
         $restaurantBranch->delete();
 
-
         return response()->json([
             'status' => 'success',
             'message' => 'Restaurant deleted successfully.',
-
         ]);
     }
-
-
 }
