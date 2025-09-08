@@ -21,6 +21,7 @@
     <link href="{{ asset('backend') }}/assets/css/app.min.css" rel="stylesheet" type="text/css" id="app-style" />
 
     <!-- Icons css -->
+    <link href="{{ asset('backend') }}/assets/css/custom.css" rel="stylesheet" type="text/css" />
     <link href="{{ asset('backend') }}/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
     <link href="{{ asset('backend') }}/assets/css/toastr.css" rel="stylesheet" type="text/css" />
 
@@ -61,7 +62,7 @@
         <!-- ============================================================== -->
         <!-- Start Page Content here -->
         <!-- ============================================================== -->
-        
+
         @yield('admin_content')
 
         <!-- ============================================================== -->

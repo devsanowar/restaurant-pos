@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\AdminSettingController;
 use App\Http\Controllers\Admin\CostCategoryController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\IncomeCategoryController;
+use App\Http\Controllers\Admin\PayrollController;
 use App\Http\Controllers\Admin\RestaurantBranchController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\UserManagementController;
@@ -175,6 +176,17 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::post('/store', 'store')->name('store');
         Route::get('/{id}/edit', 'edit')->name('edit');
         Route::put('/{id}', 'update')->name('update');
+        Route::delete('/{id}', 'destroy')->name('destroy');
+    });
+
+
+    //Restaurant management route
+    Route::controller(PayrollController::class)->prefix('payroll')->name('payroll.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/store', 'store')->name('store');
+        Route::get('/{id}/edit', 'edit')->name('edit');
+        Route::put('/update/{id}', 'update')->name('update');
         Route::delete('/{id}', 'destroy')->name('destroy');
     });
 

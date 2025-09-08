@@ -222,8 +222,13 @@
                             </a>
                         </li>
                         <li class="side-nav-item">
-                            <a href="apps-prodcut-add-new.html" class="side-nav-link">
-                                <span class="menu-text">Add New Product</span>
+                            <a href="{{ route('admin.payroll.create') }}" class="side-nav-link">
+                                <span class="menu-text">Add Payroll</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="{{ route('admin.payroll.index') }}" class="side-nav-link">
+                                <span class="menu-text">All Payroll</span>
                             </a>
                         </li>
                     </ul>
