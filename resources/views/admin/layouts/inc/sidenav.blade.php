@@ -75,13 +75,8 @@
                             </a>
                         </li>
                         <li class="side-nav-item">
-                            <a href="apps-product-all-products.html" class="side-nav-link">
+                            <a href="{{ route('admin.product.index') }}" class="side-nav-link">
                                 <span class="menu-text">All Product</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="apps-prodcut-add-new.html" class="side-nav-link">
-                                <span class="menu-text">Add New Product</span>
                             </a>
                         </li>
                     </ul>

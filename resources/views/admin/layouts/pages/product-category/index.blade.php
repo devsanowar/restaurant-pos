@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-
+@section('title', 'All Product Category')
 @push('styles')
     <link href="{{ asset('backend') }}/assets/css/sweetalert2.min.css" rel="stylesheet" type="text/css" />
 @endpush
@@ -44,15 +44,6 @@
                                     <i class="ti ti-plus me-1"></i> Add Category
                                 </button>
 
-                                <!-- Import Button with File Input -->
-                                <div class="position-relative">
-                                    <button type="button" class="btn btn-secondary btn-sm"
-                                            onclick="document.getElementById('importFileInput').click();">
-                                        <i class="ti ti-file-import me-1"></i> Import
-                                    </button>
-                                    <input type="file" id="importFileInput" accept=".csv, .xlsx"
-                                           style="display: none;" onchange="handleFileUpload(event)">
-                                </div>
                             </div>
                         </div>
 
@@ -73,41 +64,63 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <!-- Example Supplier Row -->
+                                @foreach($productCategories as $productCategory)
                                 <tr>
                                     <td class="ps-3"><input type="checkbox" class="form-check-input"></td>
                                     <td>
-                                        <img src="{{ asset('backend') }}/assets/images/suppliers/freshfoods.png" alt="Fresh Foods"
+                                        <img src="{{ asset($productCategory->image) }}" alt="Product Category"
                                              class="img-thumbnail"
                                              style="width: 50px; height: 50px; object-fit: cover;">
                                     </td>
-                                    <td>SUP001</td>
-                                    <td><span class="text-dark fw-medium">Fresh Foods Ltd.</span></td>
-                                    <td>John Doe</td>
-                                    <td>+880 1711-000000</td>
-                                    <td>freshfoods@gmail.com</td>
-                                    <td><span class="badge bg-success">Active</span></td>
+                                    <td><span class="text-dark fw-medium">{{ $productCategory->category_name }}</span></td>
+                                    <td>{{ $productCategory->category_slug }}</td>
+                                    <td>{{ $productCategory->description }}</td>
+                                    <td>
+                                        @if($productCategory->is_active == 1)
+                                            <span class="badge bg-success">Active</span>
+                                        @else
+                                            <span class="badge bg-danger">Deactive</span>
+                                        @endif
+                                    </td>
                                     <td class="pe-3">
                                         <div class="hstack gap-1 justify-content-end">
-                                            <a href="javascript:void(0);"
+
+                                            <!-- View -->
+                                            <a href="{{ route('admin.product-category.show', $productCategory->id) }}"
                                                class="btn btn-soft-primary btn-icon btn-sm rounded-circle"
                                                title="View">
                                                 <i class="ti ti-eye"></i>
                                             </a>
+
+                                            <!-- Edit Button -->
                                             <a href="javascript:void(0);"
-                                               class="btn btn-soft-success btn-icon btn-sm rounded-circle"
+                                               class="btn btn-soft-success btn-icon btn-sm rounded-circle editCategoryBtn"
+                                               data-id="{{ $productCategory->id }}"
+                                               data-name="{{ $productCategory->category_name }}"
+                                               data-description="{{ $productCategory->description }}"
+                                               data-image="{{ asset($productCategory->image) }}"
+                                               data-status="{{ $productCategory->is_active }}"
                                                title="Edit">
                                                 <i class="ti ti-edit fs-16"></i>
                                             </a>
-                                            <a href="javascript:void(0);"
-                                               class="btn btn-soft-danger btn-icon btn-sm rounded-circle"
-                                               title="Delete">
-                                                <i class="ti ti-trash"></i>
-                                            </a>
+
+                                            <!-- Delete -->
+                                            <form action="{{ route('admin.product-category.destroy', $productCategory->id) }}"
+                                                  method="POST"
+                                                  style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                        class="btn btn-soft-danger btn-icon btn-sm rounded-circle show_confirm"
+                                                        title="Delete">
+                                                    <i class="ti ti-trash"></i>
+                                                </button>
+                                            </form>
                                         </div>
                                     </td>
+
                                 </tr>
-                                <!-- Repeat similar rows dynamically -->
+                                @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -136,74 +149,10 @@
             </div>
 
             <!-- Add Category Modal -->
-            <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-lg">
-                    <div class="modal-content">
+            @include('admin.layouts.pages.product-category.create')
 
-                        <!-- Modal Header -->
-                        <div class="modal-header bg-light">
-                            <h5 class="modal-title" id="addCategoryModalLabel">Add Category</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                        </div>
-
-                        <!-- Modal Body -->
-                        <div class="modal-body">
-                            <form action="{{ route('admin.product-category.store') }}" method="POST" id="categoryForm" enctype="multipart/form-data">
-                                @csrf
-
-                                @if ($errors->any())
-                                    <div class="alert alert-danger">
-                                        <strong>Whoops!</strong> There were some problems with your input.<br><br>
-                                        <ul class="mb-0">
-                                            @foreach ($errors->all() as $error)
-                                                <li>{{ $error }}</li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                @endif
-
-                                <div class="row g-3">
-                                    <!-- Category Name -->
-                                    <div>
-                                        <label for="categoryName" class="form-label">Category Name</label>
-                                        <input type="text" name="category_name" class="form-control" id="categoryName"
-                                               placeholder="Enter category name" required>
-                                    </div>
-                                    <!-- Description -->
-                                    <div>
-                                        <label for="description" class="form-label">Description</label>
-                                        <textarea name="description" id="description" cols="30" rows="4" class="form-control"
-                                                  placeholder="Enter category description" required></textarea>
-                                    </div>
-                                    <!-- Category Image -->
-                                    <div>
-                                        <label for="image" class="form-label">Image</label>
-                                        <input type="file" name="image" class="form-control" id="image">
-                                    </div>
-                                    <!-- Status -->
-                                    <div class="mb-3">
-                                        <label for="choices-single-no-search"
-                                               class="form-label text-muted">Status</label>
-                                        <select class="form-control" id="choices-single-no-search"
-                                                name="is_active" data-choices data-choices-search-false
-                                                data-choices-removeItem>
-                                            <option value="1">Active</option>
-                                            <option value="0">Deactive</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                        <!-- Modal Footer -->
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" form="categoryForm" class="btn btn-primary">Save</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!-- Edit Modal -->
+            @include('admin.layouts.pages.product-category.edit')
 
         </div> <!-- container -->
 
@@ -236,6 +185,39 @@
 @endsection
 
 @push('scripts')
+
+    <script>
+        $(document).ready(function() {
+            $('.editCategoryBtn').on('click', function() {
+                let id = $(this).data('id');
+                let name = $(this).data('name');
+                let description = $(this).data('description');
+                let image = $(this).data('image');
+                let status = $(this).data('status');
+
+                // Fill modal fields
+                $('#edit_category_name').val(name);
+                $('#edit_description').val(description ?? '');
+                $('#edit_is_active').val(String(status)).trigger('change');
+
+                // Image preview
+                if(image){
+                    $('#preview_image').html(`<img src="${image}" class="img-thumbnail" style="width:80px;height:80px;object-fit:cover;">`);
+                } else {
+                    $('#preview_image').html('');
+                }
+
+                // Update form action dynamically
+                let url = "{{ route('admin.product-category.update', ':id') }}";
+                url = url.replace(':id', id);
+                $('#editCategoryForm').attr('action', url);
+
+                // Show modal
+                $('#editCategoryModal').modal('show');
+            });
+        });
+    </script>
+
     <script src="{{ asset('backend') }}/assets/js/sweetalert2.all.min.js"></script>
 
     <script>

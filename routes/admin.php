@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\IncomeController;
 use App\Http\Controllers\Admin\SmsSettingController;
 use App\Http\Controllers\Admin\SmsReportController;
 use App\Http\Controllers\Admin\ProductCategoryController;
+use App\Http\Controllers\Admin\ProductController;
 
 Route::get('/', [App\Http\Controllers\Admin\AdminLoginPageController::class, 'index'])->name('admin.login');
 
@@ -138,5 +139,8 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
 
     // Product Category
     Route::resource('product-category', ProductCategoryController::class);
+
+    // Product
+    Route::resource('product', ProductController::class);
 
 });

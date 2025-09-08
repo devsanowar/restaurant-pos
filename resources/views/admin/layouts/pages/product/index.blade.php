@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-
+@section('title', 'All Product')
 @push('styles')
     <link href="{{ asset('backend') }}/assets/css/sweetalert2.min.css" rel="stylesheet" type="text/css" />
 @endpush
@@ -16,19 +16,18 @@
 
             <div class="page-title-head d-flex align-items-sm-center flex-sm-row flex-column gap-2">
                 <div class="flex-grow-1">
-                    <h4 class="fs-18 fw-semibold mb-0">Supplier</h4>
+                    <h4 class="fs-18 fw-semibold mb-0">Products</h4>
                 </div>
 
                 <div class="text-end">
                     <ol class="breadcrumb m-0 py-0">
                         <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
 
-                        <li class="breadcrumb-item active">Supplier</li>
+                        <li class="breadcrumb-item active">Products</li>
                     </ol>
                 </div>
             </div>
 
-            <!-- All Suppliers Data -->
             <!-- All Suppliers Data -->
             <div class="row">
                 <div class="col-12">
@@ -36,23 +35,14 @@
                         <!-- Header -->
                         <div
                             class="card-header d-flex align-items-center justify-content-between border-bottom border-light">
-                            <h4 class="header-title mb-0">Supplier List</h4>
+                            <h4 class="header-title mb-0">Product List</h4>
                             <div class="d-flex gap-2">
                                 <!-- Add Supplier Button -->
                                 <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                                        data-bs-target="#addSupplierModal">
-                                    <i class="ti ti-plus me-1"></i> Add Supplier
+                                        data-bs-target="#addProductModal">
+                                    <i class="ti ti-plus me-1"></i> Add Product
                                 </button>
 
-                                <!-- Import Button with File Input -->
-                                <div class="position-relative">
-                                    <button type="button" class="btn btn-secondary btn-sm"
-                                            onclick="document.getElementById('importFileInput').click();">
-                                        <i class="ti ti-file-import me-1"></i> Import
-                                    </button>
-                                    <input type="file" id="importFileInput" accept=".csv, .xlsx"
-                                           style="display: none;" onchange="handleFileUpload(event)">
-                                </div>
                             </div>
                         </div>
 
@@ -62,54 +52,73 @@
                                 <thead class="bg-light-subtle">
                                 <tr>
                                     <th class="ps-3" style="width: 50px;">
-                                        <input type="checkbox" class="form-check-input" id="selectAllSuppliers">
+                                        <input type="checkbox" class="form-check-input" id="selectAllProducts">
                                     </th>
-                                    <th>Logo</th>
-                                    <th>Supplier ID</th>
-                                    <th>Supplier Name</th>
-                                    <th>Contact Person</th>
-                                    <th>Phone</th>
-                                    <th>Email</th>
+                                    <th>Image</th>
+                                    <th>Product Category</th>
+                                    <th>Product Name</th>
+                                    <th>Costing Price</th>
+                                    <th>Sales Price</th>
                                     <th>Status</th>
                                     <th class="text-center" style="width: 150px;">Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <!-- Example Supplier Row -->
+                                @foreach($products as $product)
                                 <tr>
                                     <td class="ps-3"><input type="checkbox" class="form-check-input"></td>
                                     <td>
-                                        <img src="{{ asset('backend') }}/assets/images/suppliers/freshfoods.png" alt="Fresh Foods"
+                                        <img src="{{ asset($product->image) }}" alt="Product"
                                              class="img-thumbnail"
                                              style="width: 50px; height: 50px; object-fit: cover;">
                                     </td>
-                                    <td>SUP001</td>
-                                    <td><span class="text-dark fw-medium">Fresh Foods Ltd.</span></td>
-                                    <td>John Doe</td>
-                                    <td>+880 1711-000000</td>
-                                    <td>freshfoods@gmail.com</td>
-                                    <td><span class="badge bg-success">Active</span></td>
+                                    <td>{{ $product->category->category_name }}</td>
+                                    <td><span class="text-dark fw-medium">{{ $product->product_name }}</span></td>
+                                    <td>{{ number_format($product->costing_price, 2) }}</td>
+                                    <td>{{ number_format($product->sales_price, 2) }}</td>
+                                    <td>
+                                        @if($product->status == 'In Stock')
+                                            <span class="badge bg-success">In Stock</span></td>
+                                        @else
+                                            <span class="badge bg-danger">Out of Stock</span></td>
+                                        @endif
                                     <td class="pe-3">
                                         <div class="hstack gap-1 justify-content-end">
-                                            <a href="javascript:void(0);"
+
+                                            <a href="{{ route('admin.product.show', $product->id) }}"
                                                class="btn btn-soft-primary btn-icon btn-sm rounded-circle"
                                                title="View">
                                                 <i class="ti ti-eye"></i>
                                             </a>
+
+                                            <!-- Edit Button -->
                                             <a href="javascript:void(0);"
-                                               class="btn btn-soft-success btn-icon btn-sm rounded-circle"
+                                               class="btn btn-soft-success btn-icon btn-sm rounded-circle editProductBtn"
+                                               data-id="{{ $product->id }}"
                                                title="Edit">
                                                 <i class="ti ti-edit fs-16"></i>
                                             </a>
-                                            <a href="javascript:void(0);"
-                                               class="btn btn-soft-danger btn-icon btn-sm rounded-circle"
-                                               title="Delete">
-                                                <i class="ti ti-trash"></i>
-                                            </a>
+
+                                            <!-- Delete -->
+                                            <form action="{{ route('admin.product.destroy', $product->id) }}"
+                                                  method="POST"
+                                                  style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                        class="btn btn-soft-danger btn-icon btn-sm rounded-circle show_confirm"
+                                                        title="Delete">
+                                                    <i class="ti ti-trash"></i>
+                                                </button>
+                                            </form>
                                         </div>
                                     </td>
                                 </tr>
-                                <!-- Repeat similar rows dynamically -->
+
+                                <!-- Edit Product Modal -->
+                                @include('admin.layouts.pages.product.edit')
+
+                                @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -137,78 +146,8 @@
                 </div>
             </div>
 
-            <!-- Add Supplier Modal -->
-            <div class="modal fade" id="addSupplierModal" tabindex="-1" aria-labelledby="addSupplierModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-lg">
-                    <div class="modal-content">
-                        <!-- Modal Header -->
-                        <div class="modal-header bg-light">
-                            <h5 class="modal-title" id="addSupplierModalLabel">Add Supplier</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                        </div>
-                        <!-- Modal Body -->
-                        <div class="modal-body">
-                            <form id="supplierForm">
-                                <div class="row g-3">
-                                    <!-- Supplier Name -->
-                                    <div class="col-md-6">
-                                        <label for="supplierName" class="form-label">Supplier Name</label>
-                                        <input type="text" class="form-control" id="supplierName"
-                                               placeholder="Enter supplier name" required>
-                                    </div>
-                                    <!-- Contact Person -->
-                                    <div class="col-md-6">
-                                        <label for="contactPerson" class="form-label">Contact Person</label>
-                                        <input type="text" class="form-control" id="contactPerson"
-                                               placeholder="Enter contact person name" required>
-                                    </div>
-                                    <!-- Phone -->
-                                    <div class="col-md-6">
-                                        <label for="phone" class="form-label">Phone</label>
-                                        <input type="tel" class="form-control" id="phone"
-                                               placeholder="+880 1XXX-XXXXXX" required>
-                                    </div>
-                                    <!-- Email -->
-                                    <div class="col-md-6">
-                                        <label for="email" class="form-label">Email</label>
-                                        <input type="email" class="form-control" id="email"
-                                               placeholder="example@mail.com" required>
-                                    </div>
-                                    <!-- Address -->
-                                    <div class="col-md-12">
-                                        <label for="address" class="form-label">Address</label>
-                                        <textarea class="form-control" id="address" rows="2"
-                                                  placeholder="Enter supplier address"></textarea>
-                                    </div>
-                                    <!-- Upload Logo -->
-                                    <div class="col-md-6">
-                                        <label for="logo" class="form-label">Upload Logo</label>
-                                        <input type="file" class="form-control" id="logo" accept="image/*">
-                                    </div>
-                                    <!-- Status -->
-                                    <div class="col-md-6 mb-3">
-                                        <label for="choices-single-no-search"
-                                               class="form-label text-muted">Status</label>
-                                        <select class="form-control" id="choices-single-no-search"
-                                                name="choices-single-no-search" data-choices data-choices-search-false
-                                                data-choices-removeItem>
-                                            <option value="Active">Active</option>
-                                            <option value="Deactive">Deactive</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                        <!-- Modal Footer -->
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" form="supplierForm" class="btn btn-primary">Save</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!-- Add Product Modal -->
+            @include('admin.layouts.pages.product.create')
 
         </div> <!-- container -->
 
@@ -241,6 +180,34 @@
 @endsection
 
 @push('scripts')
+
+    <script>
+        $(document).ready(function () {
+            $('.editProductBtn').on('click', function () {
+                let id = $(this).data('id');
+
+                // Build update URL dynamically
+                let url = "{{ route('admin.product.update', ':id') }}";
+                url = url.replace(':id', id);
+                $('#productEditForm').attr('action', url);
+
+                // (Optional) If you want to load product data via Ajax:
+                $.get("{{ url('admin/product') }}/" + id + "/edit", function (data) {
+                    $('#productCategory').val(data.product_category_id);
+                    $('#productName').val(data.product_name);
+                    $('#costingPrice').val(data.costing_price);
+                    $('#salesPrice').val(data.sales_price);
+                    $('#image').val('');
+                    $('#editProductModal img').attr('src', '/' + data.image);
+                    $('select[name="status"]').val(data.status);
+
+                    // Show modal after filling form
+                    $('#editProductModal').modal('show');
+                });
+            });
+        });
+    </script>
+
     <script src="{{ asset('backend') }}/assets/js/sweetalert2.all.min.js"></script>
 
     <script>
