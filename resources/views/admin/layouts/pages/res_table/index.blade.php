@@ -39,14 +39,14 @@
                                 </button>
 
                                 <!-- Import Button with File Input -->
-                                <div class="position-relative">
+                                {{-- <div class="position-relative">
                                     <button type="button" class="btn btn-secondary btn-sm"
                                         onclick="document.getElementById('importFileInput').click();">
                                         <i class="ti ti-file-import me-1"></i> Import
                                     </button>
                                     <input type="file" id="importFileInput" accept=".csv, .xlsx" style="display: none;"
                                         onchange="handleFileUpload(event)">
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
 

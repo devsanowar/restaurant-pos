@@ -90,11 +90,35 @@
                 </a>
             </li>
             <!-- Stock -->
-            <li class="side-nav-item">
+            {{-- <li class="side-nav-item">
                 <a href="apps-stock.html" class="side-nav-link">
                     <span class="menu-icon"><i class="ti ti-message"></i></span>
                     <span class="menu-text"> Stock </span>
                 </a>
+            </li> --}}
+
+            <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#sidebarInvoice" aria-expanded="false"
+                    aria-controls="sidebarInvoice" class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-file-invoice"></i></span>
+                    <span class="menu-text"> Stock</span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="sidebarInvoice">
+                    <ul class="sub-menu">
+                        <li class="side-nav-item">
+                            <a href="{{ route('admin.stock.item.index') }}" class="side-nav-link">
+                                <span class="menu-text">Stock items</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="{{ route('admin.stock.index') }}" class="side-nav-link">
+                                <span class="menu-text">Stock</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
             </li>
             <!-- Stock Out-->
             <li class="side-nav-item">
@@ -103,6 +127,8 @@
                     <span class="menu-text"> Stock Out </span>
                 </a>
             </li>
+
+
             <!-- Sales-->
             <li class="side-nav-item">
                 <a href="apps-sales.html" class="side-nav-link">
@@ -180,12 +206,36 @@
 
 
             <!-- Payroll-->
+
             <li class="side-nav-item">
-                <a href="apps-payroll.html" class="side-nav-link">
+                <a data-bs-toggle="collapse" href="#posProduct" aria-expanded="false" aria-controls="posProduct"
+                    class="side-nav-link">
                     <span class="menu-icon"><i class="ti ti-message"></i></span>
-                    <span class="menu-text"> Payroll </span>
+                    <span class="menu-text"> Payroll</span>
+                    <span class="menu-arrow"></span>
                 </a>
+                <div class="collapse" id="posProduct">
+                    <ul class="sub-menu">
+                        <li class="side-nav-item">
+                            <a href="{{ route('admin.restaurant.branch.index') }}" class="side-nav-link">
+                                <span class="menu-text">All Retaurant</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="{{ route('admin.payroll.create') }}" class="side-nav-link">
+                                <span class="menu-text">Add Payroll</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="{{ route('admin.payroll.index') }}" class="side-nav-link">
+                                <span class="menu-text">All Payroll</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </li>
+
+
             <!-- Reports-->
             <li class="side-nav-item">
                 <a href="apps-reports.html" class="side-nav-link">
@@ -195,7 +245,7 @@
             </li>
             <!-- Settings-->
             <li class="side-nav-item">
-                <a href="apps-settings.html" class="side-nav-link">
+                <a href="{{ route('admin.setting.index') }}" class="side-nav-link">
                     <span class="menu-icon"><i class="ti ti-message"></i></span>
                     <span class="menu-text"> Settings </span>
                 </a>
@@ -238,7 +288,7 @@
 
             <!-- User Management-->
             <li class="side-nav-item">
-                <a href="apps-user-management.html" class="side-nav-link">
+                <a href="{{ route('admin.user.management.index') }}" class="side-nav-link">
                     <span class="menu-icon"><i class="ti ti-message"></i></span>
                     <span class="menu-text"> User Management </span>
                 </a>
