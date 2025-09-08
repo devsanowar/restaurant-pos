@@ -13,7 +13,7 @@ class ProductCategoryController extends Controller
 {
     public function index()
     {
-        $productCategories = ProductCategory::latest()->get();
+        $productCategories = ProductCategory::orderBy('id', 'desc')->paginate(10);
         return view('admin.layouts.pages.product-category.index', compact('productCategories'));
     }
 
