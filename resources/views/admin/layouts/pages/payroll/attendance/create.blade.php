@@ -35,20 +35,7 @@
                             class="card-header d-flex align-items-center justify-content-between border-bottom border-light">
                             <h4 class="header-title mb-0">Add Attendance</h4>
 
-                            @if (session('error'))
-                                <div class="alert alert-danger">
-                                    {{ session('error') }}
-                                </div>
-                            @endif
-
-                            @if (session('success'))
-                                <div class="alert alert-success">
-                                    {{ session('success') }}
-                                </div>
-                            @endif
-
-
-
+                        
                             <div class="d-flex gap-2">
                                 <form method="GET" action="" class="d-flex gap-2 mb-3">
                                     <input type="date" name="date" value="{{ $selectedDate }}"

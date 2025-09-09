@@ -200,7 +200,8 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::get('/', 'index')->name('index');
         Route::get('/create', 'create')->name('create');
         Route::post('/store', 'store')->name('store');
-
+        Route::get('/{id}/edit', 'edit')->name('edit');
+        Route::put('/update/{id}', 'update')->name('update');
     });
 
     // SMS Settings

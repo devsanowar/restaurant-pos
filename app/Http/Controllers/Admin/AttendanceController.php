@@ -10,22 +10,62 @@ use App\Http\Controllers\Controller;
 
 class AttendanceController extends Controller
 {
-    public function index()
-    {
-        return view('admin.layouts.pages.payroll.attendance.index');
+    // public function index()
+    // {
+    //     $today = Carbon::today()->toDateString();
+
+    //     $attendances = Attendance::with(['payroll:id,employe_image,id_number,employe_name,employe_designation'])
+    //         ->whereDate('date', $today)
+    //         ->latest()
+    //         ->get();
+
+    //     return view('admin.layouts.pages.payroll.attendance.index', compact('attendances'));
+    // }
+
+    public function index(Request $request)
+{
+    $employees = Payroll::select('id', 'employe_name')->get(); // Employee list for filter
+
+    $query = Attendance::with(['payroll:id,employe_image,id_number,employe_name,employe_designation']);
+
+    // Filter: Employee
+    if ($request->filled('employee_id')) {
+        $query->where('payroll_id', $request->employee_id);
     }
+
+    // Filter: Status
+    if ($request->filled('status')) {
+        $query->where('status', $request->status);
+    }
+
+    // Filter: Date Range
+    if ($request->filled('from_date')) {
+        $query->whereDate('date', '>=', $request->from_date);
+    }
+
+    if ($request->filled('to_date')) {
+        $query->whereDate('date', '<=', $request->to_date);
+    }
+
+    // Default: Today if no filter
+    if (!$request->hasAny(['employee_id', 'status', 'from_date', 'to_date'])) {
+        $query->whereDate('date', Carbon::today());
+    }
+
+    $attendances = $query->latest()->get();
+
+    return view('admin.layouts.pages.payroll.attendance.index', compact('attendances', 'employees'));
+}
+
 
     public function create(Request $request)
     {
-        // Selected date (default today)
         $selectedDate = $request->date ?? date('Y-m-d');
 
-        // Employees who joined on or before selected date
         $employees = PayRoll::where('joining_date', '<=', $selectedDate)
             ->select(['id', 'id_number', 'employe_name', 'joining_date', 'employe_image', 'employe_designation'])
             ->get();
 
-        // Existing attendance for that date
         $attendances = Attendance::where('date', $selectedDate)->with('payroll')->get();
 
         return view('admin.layouts.pages.payroll.attendance.create', compact('employees', 'attendances', 'selectedDate'));
@@ -68,7 +108,27 @@ class AttendanceController extends Controller
         return redirect()->back()->with('success', 'Attendance saved successfully!');
     }
 
-    public function update() {}
+    public function edit($id)
+    {
+        $attendance = Attendance::with('payroll')->findOrFail($id);
+        return response()->json($attendance);
+    }
 
-    public function delete() {}
+    public function update(Request $request, $id)
+    {
+        $attendance = Attendance::findOrFail($id);
+
+        $attendance->update([
+            'start_time' => $request->start_time,
+            'end_time' => $request->end_time,
+            'status' => $request->status,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Attendance updated successfully!',
+        ]);
+    }
+
+
 }
