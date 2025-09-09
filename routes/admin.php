@@ -5,7 +5,6 @@ use App\Http\Controllers\Admin\SmsController;
 use App\Http\Controllers\Admin\CostController;
 use App\Http\Controllers\Admin\StockController;
 use App\Http\Controllers\Admin\IncomeController;
-use App\Http\Controllers\Admin\SmsLogController;
 use App\Http\Controllers\Admin\WaiterController;
 use App\Http\Controllers\Admin\ResTableController;
 use App\Http\Controllers\Admin\SupplierController;
