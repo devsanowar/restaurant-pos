@@ -98,8 +98,8 @@
             </li> --}}
 
             <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#sidebarInvoice" aria-expanded="false"
-                    aria-controls="sidebarInvoice" class="side-nav-link">
+                <a data-bs-toggle="collapse" href="#sidebarInvoice" aria-expanded="false" aria-controls="sidebarInvoice"
+                    class="side-nav-link">
                     <span class="menu-icon"><i class="ti ti-file-invoice"></i></span>
                     <span class="menu-text"> Stock</span>
                     <span class="menu-arrow"></span>
@@ -180,7 +180,7 @@
             </li>
             <!-- Income-->
 
-             <li class="side-nav-item">
+            <li class="side-nav-item">
                 <a data-bs-toggle="collapse" href="#sidebarIncomeCategory" aria-expanded="false"
                     aria-controls="sidebarIncomeCategory" class="side-nav-link">
                     <span class="menu-icon"><i class="ti ti-file-invoice"></i></span>
@@ -205,16 +205,15 @@
             </li>
 
 
-            <!-- Payroll-->
-
+            <!-- Payroll -->
             <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#posProduct" aria-expanded="false" aria-controls="posProduct"
-                    class="side-nav-link">
-                    <span class="menu-icon"><i class="ti ti-message"></i></span>
+                <a data-bs-toggle="collapse" href="#sidebarHospital" aria-expanded="false"
+                    aria-controls="sidebarHospital" class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-medical-cross"></i></span>
                     <span class="menu-text"> Payroll</span>
                     <span class="menu-arrow"></span>
                 </a>
-                <div class="collapse" id="posProduct">
+                <div class="collapse" id="sidebarHospital">
                     <ul class="sub-menu">
                         <li class="side-nav-item">
                             <a href="{{ route('admin.restaurant.branch.index') }}" class="side-nav-link">
@@ -228,9 +227,55 @@
                         </li>
                         <li class="side-nav-item">
                             <a href="{{ route('admin.payroll.index') }}" class="side-nav-link">
-                                <span class="menu-text">All Payroll</span>
+                                <span class="menu-text">View All Payroll</span>
                             </a>
                         </li>
+                        <li class="side-nav-item">
+                            <a href="{{ route('admin.attendance.create') }}" class="side-nav-link">
+                                <span class="menu-text">Add Attendance</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="{{ route('admin.attendance.index') }}" class="side-nav-link">
+                                <span class="menu-text">All Attendance</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="apps-payroll-add-salary.html" class="side-nav-link">
+                                <span class="menu-text">Add Salary</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="apps-payroll-all-salary.html" class="side-nav-link">
+                                <span class="menu-text">All Salary </span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="apps-payroll-advance-paymenet.html" class="side-nav-link">
+                                <span class="menu-text">Advance Payment</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="apps-payroll-all-advance-paymenet.html" class="side-nav-link">
+                                <span class="menu-text">All Advance Payment</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="apps-payroll-add-paymenet.html" class="side-nav-link">
+                                <span class="menu-text">Add Payment </span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="apps-payroll-all-paymenet.html" class="side-nav-link">
+                                <span class="menu-text">All Payment</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="apps-payroll-salary-report.html" class="side-nav-link">
+                                <span class="menu-text">Salary Report</span>
+                            </a>
+                        </li>
+
                     </ul>
                 </div>
             </li>
@@ -252,8 +297,8 @@
             </li>
             <!-- SMS-->
             <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#smsApiSetting" aria-expanded="false" aria-controls="smsApiSetting"
-                    class="side-nav-link">
+                <a data-bs-toggle="collapse" href="#smsApiSetting" aria-expanded="false"
+                    aria-controls="smsApiSetting" class="side-nav-link">
                     <span class="menu-icon"><i class="ti ti-message"></i></span>
                     <span class="menu-text"> SMS</span>
                     <span class="menu-arrow"></span>
