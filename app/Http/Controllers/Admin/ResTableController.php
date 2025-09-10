@@ -81,4 +81,12 @@ class ResTableController extends Controller
             'message' => 'Table deleted successfully.',
         ]);
     }
+
+    public function getWaiter($tableId)
+    {
+        $table = ResTable::with('waiter')->findOrFail($tableId);
+
+        return response()->json($table->waiter);
+    }
+
 }

@@ -2,15 +2,25 @@
 
 namespace App\Models;
 
-use App\Models\Orderitem;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
     protected $guarded = ['id'];
 
-    public function orderItems()
+    public function table()
     {
-        return $this->hasMany(Orderitem::class);
+        return $this->belongsTo(ResTable::class, 'res_table_id');
     }
+
+    public function waiter()
+    {
+        return $this->belongsTo(Waiter::class, 'waiter_id');
+    }
+
+    public function items()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
 }
