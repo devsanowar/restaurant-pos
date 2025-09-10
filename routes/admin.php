@@ -24,6 +24,8 @@ use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductCategoryController;
+use App\Http\Controllers\Admin\SalesController;
+use App\Http\Controllers\Admin\OrderController;
 
 
 Route::get('/', [App\Http\Controllers\Admin\AdminLoginPageController::class, 'index'])->name('admin.login');
@@ -123,6 +125,8 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::delete('/{id}', 'destroy')->name('destroy');
     });
 
+    Route::get('/get-waiter/{tableId}', [ResTableController::class, 'getWaiter'])->name('get.waiter');
+
     // Waiter Management
     Route::controller(WaiterController::class)->prefix('waiter')->name('waiter.')->group(function () {
         Route::get('/', 'index')->name('index');
@@ -183,7 +187,6 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::delete('/{id}', 'destroy')->name('destroy');
     });
 
-
     //Restaurant management route
     Route::controller(PayrollController::class)->prefix('payroll')->name('payroll.')->group(function () {
         Route::get('/', 'index')->name('index');
@@ -235,5 +238,17 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
 
     // Product
     Route::resource('product', ProductController::class);
+
+    // Sales
+    Route::resource('sales', SalesController::class);
+
+    // Order
+    Route::resource('orders', OrderController::class);
+
+    // PDF view (inline preview)
+    Route::get('orders/{order}/invoice', [OrderController::class, 'showInvoice'])->name('orders.showInvoice');
+
+    // PDF download
+    Route::get('orders/{order}/download', [OrderController::class, 'download'])->name('orders.download');
 
 });

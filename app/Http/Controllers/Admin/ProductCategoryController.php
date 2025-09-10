@@ -42,8 +42,7 @@ class ProductCategoryController extends Controller
             'is_active'     => $request->is_active,
         ]);
 
-        Toastr::success('Product category added successfully.');
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Product category added successfully.');
     }
 
     public function show(ProductCategory $productCategory)
@@ -86,8 +85,7 @@ class ProductCategoryController extends Controller
             'is_active'     => $request->is_active,
         ]);
 
-        Toastr::success('Product category updated successfully.');
-        return redirect()->route('admin.product-category.index');
+        return redirect()->route('admin.product-category.index')->with('success', 'Product category updated successfully.');
     }
 
     public function destroy(ProductCategory $productCategory)
@@ -102,8 +100,8 @@ class ProductCategoryController extends Controller
         }
 
         $productCategory->delete();
-        Toastr::success('Product category deleted successfully.');
-        return redirect()->back();
+
+        return redirect()->back()->with('success', 'Product category deleted successfully.');
     }
 
     private function categoryImage(Request $request)

@@ -128,10 +128,9 @@
                 </a>
             </li>
 
-
             <!-- Sales-->
             <li class="side-nav-item">
-                <a href="apps-sales.html" class="side-nav-link">
+                <a href="{{ route('admin.sales.index') }}" class="side-nav-link" target="_blank">
                     <span class="menu-icon"><i class="ti ti-message"></i></span>
                     <span class="menu-text"> Sales </span>
                 </a>
