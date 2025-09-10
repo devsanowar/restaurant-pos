@@ -14,7 +14,7 @@ class ProductController extends Controller
     public function index()
     {
         $productCategories = ProductCategory::where('is_active', 1)->get();
-        $products = Product::latest()->get();
+        $products = Product::orderBy('id', 'desc')->paginate(10);
         return view('admin.layouts.pages.product.index', compact('productCategories', 'products'));
     }
 

@@ -127,18 +127,34 @@
                         <div class="card-footer">
                             <div class="d-flex justify-content-end">
                                 <ul class="pagination mb-0">
-                                    <li class="page-item disabled">
-                                        <a href="#" class="page-link"><i class="ti ti-chevrons-left"></i></a>
-                                    </li>
-                                    <li class="page-item active">
-                                        <a href="#" class="page-link bg-primary text-white">1</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a href="#" class="page-link">2</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a href="#" class="page-link"><i class="ti ti-chevrons-right"></i></a>
-                                    </li>
+                                    {{-- Previous Page Link --}}
+                                    @if ($products->onFirstPage())
+                                        <li class="page-item disabled">
+                                            <span class="page-link"><i class="ti ti-chevrons-left"></i></span>
+                                        </li>
+                                    @else
+                                        <li class="page-item">
+                                            <a class="page-link" href="{{ $products->previousPageUrl() }}"><i class="ti ti-chevrons-left"></i></a>
+                                        </li>
+                                    @endif
+
+                                    {{-- Pagination Elements --}}
+                                    @foreach ($products->getUrlRange(1, $products->lastPage()) as $page => $url)
+                                        <li class="page-item {{ $products->currentPage() == $page ? 'active' : '' }}">
+                                            <a class="page-link {{ $products->currentPage() == $page ? 'bg-primary text-white' : '' }}" href="{{ $url }}">{{ $page }}</a>
+                                        </li>
+                                    @endforeach
+
+                                    {{-- Next Page Link --}}
+                                    @if ($products->hasMorePages())
+                                        <li class="page-item">
+                                            <a class="page-link" href="{{ $products->nextPageUrl() }}"><i class="ti ti-chevrons-right"></i></a>
+                                        </li>
+                                    @else
+                                        <li class="page-item disabled">
+                                            <span class="page-link"><i class="ti ti-chevrons-right"></i></span>
+                                        </li>
+                                    @endif
                                 </ul>
                             </div>
                         </div>
