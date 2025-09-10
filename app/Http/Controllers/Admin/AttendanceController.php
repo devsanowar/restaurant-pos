@@ -130,5 +130,10 @@ class AttendanceController extends Controller
         ]);
     }
 
+    public function show($id){
+        $attendance = Attendance::with('payroll')->findOrFail($id);
+        return response()->json($attendance);
+    }
+
 
 }

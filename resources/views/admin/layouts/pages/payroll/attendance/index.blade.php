@@ -39,44 +39,51 @@
 
                         <!-- Filter Bar with Labels -->
                         <div class="card-body border-bottom py-2">
-                            <form class="row g-2 align-items-end" method="GET" action="{{ route('admin.attendance.index') }}">
-    <div class="col-md-3">
-        <label class="form-label small mb-1">Employee</label>
-        <select class="form-select form-select-sm" name="employee_id">
-            <option value="">Select Employee</option>
-            @foreach($employees as $employee)
-                <option value="{{ $employee->id }}" {{ request('employee_id') == $employee->id ? 'selected' : '' }}>
-                    {{ $employee->employe_name }}
-                </option>
-            @endforeach
-        </select>
-    </div>
+                            <form class="row g-2 align-items-end" method="GET"
+                                action="{{ route('admin.attendance.index') }}">
+                                <div class="col-md-3">
+                                    <label class="form-label small mb-1">Employee</label>
+                                    <select class="form-select form-select-sm" name="employee_id">
+                                        <option value="">Select Employee</option>
+                                        @foreach ($employees as $employee)
+                                            <option value="{{ $employee->id }}"
+                                                {{ request('employee_id') == $employee->id ? 'selected' : '' }}>
+                                                {{ $employee->employe_name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
 
-    <div class="col-md-3">
-        <label class="form-label small mb-1">Status</label>
-        <select class="form-select form-select-sm" name="status">
-            <option value="">Select Status</option>
-            <option value="Present" {{ request('status') == 'Present' ? 'selected' : '' }}>Present</option>
-            <option value="Absent" {{ request('status') == 'Absent' ? 'selected' : '' }}>Absent</option>
-            <option value="Late" {{ request('status') == 'Late' ? 'selected' : '' }}>Late</option>
-        </select>
-    </div>
+                                <div class="col-md-3">
+                                    <label class="form-label small mb-1">Status</label>
+                                    <select class="form-select form-select-sm" name="status">
+                                        <option value="">Select Status</option>
+                                        <option value="Present" {{ request('status') == 'Present' ? 'selected' : '' }}>
+                                            Present</option>
+                                        <option value="Absent" {{ request('status') == 'Absent' ? 'selected' : '' }}>Absent
+                                        </option>
+                                        <option value="Late" {{ request('status') == 'Late' ? 'selected' : '' }}>Late
+                                        </option>
+                                    </select>
+                                </div>
 
-    <div class="col-md-3">
-        <label class="form-label small mb-1">From Date</label>
-        <input type="date" class="form-control form-control-sm" name="from_date" value="{{ request('from_date') }}">
-    </div>
+                                <div class="col-md-3">
+                                    <label class="form-label small mb-1">From Date</label>
+                                    <input type="date" class="form-control form-control-sm" name="from_date"
+                                        value="{{ request('from_date') }}">
+                                </div>
 
-    <div class="col-md-2">
-        <label class="form-label small mb-1">To Date</label>
-        <input type="date" class="form-control form-control-sm" name="to_date" value="{{ request('to_date') }}">
-    </div>
+                                <div class="col-md-2">
+                                    <label class="form-label small mb-1">To Date</label>
+                                    <input type="date" class="form-control form-control-sm" name="to_date"
+                                        value="{{ request('to_date') }}">
+                                </div>
 
-    <div class="col-md-1 d-grid">
-        <label class="form-label invisible">Search</label>
-        <button type="submit" class="btn btn-sm btn-primary w-100">Search</button>
-    </div>
-</form>
+                                <div class="col-md-1 d-grid">
+                                    <label class="form-label invisible">Search</label>
+                                    <button type="submit" class="btn btn-sm btn-primary w-100">Search</button>
+                                </div>
+                            </form>
 
                         </div>
 
@@ -222,7 +229,7 @@
 
                 $.ajax({
                     url: '/admin/employe/attendance/' + attendanceId +
-                        '/edit', // edit method used to fetch data
+                        '/show', // edit method used to fetch data
                     type: 'GET',
                     success: function(res) {
                         // Employee info
@@ -230,7 +237,7 @@
                         $('#employeeId').text(res.payroll.id_number ?? 'N/A');
                         $('#employeePhone').text(res.payroll.employe_phone ?? 'N/A');
                         $('#employeeDesignation').text(res.payroll.employe_designation ??
-                        'N/A');
+                            'N/A');
 
                         // Image fix
                         let imagePath = res.payroll.employe_image ? "{{ url('') }}/" +
@@ -296,7 +303,7 @@
                         $('#end_time').val(res.end_time ? res.end_time.substring(0, 5) :
                             '18:00');
 
-                        $('#status').val(res.status); // This will set the selected status value
+                        $('#statusshow').val(res.status); // This will set the selected status value
                         $('#editAttendanceModal').modal('show');
                     },
                     error: function(err) {

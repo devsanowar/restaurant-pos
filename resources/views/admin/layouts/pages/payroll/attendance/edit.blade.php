@@ -22,7 +22,7 @@
 
                     <div class="mb-2">
                         <label class="form-label">Status</label>
-                        <select class="form-select" name="status">
+                        <select class="form-select" name="status" id="statusshow">
                             <option value="Present">Present</option>
                             <option value="Absent">Absent</option>
                             <option value="Late">Late</option>

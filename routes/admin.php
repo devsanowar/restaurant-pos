@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\FieldOfCostController;
 use App\Http\Controllers\Admin\AdminSettingController;
 use App\Http\Controllers\Admin\CostCategoryController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdvancePaymentController;
 use App\Http\Controllers\Admin\AttendanceController;
 use App\Http\Controllers\Admin\IncomeCategoryController;
 use App\Http\Controllers\Admin\PayrollController;
@@ -201,8 +202,20 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::get('/create', 'create')->name('create');
         Route::post('/store', 'store')->name('store');
         Route::get('/{id}/edit', 'edit')->name('edit');
+        Route::get('/{id}/show', 'show')->name('show');
         Route::put('/update/{id}', 'update')->name('update');
     });
+
+    // Advacne payment route
+    Route::controller(AdvancePaymentController::class)->prefix('advance/payment')->name('advance.payment.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/store', 'store')->name('store');
+        Route::get('/{id}/edit', 'edit')->name('edit');
+        Route::get('/{id}/show', 'show')->name('show');
+        Route::put('/update/{id}', 'update')->name('update');
+    });
+    Route::get('/advance-payments/filter', [AdvancePaymentController::class, 'filter'])->name('advance.payment.filter');
 
     // SMS Settings
     Route::get('sms-settings', [SmsSettingController::class, 'edit'])->name('sms-settings.edit');

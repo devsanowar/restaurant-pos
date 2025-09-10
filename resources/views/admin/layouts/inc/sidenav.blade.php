@@ -240,6 +240,13 @@
                                 <span class="menu-text">All Attendance</span>
                             </a>
                         </li>
+
+                        <li class="side-nav-item">
+                            <a href="{{ route('admin.advance.payment.index') }}" class="side-nav-link">
+                                <span class="menu-text">Advance Payment</span>
+                            </a>
+                        </li>
+
                         <li class="side-nav-item">
                             <a href="apps-payroll-add-salary.html" class="side-nav-link">
                                 <span class="menu-text">Add Salary</span>
@@ -250,16 +257,7 @@
                                 <span class="menu-text">All Salary </span>
                             </a>
                         </li>
-                        <li class="side-nav-item">
-                            <a href="apps-payroll-advance-paymenet.html" class="side-nav-link">
-                                <span class="menu-text">Advance Payment</span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="apps-payroll-all-advance-paymenet.html" class="side-nav-link">
-                                <span class="menu-text">All Advance Payment</span>
-                            </a>
-                        </li>
+
                         <li class="side-nav-item">
                             <a href="apps-payroll-add-paymenet.html" class="side-nav-link">
                                 <span class="menu-text">Add Payment </span>
