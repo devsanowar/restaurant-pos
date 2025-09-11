@@ -77,26 +77,42 @@
             <li class="side-nav-item">
                 <a data-bs-toggle="collapse" href="#sidebarInvoice" aria-expanded="false" aria-controls="sidebarInvoice"
                     class="side-nav-link">
-                    <span class="menu-icon"><i class="ti ti-file-invoice"></i></span>
-                    <span class="menu-text"> Stock</span>
+                    <span class="menu-icon"><i class="ti ti-shopping-cart"></i></span>
+                    <span class="menu-text"> Purchase</span>
                     <span class="menu-arrow"></span>
                 </a>
                 <div class="collapse" id="sidebarInvoice">
                     <ul class="sub-menu">
                         <li class="side-nav-item">
                             <a href="{{ route('admin.stock.item.index') }}" class="side-nav-link">
-                                <span class="menu-text">Stock items</span>
+                                <span class="menu-text">Add items</span>
                             </a>
                         </li>
+
                         <li class="side-nav-item">
-                            <a href="{{ route('admin.stock.index') }}" class="side-nav-link">
-                                <span class="menu-text">Stock</span>
+                            <a href="{{ route('admin.purchase.create') }}" class="side-nav-link">
+                                <span class="menu-text">Add Purchase</span>
+                            </a>
+                        </li>
+
+                        <li class="side-nav-item">
+                            <a href="{{ route('admin.purchase.index') }}" class="side-nav-link">
+                                <span class="menu-text">All Purchase</span>
                             </a>
                         </li>
 
                     </ul>
                 </div>
             </li>
+
+            <!-- Stock -->
+            <li class="side-nav-item">
+                <a href="{{ route('admin.stock.index') }}" class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-message"></i></span>
+                    <span class="menu-text"> Stock </span>
+                </a>
+            </li>
+
             <!-- Stock Out-->
             <li class="side-nav-item">
                 <a href="apps-stock-out.html" class="side-nav-link">
