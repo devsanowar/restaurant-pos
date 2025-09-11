@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\ProductCategory;
-use Brian2694\Toastr\Facades\Toastr;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Models\ProductCategory;
+use App\Http\Controllers\Controller;
 use Intervention\Image\Laravel\Facades\Image;
+
 
 class ProductCategoryController extends Controller
 {
@@ -104,22 +104,33 @@ class ProductCategoryController extends Controller
         return redirect()->back()->with('success', 'Product category deleted successfully.');
     }
 
-    private function categoryImage(Request $request)
-    {
-        if ($request->hasFile('image')) {
-            $image = Image::read($request->file('image'));
-            $imageName = time() . '-' . $request->file('image')->getClientOriginalName();
-            $destinationPath = public_path('uploads/category_image/');
+   private function categoryImage(Request $request)
+{
+    if ($request->hasFile('image')) {
 
-            if (!file_exists($destinationPath)) {
-                mkdir($destinationPath, 0777, true);
-            }
+        // Image load করা
+        $imageFile = $request->file('image');
+        $image = Image::make($imageFile->getRealPath());
 
-            $image->save($destinationPath . $imageName);
+        // Image নাম generate
+        $imageName = time() . '-' . $imageFile->getClientOriginalName();
 
-            return 'uploads/category_image/' . $imageName;
+        // Destination path
+        $destinationPath = public_path('uploads/category_image/');
+
+        // Folder check এবং create
+        if (!file_exists($destinationPath)) {
+            mkdir($destinationPath, 0777, true);
         }
-        return null;
+
+        // Image save করা
+        $image->save($destinationPath . $imageName);
+
+        // Return public path
+        return 'uploads/category_image/' . $imageName;
     }
+
+    return null;
+}
 
 }

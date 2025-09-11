@@ -1,0 +1,38 @@
+[33m1803dfe[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/feat/attendance[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mfeat/attendance[m[33m)[m HEAD@{0}: merge feat/attendance: Fast-forward
+[33mb61a6df[m HEAD@{1}: checkout: moving from feat/attendance to main
+[33m1803dfe[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/feat/attendance[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mfeat/attendance[m[33m)[m HEAD@{2}: merge main: Merge made by the 'ort' strategy.
+[33ma2b966a[m HEAD@{3}: commit: Advance payment add edit and filtering option donw now i am working with delete functionality
+[33mf3595ab[m HEAD@{4}: checkout: moving from main to feat/attendance
+[33mb61a6df[m HEAD@{5}: pull origin main --rebase (finish): returning to refs/heads/main
+[33mb61a6df[m HEAD@{6}: pull origin main --rebase (start): checkout b61a6dfe17b2186f32fee10a4549c262e062f1f1
+[33m6d9b3f5[m HEAD@{7}: commit (merge): Resolved merge conflicts and merged feat/attendance into main
+[33m54186bf[m HEAD@{8}: checkout: moving from feat/attendance to main
+[33mf3595ab[m HEAD@{9}: checkout: moving from main to feat/attendance
+[33m54186bf[m HEAD@{10}: pull origin main: Fast-forward
+[33m7f3a965[m[33m ([m[1;31morigin/feat/payroll/restaurant[m[33m)[m HEAD@{11}: checkout: moving from feat/attendance to main
+[33mf3595ab[m HEAD@{12}: commit: Attendance system done
+[33m3e94d3a[m HEAD@{13}: commit: Employe attendance functionality implemented
+[33me13bbf4[m[33m ([m[1;32mfeat/payroll/restaurant[m[33m)[m HEAD@{14}: checkout: moving from feat/payroll/restaurant to feat/attendance
+[33me13bbf4[m[33m ([m[1;32mfeat/payroll/restaurant[m[33m)[m HEAD@{15}: pull origin main: Fast-forward
+[33m7f3a965[m[33m ([m[1;31morigin/feat/payroll/restaurant[m[33m)[m HEAD@{16}: checkout: moving from main to feat/payroll/restaurant
+[33m7f3a965[m[33m ([m[1;31morigin/feat/payroll/restaurant[m[33m)[m HEAD@{17}: merge feat/payroll/restaurant: Fast-forward
+[33m99b5896[m HEAD@{18}: checkout: moving from feat/payroll/restaurant to main
+[33m7f3a965[m[33m ([m[1;31morigin/feat/payroll/restaurant[m[33m)[m HEAD@{19}: commit: Employe module payroll functionality implemented . now i am working attendance system
+[33m99b5896[m HEAD@{20}: checkout: moving from main to feat/payroll/restaurant
+[33m99b5896[m HEAD@{21}: merge feat/payroll/restaurant: Fast-forward
+[33m487072a[m HEAD@{22}: checkout: moving from feat/payroll/restaurant to main
+[33m99b5896[m HEAD@{23}: commit: some updates
+[33m18393ed[m HEAD@{24}: checkout: moving from main to feat/payroll/restaurant
+[33m487072a[m HEAD@{25}: checkout: moving from feat/payroll/restaurant to main
+[33m18393ed[m HEAD@{26}: checkout: moving from main to feat/payroll/restaurant
+[33m487072a[m HEAD@{27}: checkout: moving from feat/payroll/restaurant to main
+[33m18393ed[m HEAD@{28}: commit: Restaurant edit and update functionality implemented
+[33m487072a[m HEAD@{29}: checkout: moving from main to feat/payroll/restaurant
+[33m487072a[m HEAD@{30}: merge feat/payroll/restaurant: Fast-forward
+[33m17b98ce[m HEAD@{31}: checkout: moving from main to main
+[33m17b98ce[m HEAD@{32}: pull origin main: Fast-forward
+[33md56bc52[m[33m ([m[1;31morigin/SMS-System[m[33m)[m HEAD@{33}: checkout: moving from feat/payroll/restaurant to main
+[33m487072a[m HEAD@{34}: commit: Restaurant add and delete option done . now i am working on edit functionality
+[33m749ffcd[m[33m ([m[1;31morigin/feat/user-management[m[33m, [m[1;32mfeat/user-management[m[33m)[m HEAD@{35}: checkout: moving from feat/user-management to feat/payroll/restaurant
+[33m749ffcd[m[33m ([m[1;31morigin/feat/user-management[m[33m, [m[1;32mfeat/user-management[m[33m)[m HEAD@{36}: commit: full path insert in database . this system implemented
+[33m41b5756[m HEAD@{37}: commit: Website settings functionality implemented
