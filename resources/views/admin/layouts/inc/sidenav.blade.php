@@ -36,29 +36,6 @@
                 </a>
             </li>
 
-            <!-- Category -->
-            <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#posCategory" aria-expanded="false" aria-controls="posCategory"
-                    class="side-nav-link">
-                    <span class="menu-icon"><i class="ti ti-medical-cross"></i></span>
-                    <span class="menu-text"> Category</span>
-                    <span class="menu-arrow"></span>
-                </a>
-                <div class="collapse" id="posCategory">
-                    <ul class="sub-menu">
-                        <li class="side-nav-item">
-                            <a href="apps-category-all-category.html" class="side-nav-link">
-                                <span class="menu-text">All Category </span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="apps-category-add-new.html" class="side-nav-link">
-                                <span class="menu-text">Add New Category</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
             <!-- Product -->
             <li class="side-nav-item">
                 <a data-bs-toggle="collapse" href="#posProduct" aria-expanded="false" aria-controls="posProduct"

@@ -65,7 +65,7 @@
         <div class="title">Restaurant POS</div>
         <p style="text-align: center">Mymensingh Sadar, Mymensingh.</p>
         <p style="text-align: center; padding-top: 4px">Memo No. #00{{ $order->id }} | {{ $order->created_at->format('F d, Y') }}</p>
-        <p style="text-align: center; font-size: 12px; background-color: gainsboro; color: white">
+        <p style="text-align: center; font-size: 12px; background-color: black; color: white">
             Invoice <br>
             <span style="font-size: 8px">(Office Copy)</span>
         </p>
@@ -108,7 +108,7 @@
         <div class="title">Restaurant POS</div>
         <p style="text-align: center">Mymensingh Sadar, Mymensingh.</p>
         <p style="text-align: center">Memo No. #00{{ $order->id }} | {{ $order->created_at->format('F d, Y') }}</p>
-        <p style="text-align: center;">
+        <p style="text-align: center; font-size: 12px; background-color: black; color: white">
             Invoice <br>
             <span style="font-size: 8px">(Customer Copy)</span>
         </p>
@@ -151,7 +151,7 @@
         <div class="title">Restaurant POS</div>
         <p style="text-align: center">Mymensingh Sadar, Mymensingh.</p>
         <p style="text-align: center">Memo No. #00{{ $order->id }} | {{ $order->created_at->format('F d, Y') }}</p>
-        <p style="text-align: center;">
+        <p style="text-align: center; font-size: 12px; background-color: black; color: white">
             Invoice <br>
             <span style="font-size: 8px">(Kitchen Copy)</span>
         </p>
