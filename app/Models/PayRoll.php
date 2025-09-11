@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Salary;
 use App\Models\Attendance;
 use App\Models\AdvancePayment;
 use App\Models\RestaurantBranch;
@@ -23,5 +24,11 @@ class PayRoll extends Model
     public function advancePayments()
     {
         return $this->hasMany(AdvancePayment::class, 'employe_id');
+    }
+
+    // Relationship: one employee has many salary records
+    public function salaries()
+    {
+        return $this->hasMany(Salary::class, 'employee_id', 'id');
     }
 }

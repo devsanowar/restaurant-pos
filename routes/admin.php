@@ -26,7 +26,8 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProductCategoryController;
 use App\Http\Controllers\Admin\SalesController;
 use App\Http\Controllers\Admin\OrderController;
-
+use App\Http\Controllers\Admin\SalaryController;
+use App\Http\Controllers\Admin\SalleryController;
 
 Route::get('/', [App\Http\Controllers\Admin\AdminLoginPageController::class, 'index'])->name('admin.login');
 
@@ -208,6 +209,17 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::put('/update/{id}', 'update')->name('update');
     });
 
+     // Sallery route here
+    Route::controller(SalaryController::class)->prefix('salary')->name('salary.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/store', 'store')->name('store');
+        Route::get('/{id}/edit', 'edit')->name('edit');
+        Route::put('/update/{id}', 'update')->name('update');
+        Route::delete('/{id}', 'destroy')->name('destroy');
+        Route::get('/filter', 'filter')->name('filter');
+    });
+
     // Advacne payment route
     Route::controller(AdvancePaymentController::class)->prefix('advance/payment')->name('advance.payment.')->group(function () {
         Route::get('/', 'index')->name('index');
@@ -216,14 +228,17 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::get('/{id}/edit', 'edit')->name('edit');
         Route::get('/{id}/show', 'show')->name('show');
         Route::put('/update/{id}', 'update')->name('update');
+        Route::delete('/{id}', 'destroy')->name('destroy');
     });
     Route::get('/advance-payments/filter', [AdvancePaymentController::class, 'filter'])->name('advance.payment.filter');
+
+
 
     // SMS Settings
     Route::get('sms-settings', [SmsSettingController::class, 'edit'])->name('sms-settings.edit');
     Route::put('sms-settings', [SmsSettingController::class, 'update'])->name('sms-settings.update');
 
-    Route::get('/', [SmsController::class, 'index'])->name('sms.index');
+    Route::get('/sms', [SmsController::class, 'index'])->name('sms.index');
     Route::post('/send-message', [SmsController::class, 'send'])->name('send.sms');
     Route::get('/custom-sms', [SmsController::class, 'customSms'])->name('custom.sms');
 

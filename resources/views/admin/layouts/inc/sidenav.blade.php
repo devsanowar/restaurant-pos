@@ -247,12 +247,12 @@
                         </li>
 
                         <li class="side-nav-item">
-                            <a href="apps-payroll-add-salary.html" class="side-nav-link">
+                            <a href="{{ route('admin.salary.create') }}" class="side-nav-link">
                                 <span class="menu-text">Add Salary</span>
                             </a>
                         </li>
                         <li class="side-nav-item">
-                            <a href="apps-payroll-all-salary.html" class="side-nav-link">
+                            <a href="{{ route('admin.salary.index') }}" class="side-nav-link">
                                 <span class="menu-text">All Salary </span>
                             </a>
                         </li>
