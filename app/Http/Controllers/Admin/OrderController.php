@@ -55,31 +55,4 @@ class OrderController extends Controller
         ]);
     }
 
-    // Show PDF in iframe
-    public function showInvoice(Order $order)
-    {
-        $order->load('table', 'waiter', 'items');
-        $pdf = Pdf::loadView('admin.layouts.pages.orders.three_copies', [
-            'order' => $order,
-            'items' => $order->items,
-        ])->setPaper('a4', 'landscape');
-
-        return view('admin.layouts.pages.orders.show_invoice', [
-            'pdf' => $pdf->stream(),
-            'order' => $order
-        ]);
-    }
-
-// Download PDF
-    public function download(Order $order)
-    {
-        $order->load('table', 'waiter', 'items');
-        $pdf = Pdf::loadView('admin.layouts.pages.orders.three_copies', [
-            'order' => $order,
-            'items' => $order->items,
-        ])->setPaper('a4', 'landscape');
-
-        return $pdf->download("order-{$order->id}-invoice.pdf");
-    }
-
 }
