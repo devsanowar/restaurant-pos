@@ -12,14 +12,14 @@
             <div class="page-title-head d-flex align-items-sm-center flex-sm-row flex-column gap-2">
                 <div class="flex-grow-1">
                     <h4 class="fs-18 fw-semibold mb-0">
-                        <i class="ti ti-user-check me-2"></i> Stock item management<span>| <a href="{{ route('admin.stock.item.deleted-data') }}">Recycle Bin (<span id="recycleCount">{{ $deletedItemCount }}</span>)</a></span></h4>
+                        <i class="ti ti-user-check me-2"></i> Purchase Item management<span> | <a href="{{ route('admin.stock.item.deleted-data') }}">Recycle Bin (<span id="recycleCount">{{ $deletedItemCount }}</span>)</a></span></h4>
 
                 </div>
 
                 <div class="text-end">
                     <ol class="breadcrumb m-0 py-0">
                         <li class="breadcrumb-item"><a href="javascript:void(0);">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Stock Item</li>
+                        <li class="breadcrumb-item active">Purchase Item</li>
                     </ol>
                 </div>
             </div>
@@ -27,9 +27,9 @@
             <!-- stock Management Card -->
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="card-title mb-0"><i class="ti ti-users me-2"></i> Stock item lists</h5>
+                    <h5 class="card-title mb-0"><i class="ti ti-users me-2"></i> Purchase item lists</h5>
                     <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addStockItemModal">
-                        <i class="ti ti-plus me-1"></i> Add New
+                        <i class="ti ti-plus me-1"></i> Add Item
                     </button>
                 </div>
 
@@ -50,7 +50,7 @@
                             <thead class="table-light">
                                 <tr>
                                     <th>#</th>
-                                    <th><i class="ti ti-user"></i> Stock Item Name</th>
+                                    <th>Purchase Item Name</th>
                                     <th class="text-end"><i class="ti ti-settings"></i> Actions</th>
                                 </tr>
                             </thead>
@@ -91,20 +91,18 @@
                         </div>
                     </div>
 
-
                 </div>
             </div>
+
             <!-- Add Waiter Modal -->
             @include('admin.layouts.pages.stock.stock-item.create')
+
             <!-- Edit Waiter Modal -->
             @include('admin.layouts.pages.stock.stock-item.edit')
 
-
         </div>
-
-
-
     </div>
+
 @endsection
 
 

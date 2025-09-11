@@ -12,8 +12,13 @@ class Stock extends Model
 
     protected $guarded = ['id'];
 
-    public function purchaseItems()
-{
-    return $this->hasMany(PurchaseItem::class, 'stock_id');
-}
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class, 'supplier_id');
+    }
+
+    public function stockItem()
+    {
+        return $this->belongsTo(StockItem::class, 'stock_item_id');
+    }
 }

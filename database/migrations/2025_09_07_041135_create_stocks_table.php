@@ -5,27 +5,21 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
-    /**
-     * Run the migrations.
-     */
+
     public function up(): void
     {
         Schema::create('stocks', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('supplier_id');
-            $table->date('stock_entry_date');
-            $table->enum('stock_type', ['stock_in', 'stock_out', 'adjustment'])->nullable();
-            $table->text('stock_note')->nullable();
-            $table->string('invoice')->nullable();
-            $table->decimal('total_price', 12, 2)->default(0.0);
+            $table->unsignedBigInteger('supplier_id')->nullable();
+            $table->unsignedBigInteger('stock_item_id');
+            $table->integer('quantity')->default(0);
+            $table->decimal('purchase_price', 12, 2)->nullable();
+            $table->date('stock_entry_date')->nullable();
+            $table->string('unit')->default('pcs');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('stocks');
