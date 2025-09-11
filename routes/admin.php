@@ -27,7 +27,7 @@ use App\Http\Controllers\Admin\ProductCategoryController;
 use App\Http\Controllers\Admin\SalesController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\SalaryController;
-use App\Http\Controllers\Admin\SalleryController;
+use App\Http\Controllers\Admin\PurchaseController;
 
 Route::get('/', [App\Http\Controllers\Admin\AdminLoginPageController::class, 'index'])->name('admin.login');
 
