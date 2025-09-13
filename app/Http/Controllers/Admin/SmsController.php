@@ -13,6 +13,16 @@ use App\Jobs\SendSmsJob;
 
 class SmsController extends Controller
 {
+    private function calculateSmsUsage($message)
+    {
+        $charCount   = mb_strlen($message, 'UTF-8');
+        $isUnicode   = preg_match('/[^\x00-\x7F]/', $message);
+        $segmentSize = $isUnicode ? 70 : 160;
+        $smsCount    = ceil($charCount / $segmentSize);
+
+        return [$charCount, $smsCount];
+    }
+
     public function index()
     {
         $customers = Order::latest()->get();
@@ -36,9 +46,12 @@ class SmsController extends Controller
         ]);
 
         $successCount = 0;
-        $failCount = 0;
+        $failCount    = 0;
         $sentToNumbers = [];
 
+        [$charCount, $smsCount] = $this->calculateSmsUsage($request->message);
+
+        // 🔹 Send to selected customers
         $customers = collect();
         if (!empty($request->selected)) {
             $customers = Order::whereIn('id', $request->selected)->get();
@@ -46,7 +59,6 @@ class SmsController extends Controller
 
         foreach ($customers as $customer) {
             $phone = $customer->phone;
-
             $today = Carbon::today();
 
             $alreadySentToday = SmsReport::where('mobile', $phone)
@@ -58,18 +70,25 @@ class SmsController extends Controller
             }
 
             try {
-                SendSmsJob::dispatch($phone, $request->message, [
-                    'api_url'    => $sms_setting->api_url,
-                    'api_key'    => $sms_setting->api_key,
-                    'api_secret' => $sms_setting->api_secret,
-                    'sender'     => $sms_setting->sender_id,
-                ], $customer->id);
+                SendSmsJob::dispatch(
+                    $phone,
+                    $request->message,
+                    [
+                        'api_url'    => $sms_setting->api_url,
+                        'api_key'    => $sms_setting->api_key,
+                        'api_secret' => $sms_setting->api_secret,
+                        'sender'     => $sms_setting->sender_id,
+                    ],
+                    $customer->id,
+                    $charCount,
+                    $smsCount
+                );
 
                 $successCount++;
                 $sentToNumbers[] = $phone;
-            }
-            catch (\Exception $e) {
+            } catch (\Exception $e) {
                 \Log::error("Failed to send SMS to {$phone}", ['error' => $e->getMessage()]);
+
                 SmsReport::create([
                     'customer_id'  => $customer->id,
                     'mobile'       => $phone,
@@ -77,11 +96,15 @@ class SmsController extends Controller
                     'status_code'  => null,
                     'api_response' => $e->getMessage(),
                     'success'      => false,
+                    'char_count'   => $charCount,
+                    'sms_count'    => $smsCount,
                 ]);
+
                 $failCount++;
             }
         }
 
+        // 🔹 Custom numbers input
         $customNumbers = [];
         if (!empty($request->mobile_numbers)) {
             $customNumbers = array_filter(array_map('trim', explode(',', $request->mobile_numbers)));
@@ -89,7 +112,6 @@ class SmsController extends Controller
         }
 
         foreach ($customNumbers as $number) {
-
             $today = Carbon::today();
 
             $alreadySentToday = SmsReport::where('mobile', $number)
@@ -101,18 +123,25 @@ class SmsController extends Controller
             }
 
             try {
-                SendSmsJob::dispatch($number, $request->message, [
-                    'api_url'    => $sms_setting->api_url,
-                    'api_key'    => $sms_setting->api_key,
-                    'api_secret' => $sms_setting->api_secret,
-                    'sender'     => $sms_setting->sender,
-                ]);
+                SendSmsJob::dispatch(
+                    $number,
+                    $request->message,
+                    [
+                        'api_url'    => $sms_setting->api_url,
+                        'api_key'    => $sms_setting->api_key,
+                        'api_secret' => $sms_setting->api_secret,
+                        'sender'     => $sms_setting->sender,
+                    ],
+                    null,
+                    $charCount,
+                    $smsCount
+                );
 
                 $successCount++;
                 $sentToNumbers[] = $number;
-            }
-            catch (\Exception $e) {
+            } catch (\Exception $e) {
                 \Log::error("Failed to send SMS to {$number}", ['error' => $e->getMessage()]);
+
                 SmsReport::create([
                     'customer_id'  => null,
                     'mobile'       => $number,
@@ -120,13 +149,16 @@ class SmsController extends Controller
                     'status_code'  => null,
                     'api_response' => $e->getMessage(),
                     'success'      => false,
+                    'char_count'   => $charCount,
+                    'sms_count'    => $smsCount,
                 ]);
+
                 $failCount++;
             }
         }
 
+        // 🔹 Summary
         $seeReportUrl = route('admin.sms-report.index');
-
         $customerNumbers = $customers->pluck('phone')->toArray();
         $totalNumbers = array_unique(array_merge($customerNumbers, $customNumbers));
 
@@ -141,16 +173,16 @@ class SmsController extends Controller
 
         if ($insufficientBalance) {
             $statusMessage .= "<span class='text-danger'>Insufficient Balance, Please recharge.</span><br>";
-        } else
+        } else {
             $statusMessage .= "
-                            <span class='text-success'>{$successCount} SMS Successful </span>,
-                            <span class='text-danger'>{$failCount} SMS Failed </span>,
-                            <span class='text-warning'>{$skipCount} SMS Cancel (Already Sent) </span>
-                            <a href='{$seeReportUrl}' class='btn btn-sm btn-info ms-2'>See SMS Report</a>
-                        ";
+                <span class='text-success'>{$successCount} SMS Successful </span>,
+                <span class='text-danger'>{$failCount} SMS Failed </span>,
+                <span class='text-warning'>{$skipCount} SMS Cancel (Already Sent) </span>
+                <a href='{$seeReportUrl}' class='btn btn-sm btn-info ms-2'>See SMS Report</a>
+            ";
+        }
 
         return back()->with('message', $statusMessage);
-
     }
 
     public function customSms()
@@ -162,16 +194,9 @@ class SmsController extends Controller
         $totalSmsCount = 0;
 
         foreach ($sms_reports as $report) {
-            $msg = $report->message_body;
-            $charCount = mb_strlen($msg, 'UTF-8');
-            $isUnicode = preg_match('/[^\x00-\x7F]/', $msg);
-            $segmentSize = $isUnicode ? 70 : 160;
-            $smsCount = ceil($charCount / $segmentSize);
-
-            $totalSmsCount += $smsCount;
+            $totalSmsCount += $report->sms_count ?? 0; // use saved value
         }
 
         return view('admin.layouts.pages.sms.custom-sms', compact('totalSmsCount', 'sms_setting', 'successfulSms'));
     }
-
 }

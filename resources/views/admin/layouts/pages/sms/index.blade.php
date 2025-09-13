@@ -80,9 +80,9 @@
                                             <tr>
                                                 <td class="ps-3"><input type="checkbox" class="row-checkbox" name="selected[]" value="{{ $customer->id }}" data-phone="{{ $customer->phone }}"></td>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td style="text-align: left">{{ $customer->name }}</td>
-                                                <td>{{ $customer->phone }}</td>
-                                                <td style="text-align: left">{{ $customer->address }}</td>
+                                                <td style="text-align: left">{{ $customer->name ?? 'N/A' }}</td>
+                                                <td>{{ $customer->customer_phone }}</td>
+                                                <td style="text-align: left">{{ $customer->address ?? 'N/A' }}</td>
                                             </tr>
                                         @empty
                                             <tr>

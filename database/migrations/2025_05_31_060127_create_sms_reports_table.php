@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('sms_reports', function (Blueprint $table) {
@@ -16,6 +13,8 @@ return new class extends Migration
             $table->unsignedBigInteger('customer_id')->nullable();
             $table->string('mobile');
             $table->text('message_body');
+            $table->integer('char_count')->nullable();
+            $table->integer('sms_count')->nullable();
             $table->integer('status_code')->nullable();
             $table->text('api_response')->nullable();
             $table->boolean('success')->default(false);
@@ -23,9 +22,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('sms_reports');
