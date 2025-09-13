@@ -10,7 +10,6 @@ return new class extends Migration
     {
         Schema::create('sms_reports', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('customer_id')->nullable();
             $table->string('mobile');
             $table->text('message_body');
             $table->integer('char_count')->nullable();
