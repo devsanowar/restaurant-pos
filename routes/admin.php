@@ -126,8 +126,8 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::get('sms-settings', [SmsSettingController::class, 'edit'])->name('sms-settings.edit');
     Route::put('sms-settings', [SmsSettingController::class, 'update'])->name('sms-settings.update');
 
-    Route::get('/', [SmsController::class, 'index'])->name('sms.index');
-    Route::post('/send-message', [SmsController::class, 'send'])->name('send.sms');
+    Route::get('/sms', [SmsController::class, 'index'])->name('sms.index');
+    Route::post('/send-sms', [SmsController::class, 'send'])->name('send.sms');
     Route::get('/custom-sms', [SmsController::class, 'customSms'])->name('custom.sms');
 
     // Sms Report

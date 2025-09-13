@@ -90,10 +90,16 @@
                                 </div>
 
                                 <div class="col-md-12">
+                                    <label for="sms_balance" class="form-label">SMS Balance</label>
+                                    <input type="text" class="form-control" id="sms_balance" name="sms_balance"
+                                           placeholder="Enter sms balance" value="{{ $setting->sms_balance ?? '' }}">
+                                </div>
+
+                                <div class="col-md-12">
                                     <label for="active_status" class="form-label">Status</label>
                                     <select class="form-select" id="active_status" name="is_active">
-                                        <option value="1"{{ $setting->is_active == 1 ? 'selected' : '' }}>Active</option>
-                                        <option value="0"{{ $setting->is_active == 0 ? 'selected' : '' }}>Inactive</option>
+                                        <option value="1" {{ $setting->is_active == 1 ? 'selected' : '' }} >Active</option>
+                                        <option value="0" {{ $setting->is_active == 0 ? 'selected' : '' }} >Inactive</option>
                                     </select>
                                 </div>
 

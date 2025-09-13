@@ -210,11 +210,11 @@
                 </a>
                 <div class="collapse" id="smsApiSetting">
                     <ul class="sub-menu">
-                        <li class="side-nav-item">
-                            <a href="{{ route('admin.sms.index') }}" class="side-nav-link">
-                                <span class="menu-text">Send SMS</span>
-                            </a>
-                        </li>
+{{--                        <li class="side-nav-item">--}}
+{{--                            <a href="{{ route('admin.sms.index') }}" class="side-nav-link">--}}
+{{--                                <span class="menu-text">Send SMS</span>--}}
+{{--                            </a>--}}
+{{--                        </li>--}}
                         <li class="side-nav-item">
                             <a href="{{ route('admin.custom.sms') }}" class="side-nav-link">
                                 <span class="menu-text">Send Custom SMS</span>
