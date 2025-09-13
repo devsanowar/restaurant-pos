@@ -57,7 +57,7 @@
                                         <input type="checkbox" class="form-check-input" id="selectAllSuppliers">
                                     </th>
                                     <th>SL No</th>
-                                    <th>Name</th>
+{{--                                    <th>Name</th>--}}
                                     <th>Phone</th>
                                     <th>Used SMS</th>
                                     <th>Date</th>
@@ -89,7 +89,7 @@
                                     <tr id="row_{{ $sms_report->id }}">
                                         <td class="ps-3"><input type="checkbox" class="form-check-input"></td>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $sms_report->order?->name ?? 'Custom Number' }}</td>
+{{--                                        <td>{{ $sms_report->order?->name ?? 'Custom Number' }}</td>--}}
                                         <td>{{ $sms_report->mobile }}</td>
                                         <td>{{ $smsCount }} SMS</td>
                                         <td>{{ $sms_report->created_at->format('d-m-Y h:i A') }}</td>
@@ -133,8 +133,8 @@
 
                                 <tfoot>
                                     <tr>
-                                        <td colspan="4" class="text-end"><strong>Total Used SMS =</strong></td>
-                                        <td colspan="4"><strong>{{ $totalSmsCount }} SMS</strong></td>
+                                        <td colspan="3" class="text-end"><strong>Total Used SMS =</strong></td>
+                                        <td colspan="3"><strong>{{ $totalSmsCount }} SMS</strong></td>
                                     </tr>
                                 </tfoot>
 

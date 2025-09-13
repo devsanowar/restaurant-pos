@@ -17,22 +17,14 @@ class SendSmsJob implements ShouldQueue
 
     public $phone, $text, $messageConfig, $customerId, $charCount, $smsCount;
 
-    /**
-     * @param string $phone
-     * @param string $text
-     * @param array $messageConfig
-     * @param int|null $customerId
-     * @param int $charCount
-     * @param int $smsCount
-     */
     public function __construct($phone, $text, array $messageConfig, $customerId = null, $charCount = 0, $smsCount = 1)
     {
-        $this->phone        = $phone;
-        $this->text         = $text;
+        $this->phone         = $phone;
+        $this->text          = $text;
         $this->messageConfig = $messageConfig;
-        $this->customerId   = $customerId;
-        $this->charCount    = $charCount;
-        $this->smsCount     = $smsCount;
+        $this->customerId    = $customerId;
+        $this->charCount     = $charCount;
+        $this->smsCount      = $smsCount;
     }
 
     public function handle()
@@ -62,7 +54,6 @@ class SendSmsJob implements ShouldQueue
             Log::error("Failed to send SMS to {$this->phone}", ['error' => $e->getMessage()]);
 
             SmsReport::create([
-                'customer_id'  => $this->customerId,
                 'mobile'       => $this->phone,
                 'message_body' => $this->text,
                 'char_count'   => $this->charCount,
