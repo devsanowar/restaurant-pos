@@ -111,16 +111,25 @@
             let salaryInput = document.getElementById("salaryInput");
 
             employeeSelect.addEventListener("change", function() {
-                let selectedOption = this.options[this.selectedIndex];
-                let salary = selectedOption.getAttribute("data-salary") || 0;
-                salaryInput.value = salary;
-            });
-        });
-    </script>
+                let employeeId = this.value;
+                if (!employeeId) return;
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            let salaryInput = document.getElementById("salaryInput");
+                fetch(`/admin/get-salary/${employeeId}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            salaryInput.value = data.present_salary;
+                            document.getElementById("salaryIdInput").value = data
+                            .salary_id; // <-- add this line
+                            calculateDue();
+                        } else {
+                            salaryInput.value = 0;
+                            document.getElementById("salaryIdInput").value = "";
+                            calculateDue();
+                        }
+                    });
+            });
+
             let paidInput = document.getElementById("paidInput");
             let dueInput = document.getElementById("dueInput");
 
@@ -128,7 +137,6 @@
                 let salary = parseFloat(salaryInput.value) || 0;
                 let paid = parseFloat(paidInput.value) || 0;
 
-                // Check condition: Paid cannot be more than Salary
                 if (paid > salary) {
                     alert("Advance payment cannot be more than Salary!");
                     paid = salary;
@@ -143,6 +151,7 @@
             salaryInput.addEventListener("input", calculateDue);
         });
     </script>
+
 
     <script>
         $(document).ready(function() {
