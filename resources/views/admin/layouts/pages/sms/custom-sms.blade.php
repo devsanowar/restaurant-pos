@@ -39,7 +39,7 @@
 
                             <div class="border border-dashed bg-light bg-opacity-10 p-3 rounded">
                                 <div id="smsSummary" class="alert alert-info">
-                                    Total SMS: 2500 | Sent: <strong>{{ $totalSendSms }}</strong> | Remaining: <strong>{{ $remainingSms }}</strong>
+                                    Total SMS: {{ $sms_setting->sms_balance }} | Sent: <strong>{{ $totalSendSms }}</strong> | Remaining: <strong>{{ $remainingSms }}</strong>
                                 </div>
 
                                 <form action="{{ route('admin.send.sms') }}" method="POST" id="customSmsForm" style="margin-bottom: 50px ">

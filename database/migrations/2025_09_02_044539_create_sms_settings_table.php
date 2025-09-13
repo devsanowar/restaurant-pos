@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('request_type');
             $table->string('message_type');
             $table->longText('default_message')->nullable();
+            $table->string('sms_balance')->nullable();
             $table->tinyInteger('is_active')->default(1);
             $table->timestamps();
         });
