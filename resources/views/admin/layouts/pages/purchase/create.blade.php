@@ -121,7 +121,10 @@
                                         <tbody>
                                         <tr>
                                             <th style="width:60%">Subtotal:</th>
-                                            <td><span id="subTotal">0.00</span></td>
+                                            <td>
+                                                <span id="subTotal">0.00</span>
+                                                <input type="hidden" id="subTotalInput" name="sub_total_price" value="0.00">
+                                            </td>
                                         </tr>
                                         <tr>
                                             <th>Discount:</th>
@@ -133,20 +136,20 @@
                                             <th>Grand Total:</th>
                                             <td>
                                                 <span id="grandTotal">0.00</span>
-                                                <input type="hidden" id="grandTotalInput" name="total_price" value="0">
+                                                <input type="hidden" id="grandTotalInput" name="total_price" value="0.00">
                                             </td>
                                         </tr>
                                         <tr>
                                             <th>Paid Amount:</th>
                                             <td>
-                                                <input type="number" id="paidAmount" name="paid_amount" class="form-control">
+                                                <input type="number" id="paidAmount" name="paid_amount" class="form-control" value="0.00">
                                             </td>
                                         </tr>
                                         <tr>
                                             <th>Due Amount:</th>
                                             <td>
                                                 <span id="dueAmount">0.00</span>
-                                                <input type="hidden" id="dueAmountInput" name="due_amount" value="0">
+                                                <input type="hidden" id="dueAmountInput" name="due_amount" value="0.00">
                                             </td>
                                         </tr>
                                         </tbody>

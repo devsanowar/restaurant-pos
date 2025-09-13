@@ -52,37 +52,43 @@ class PurchaseController extends Controller
                 $invoicePath = 'uploads/invoices/' . $fileName;
             }
 
-            $grandTotal = 0;
-
-            // ✅ 1. Create Purchase Master
-            $purchase = Purchase::create([
-                'supplier_id'    => $request->supplier_id,
-                'invoice_no'     => $request->invoice_no,
-                'invoice'        => $invoicePath,
-                'purchase_date'  => $request->purchase_date,
-                'note'           => $request->note,
-                'total_price'    => 0,
-                'discount'       => $request->discount ?? 0,
-                'paid_amount'    => $request->paid_amount ?? 0,
-                'due_amount'     => $request->due_amount ?? 0,
-                'payment_method' => $request->payment_method ?? 'cash',
-                'transaction_no' => $request->transaction_no,
-                'status'         => 'completed',
-            ]);
+            $subTotal = 0;
 
             foreach ($request->items as $item) {
+                $subTotal += $item['item_qty'] * $item['item_purchase_price'];
+            }
 
-                $itemTotal = $item['item_qty'] * $item['item_purchase_price'];
-                $grandTotal += $itemTotal;
+            $discount = $request->discount ?? 0;
+            $totalPrice = $subTotal - $discount;
+            $paid = $request->paid_amount ?? 0;
+            $due = $totalPrice - $paid;
 
-                // Save PurchaseItem
+            // ✅ Now save purchase in one go
+            $purchase = Purchase::create([
+                'supplier_id'     => $request->supplier_id,
+                'invoice_no'      => $request->invoice_no,
+                'invoice'         => $invoicePath ?? null,
+                'purchase_date'   => $request->purchase_date,
+                'note'            => $request->note,
+                'sub_total_price' => $subTotal,
+                'total_price'     => $totalPrice,
+                'discount'        => $discount,
+                'paid_amount'     => $paid,
+                'due_amount'      => $due,
+                'payment_method'  => $request->payment_method ?? 'cash',
+                'transaction_no'  => $request->transaction_no,
+                'status'          => 'completed',
+            ]);
+
+            // now loop and save items + stock
+            foreach ($request->items as $item) {
                 PurchaseItem::create([
                     'purchase_id'   => $purchase->id,
                     'stock_item_id' => $item['stock_item_id'],
                     'quantity'      => $item['item_qty'],
                     'unit'          => $item['item_unit'],
                     'unit_price'    => $item['item_purchase_price'],
-                    'total_price'   => $itemTotal,
+                    'total_price'   => $item['item_qty'] * $item['item_purchase_price'],
                 ]);
 
                 $stock = Stock::firstOrCreate(
@@ -103,9 +109,6 @@ class PurchaseController extends Controller
                 $stock->stock_entry_date = $request->purchase_date;
                 $stock->save();
             }
-
-            $purchase->total_price = $grandTotal;
-            $purchase->save();
         });
 
         return redirect()->back()->with('success', 'Purchase saved successfully.');
