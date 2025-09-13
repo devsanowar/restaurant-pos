@@ -7,23 +7,6 @@
 
 @section('admin_content')
 
-    @php
-        use App\Models\SmsLog;
-
-        $totalSms = config('sms.total_sms_limit');
-        $totalSendSms = SmsLog::sum('total_message');
-        $totalSentSms = SmsLog::where('delivery_report', 'success')->sum('total_message');
-        $remainingSms = max(0, $totalSms - $totalSentSms);
-
-        use Carbon\Carbon;
-
-        function banglaDate($date) {
-            $english = ['0','1','2','3','4','5','6','7','8','9','January','February','March','April','May','June','July','August','September','October','November','December'];
-            $bangla  = ['০','১','২','৩','৪','৫','৬','৭','৮','৯','জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
-            return str_replace($english, $bangla, Carbon::parse($date)->format('d F, Y'));
-        }
-    @endphp
-
     <div class="page-content">
 
         <div class="page-container">
@@ -61,15 +44,15 @@
 
                                 <!-- Table -->
                                 <div class="table-responsive">
-                                    <table class="table table-nowrap mb-0 dataTable" id="customerTable">
+                                    <table class="table table-nowrap mb-0 dataTable">
                                         <thead class="bg-light-subtle">
                                         <tr>
                                             <th class="ps-3" style="width: 50px;">
                                                 <input type="checkbox" class="form-check-input" id="selectAll">
                                             </th>
                                             <th>SL No</th>
-                                            <th>Customer Name</th>
                                             <th>Mobile</th>
+                                            <th>Customer Name</th>
                                             <th>Address</th>
                                         </tr>
                                         </thead>
@@ -78,12 +61,15 @@
                                         @forelse ($customers as $customer)
 
                                             <tr>
-                                                <td class="ps-3"><input type="checkbox" class="row-checkbox" name="selected[]" value="{{ $customer->id }}" data-phone="{{ $customer->phone }}"></td>
+                                                <td class="ps-3">
+                                                    <input type="checkbox" class="row-checkbox" name="selected[]" value="{{ $customer->id }}" data-phone="{{ $customer->customer_phone }}">
+                                                </td>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td style="text-align: left">{{ $customer->name ?? 'N/A' }}</td>
                                                 <td>{{ $customer->customer_phone }}</td>
+                                                <td style="text-align: left">{{ $customer->name ?? 'N/A' }}</td>
                                                 <td style="text-align: left">{{ $customer->address ?? 'N/A' }}</td>
                                             </tr>
+
                                         @empty
                                             <tr>
                                                 <td colspan="10" class="text-center">No Customer found.</td>
@@ -175,69 +161,60 @@
             } else {
                 smsCount = Math.ceil((charCount - singleLimit) / multiLimit) + 1;
             }
+
             counter.innerText =
                 `Characters: ${charCount} | SMS Count: ${smsCount} (${isUnicode ? 'Bangla/Unicode' : 'English'})`;
         }
+
+        // Run once on page load for default message
+        document.addEventListener('DOMContentLoaded', countSms);
+
+        // Optional: also run on input
+        document.getElementById('message-box').addEventListener('input', countSms);
     </script>
 
     <script>
-        $(document).ready(function () {
-            window.customerTable = $('#customerTable').DataTable();
-        });
-    </script>
+        const selectAllCheckbox = document.getElementById('selectAll');
+        const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+        const mobileBox = document.getElementById('mobile-box');
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const mobileBox = document.getElementById('mobile-box');
-            const selectAll = document.getElementById('selectAll');
+        // Bangladeshi phone number validation
+        function isValidBangladeshiNumber(number) {
+            const regex = /^01[3-9]\d{8}$/;
+            return regex.test(number);
+        }
 
-            $('#customerTable').on('change', '.row-checkbox', function () {
-                const phone = this.dataset.phone.trim();
-                let numbers = mobileBox.value.split(',').map(num => num.trim()).filter(num => num);
-
-                if (this.checked) {
-                    if (!numbers.includes(phone)) {
-                        numbers.push(phone);
-                    }
-                } else {
-                    numbers = numbers.filter(num => num !== phone);
+        // Update mobile numbers textarea
+        function updateMobileBox() {
+            let numbers = [];
+            rowCheckboxes.forEach(cb => {
+                let phone = cb.dataset.phone.trim();
+                if (cb.checked && phone !== '' && isValidBangladeshiNumber(phone)) {
+                    numbers.push(phone);
                 }
-
-                const uniqueNumbers = Array.from(new Set(numbers));
-                mobileBox.value = uniqueNumbers.join(', ');
             });
 
-            if (selectAll) {
-                selectAll.addEventListener('change', function () {
-                    const allRows = window.customerTable.rows({ search: 'applied' }).nodes();
-                    const checkboxes = $('input.row-checkbox', allRows);
-                    let numbers = mobileBox.value.split(',').map(num => num.trim()).filter(num => num);
+            // Remove duplicates
+            numbers = [...new Set(numbers)];
 
-                    checkboxes.each(function () {
-                        const phone = this.dataset.phone.trim();
-                        this.checked = selectAll.checked;
+            mobileBox.value = numbers.join(', ');
+        }
 
-                        if (selectAll.checked) {
-                            if (!numbers.includes(phone)) {
-                                numbers.push(phone);
-                            }
-                        } else {
-                            numbers = numbers.filter(num => num !== phone);
-                        }
-                    });
-
-                    const uniqueNumbers = Array.from(new Set(numbers));
-                    mobileBox.value = uniqueNumbers.join(', ');
-                });
-            }
+        // Select all checkbox
+        selectAllCheckbox.addEventListener('change', function() {
+            rowCheckboxes.forEach(cb => cb.checked = this.checked);
+            updateMobileBox();
         });
-    </script>
 
-    <script>
-        document.getElementById('selectAll').addEventListener('change', function () {
-            const checked = this.checked;
-            document.querySelectorAll('.row-checkbox').forEach(checkbox => {
-                checkbox.checked = checked;
+        // Individual row checkbox
+        rowCheckboxes.forEach(cb => {
+            cb.addEventListener('change', function() {
+                if (!this.checked) {
+                    selectAllCheckbox.checked = false;
+                } else {
+                    selectAllCheckbox.checked = Array.from(rowCheckboxes).every(c => c.checked);
+                }
+                updateMobileBox();
             });
         });
     </script>

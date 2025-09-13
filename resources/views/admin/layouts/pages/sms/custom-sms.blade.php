@@ -3,12 +3,11 @@
 @section('admin_content')
 
     @php
-        use App\Models\SmsLog;
 
-        $totalSms = config('sms.total_sms_limit');
-        $totalSendSms = SmsLog::sum('total_message');
-        $totalSentSms = SmsLog::where('delivery_report', 'success')->sum('total_message');
-        $remainingSms = max(0, $totalSms - $totalSentSms);
+        use App\Models\SmsReport;
+
+        $totalSendSms = SmsReport::where('success', 1)->sum('sms_count');
+
     @endphp
 
     <div class="page-content">
@@ -39,7 +38,7 @@
 
                             <div class="border border-dashed bg-light bg-opacity-10 p-3 rounded">
                                 <div id="smsSummary" class="alert alert-info">
-                                    Total SMS: {{ $sms_setting->sms_balance }} | Sent: <strong>{{ $totalSendSms }}</strong> | Remaining: <strong>{{ $remainingSms }}</strong>
+                                    Total SMS: {{ $sms_setting->sms_balance }} | Sent: <strong>{{ $totalSendSms }}</strong> | Remaining: <strong>{{ $sms_setting->sms_balance - $totalSendSms }}</strong>
                                 </div>
 
                                 <form action="{{ route('admin.send.sms') }}" method="POST" id="customSmsForm" style="margin-bottom: 50px ">
