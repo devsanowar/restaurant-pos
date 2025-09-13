@@ -36,29 +36,6 @@
                 </a>
             </li>
 
-            <!-- Category -->
-            <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#posCategory" aria-expanded="false" aria-controls="posCategory"
-                    class="side-nav-link">
-                    <span class="menu-icon"><i class="ti ti-medical-cross"></i></span>
-                    <span class="menu-text"> Category</span>
-                    <span class="menu-arrow"></span>
-                </a>
-                <div class="collapse" id="posCategory">
-                    <ul class="sub-menu">
-                        <li class="side-nav-item">
-                            <a href="apps-category-all-category.html" class="side-nav-link">
-                                <span class="menu-text">All Category </span>
-                            </a>
-                        </li>
-                        <li class="side-nav-item">
-                            <a href="apps-category-add-new.html" class="side-nav-link">
-                                <span class="menu-text">Add New Category</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
             <!-- Product -->
             <li class="side-nav-item">
                 <a data-bs-toggle="collapse" href="#posProduct" aria-expanded="false" aria-controls="posProduct"
@@ -70,13 +47,13 @@
                 <div class="collapse" id="posProduct">
                     <ul class="sub-menu">
                         <li class="side-nav-item">
-                            <a href="apps-product-all-products.html" class="side-nav-link">
-                                <span class="menu-text">All Product</span>
+                            <a href="{{ route('admin.product-category.index') }}" class="side-nav-link">
+                                <span class="menu-text">Product Category</span>
                             </a>
                         </li>
                         <li class="side-nav-item">
-                            <a href="apps-prodcut-add-new.html" class="side-nav-link">
-                                <span class="menu-text">Add New Product</span>
+                            <a href="{{ route('admin.product.index') }}" class="side-nav-link">
+                                <span class="menu-text">All Product</span>
                             </a>
                         </li>
                     </ul>
@@ -90,12 +67,52 @@
                 </a>
             </li>
             <!-- Stock -->
-            <li class="side-nav-item">
+            {{-- <li class="side-nav-item">
                 <a href="apps-stock.html" class="side-nav-link">
                     <span class="menu-icon"><i class="ti ti-message"></i></span>
                     <span class="menu-text"> Stock </span>
                 </a>
+            </li> --}}
+
+            <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#sidebarInvoice" aria-expanded="false" aria-controls="sidebarInvoice"
+                    class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-shopping-cart"></i></span>
+                    <span class="menu-text"> Purchase</span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="sidebarInvoice">
+                    <ul class="sub-menu">
+                        <li class="side-nav-item">
+                            <a href="{{ route('admin.stock.item.index') }}" class="side-nav-link">
+                                <span class="menu-text">Add items</span>
+                            </a>
+                        </li>
+
+                        <li class="side-nav-item">
+                            <a href="{{ route('admin.purchase.create') }}" class="side-nav-link">
+                                <span class="menu-text">Add Purchase</span>
+                            </a>
+                        </li>
+
+                        <li class="side-nav-item">
+                            <a href="{{ route('admin.purchase.index') }}" class="side-nav-link">
+                                <span class="menu-text">All Purchase</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
             </li>
+
+            <!-- Stock -->
+            <li class="side-nav-item">
+                <a href="{{ route('admin.stock.index') }}" class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-message"></i></span>
+                    <span class="menu-text"> Stock </span>
+                </a>
+            </li>
+
             <!-- Stock Out-->
             <li class="side-nav-item">
                 <a href="apps-stock-out.html" class="side-nav-link">
@@ -103,9 +120,10 @@
                     <span class="menu-text"> Stock Out </span>
                 </a>
             </li>
+
             <!-- Sales-->
             <li class="side-nav-item">
-                <a href="apps-sales.html" class="side-nav-link">
+                <a href="{{ route('admin.sales.index') }}" class="side-nav-link" target="_blank">
                     <span class="menu-icon"><i class="ti ti-message"></i></span>
                     <span class="menu-text"> Sales </span>
                 </a>
@@ -154,7 +172,7 @@
             </li>
             <!-- Income-->
 
-             <li class="side-nav-item">
+            <li class="side-nav-item">
                 <a data-bs-toggle="collapse" href="#sidebarIncomeCategory" aria-expanded="false"
                     aria-controls="sidebarIncomeCategory" class="side-nav-link">
                     <span class="menu-icon"><i class="ti ti-file-invoice"></i></span>
@@ -179,13 +197,80 @@
             </li>
 
 
-            <!-- Payroll-->
+            <!-- Payroll -->
             <li class="side-nav-item">
-                <a href="apps-payroll.html" class="side-nav-link">
-                    <span class="menu-icon"><i class="ti ti-message"></i></span>
-                    <span class="menu-text"> Payroll </span>
+                <a data-bs-toggle="collapse" href="#sidebarHospital" aria-expanded="false"
+                    aria-controls="sidebarHospital" class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-medical-cross"></i></span>
+                    <span class="menu-text"> Payroll</span>
+                    <span class="menu-arrow"></span>
                 </a>
+                <div class="collapse" id="sidebarHospital">
+                    <ul class="sub-menu">
+                        <li class="side-nav-item">
+                            <a href="{{ route('admin.restaurant.branch.index') }}" class="side-nav-link">
+                                <span class="menu-text">All Retaurant</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="{{ route('admin.payroll.create') }}" class="side-nav-link">
+                                <span class="menu-text">Add Payroll</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="{{ route('admin.payroll.index') }}" class="side-nav-link">
+                                <span class="menu-text">View All Payroll</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="{{ route('admin.attendance.create') }}" class="side-nav-link">
+                                <span class="menu-text">Add Attendance</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="{{ route('admin.attendance.index') }}" class="side-nav-link">
+                                <span class="menu-text">All Attendance</span>
+                            </a>
+                        </li>
+
+                        <li class="side-nav-item">
+                            <a href="{{ route('admin.advance.payment.index') }}" class="side-nav-link">
+                                <span class="menu-text">Advance Payment</span>
+                            </a>
+                        </li>
+
+                        <li class="side-nav-item">
+                            <a href="{{ route('admin.salary.create') }}" class="side-nav-link">
+                                <span class="menu-text">Add Salary</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="{{ route('admin.salary.index') }}" class="side-nav-link">
+                                <span class="menu-text">All Salary </span>
+                            </a>
+                        </li>
+
+                        <li class="side-nav-item">
+                            <a href="apps-payroll-add-paymenet.html" class="side-nav-link">
+                                <span class="menu-text">Add Payment </span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="apps-payroll-all-paymenet.html" class="side-nav-link">
+                                <span class="menu-text">All Payment</span>
+                            </a>
+                        </li>
+                        <li class="side-nav-item">
+                            <a href="apps-payroll-salary-report.html" class="side-nav-link">
+                                <span class="menu-text">Salary Report</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
             </li>
+
+
             <!-- Reports-->
             <li class="side-nav-item">
                 <a href="apps-reports.html" class="side-nav-link">
@@ -195,15 +280,15 @@
             </li>
             <!-- Settings-->
             <li class="side-nav-item">
-                <a href="apps-settings.html" class="side-nav-link">
+                <a href="{{ route('admin.setting.index') }}" class="side-nav-link">
                     <span class="menu-icon"><i class="ti ti-message"></i></span>
                     <span class="menu-text"> Settings </span>
                 </a>
             </li>
             <!-- SMS-->
             <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#smsApiSetting" aria-expanded="false" aria-controls="smsApiSetting"
-                    class="side-nav-link">
+                <a data-bs-toggle="collapse" href="#smsApiSetting" aria-expanded="false"
+                    aria-controls="smsApiSetting" class="side-nav-link">
                     <span class="menu-icon"><i class="ti ti-message"></i></span>
                     <span class="menu-text"> SMS</span>
                     <span class="menu-arrow"></span>
@@ -238,14 +323,14 @@
 
             <!-- User Management-->
             <li class="side-nav-item">
-                <a href="apps-user-management.html" class="side-nav-link">
+                <a href="{{ route('admin.user.management.index') }}" class="side-nav-link">
                     <span class="menu-icon"><i class="ti ti-message"></i></span>
                     <span class="menu-text"> User Management </span>
                 </a>
             </li>
+
             <!-- User Management-->
             <li class="side-nav-item">
-
                 <form method="POST" action="{{ route('logout') }}" style="padding:10px 15px">
                     @csrf
 
