@@ -6,7 +6,7 @@
             <th>Salary Month</th>
             <th>Name</th>
             <th>Designation</th>
-            <th>Salary</th>
+            <th>Present Salary</th>
             <th>Advance Amount</th>
             <th>Remaining Amount</th>
             <th>Action</th>
@@ -20,7 +20,7 @@
                 <td>{{ $advPayment->month_name }}</td>
                 <td>{{ $advPayment->employe->employe_name }}</td>
                 <td>{{ $advPayment->employe->employe_designation }}</td>
-                <td>{{ $advPayment->employe->employe_sallery }}</td>
+                <td>{{ $advPayment->salaryInfo?->present_salary ?? 'No Salary' }}</td>
                 <td>{{ $advPayment->adv_paid }}</td>
                 <td>{{ $advPayment->remaining_sallery }}</td>
                 <td>

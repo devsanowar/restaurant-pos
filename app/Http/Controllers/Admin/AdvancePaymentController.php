@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\AdvancePayment;
 use App\Models\PayRoll;
+use App\Models\Salary;
 use Illuminate\Http\Request;
 
 class AdvancePaymentController extends Controller
@@ -12,30 +13,51 @@ class AdvancePaymentController extends Controller
     public function index()
     {
         $employes = PayRoll::select(['id', 'employe_name', 'employe_sallery'])->get();
-        $advPayments = AdvancePayment::with(['employe:id,employe_name,employe_designation,employe_sallery'])
+        $salaries = Salary::all();
+        $advPayments = AdvancePayment::with(['employe:id,employe_name,employe_designation', 'salaryInfo:id,present_salary'])
             ->latest()
             ->paginate(20);
+
+
         return view('admin.layouts.pages.payroll.advance-payment.index', compact('employes', 'advPayments'));
+    }
+
+    public function getSalary($employee_id)
+    {
+        $salary = Salary::where('employee_id', $employee_id)->latest()->first();
+
+        if ($salary) {
+            return response()->json([
+                'status' => 'success',
+                'present_salary' => $salary->present_salary,
+                'salary_id' => $salary->id,
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'error',
+            'present_salary' => 0,
+            'salary_id' => null,
+        ]);
     }
 
     public function store(Request $request)
     {
-        // Validation
         $request->validate([
+            'salary_id' => 'required|exists:salaries,id',
             'employe_id' => 'required|exists:pay_rolls,id',
             'adv_payment_date' => 'required|date',
             'month_name' => 'required',
             'adv_paid' => 'required|numeric|min:0',
         ]);
 
-        // Find employee
-        $employe = PayRoll::findOrFail($request->employe_id);
+        $employee = PayRoll::findOrFail($request->employe_id);
+        $salaryModel = Salary::findOrFail($request->salary_id);
 
-        $salary = $employe->employe_sallery;
+        $salaryAmount = $salaryModel->present_salary;
         $paid = $request->adv_paid;
 
-        // Condition: Paid cannot be more than Salary
-        if ($paid > $salary) {
+        if ($paid > $salaryAmount) {
             return response()->json(
                 [
                     'status' => 'error',
@@ -45,15 +67,14 @@ class AdvancePaymentController extends Controller
             );
         }
 
-        // Calculate remaining salary
-        $remaining = $salary - $paid;
+        $remaining = $salaryAmount - $paid;
 
-        // Save advance payment
         $advance = AdvancePayment::create([
-            'employe_id' => $employe->id,
+            'salary_id' => $salaryModel->id,
+            'employe_id' => $employee->id,
             'adv_payment_date' => $request->adv_payment_date,
             'month_name' => $request->month_name,
-            'salary' => $salary,
+            'salary' => $salaryAmount,
             'adv_paid' => $paid,
             'remaining_sallery' => $remaining,
         ]);
@@ -95,7 +116,7 @@ class AdvancePaymentController extends Controller
 
     public function filter(Request $request)
     {
-        $query = AdvancePayment::with(['employe:id,employe_name,employe_designation,employe_sallery']);
+        $query = AdvancePayment::with(['employe:id,employe_name,employe_designation,employe_sallery', 'salaryInfo:id,present_salary']);
 
         if ($request->filled('employee_id')) {
             $query->where('employe_id', $request->employee_id);

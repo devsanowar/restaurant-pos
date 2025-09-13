@@ -15,6 +15,8 @@
                 <form class="row g-3" id="advPaymentSallery">
                     @csrf
 
+                    <input type="hidden" name="salary_id" id="salaryIdInput">
+
                     <!-- Date -->
                     <div class="col-md-6">
                         <label class="form-label">Advance Payment Date <span class="text-danger">*</span></label>
