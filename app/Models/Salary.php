@@ -13,4 +13,9 @@ class Salary extends Model
     {
         return $this->belongsTo(PayRoll::class, 'employee_id', 'id');
     }
+
+    public function advances()
+    {
+        return $this->hasMany(AdvancePayment::class, 'salary_id', 'id');
+    }
 }

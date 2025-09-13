@@ -236,13 +236,14 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     // Advacne payment route
     Route::controller(AdvancePaymentController::class)->prefix('advance/payment')->name('advance.payment.')->group(function () {
         Route::get('/', 'index')->name('index');
-        Route::get('/create', 'create')->name('create');
         Route::post('/store', 'store')->name('store');
         Route::get('/{id}/edit', 'edit')->name('edit');
         Route::get('/{id}/show', 'show')->name('show');
         Route::put('/update/{id}', 'update')->name('update');
         Route::delete('/{id}', 'destroy')->name('destroy');
     });
+    Route::get('/get-salary/{employee_id}', [AdvancePaymentController::class, 'getSalary']);
+
     Route::get('/advance-payments/filter', [AdvancePaymentController::class, 'filter'])->name('advance.payment.filter');
 
 
@@ -252,7 +253,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::put('sms-settings', [SmsSettingController::class, 'update'])->name('sms-settings.update');
 
     Route::get('/sms', [SmsController::class, 'index'])->name('sms.index');
-    Route::post('/send-message', [SmsController::class, 'send'])->name('send.sms');
+    Route::post('/send-sms', [SmsController::class, 'send'])->name('send.sms');
     Route::get('/custom-sms', [SmsController::class, 'customSms'])->name('custom.sms');
 
     // Sms Report
