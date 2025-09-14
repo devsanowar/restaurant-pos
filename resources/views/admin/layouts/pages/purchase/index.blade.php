@@ -102,11 +102,11 @@
                                         </td>
                                         <td class="pe-3">
                                             <div class="hstack gap-1 justify-content-end">
-{{--                                                <a href="{{ route('admin.purchase.show', $purchase->id) }}"--}}
-{{--                                                   class="btn btn-soft-primary btn-icon btn-sm rounded-circle"--}}
-{{--                                                   title="View">--}}
-{{--                                                    <i class="ti ti-eye"></i>--}}
-{{--                                                </a>--}}
+                                                <a href="{{ route('admin.purchase.show', $purchase->id) }}"
+                                                   class="btn btn-soft-primary btn-icon btn-sm rounded-circle"
+                                                   title="View">
+                                                    <i class="ti ti-eye"></i>
+                                                </a>
                                                 <a href="{{ route('admin.purchase.edit', $purchase->id) }}"
                                                    class="btn btn-soft-success btn-icon btn-sm rounded-circle"
                                                    title="Edit">

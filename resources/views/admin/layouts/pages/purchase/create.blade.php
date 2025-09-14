@@ -80,23 +80,26 @@
 
                         <!-- Totals, Invoice, Note -->
                         <div class="row mt-4">
-                            <div class="col-md-4 offset-md-8">
+                            <div class="col-md-6 col-lg-12 col-xl-6 col-xxl-8">
+
+                            </div>
+                            <div class="col-md-6 col-lg-12 col-xl-6 col-xxl-4">
                                 <div class="card p-3 shadow-sm">
 
                                     <div class="d-flex justify-content-between gap-2 mb-2">
-                                        <div class="col-md-4">
+                                        <div class="col-md-6">
                                             <label class="form-label">Invoice No.</label>
                                             <input type="text" class="form-control" name="invoice_no">
                                         </div>
 
-                                        <div class="col-md-8">
+                                        <div class="col-md-6">
                                             <label class="form-label">Upload Invoice</label>
                                             <input type="file" class="form-control" name="invoice">
                                         </div>
                                     </div>
 
                                     <div class="d-flex justify-content-between gap-2 mb-2">
-                                        <div class="col-md-4">
+                                        <div class="col-md-6">
                                             <label class="form-label">Payment Method</label>
                                             <select name="payment_method" id="" class="form-control">
                                                 <option value="cash">Cash</option>
@@ -106,7 +109,7 @@
                                             </select>
                                         </div>
 
-                                        <div class="col-md-8">
+                                        <div class="col-md-6">
                                             <label class="form-label">Transaction No.</label>
                                             <input type="text" class="form-control" name="transaction_no">
                                         </div>
