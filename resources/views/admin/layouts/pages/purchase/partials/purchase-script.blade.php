@@ -1,10 +1,10 @@
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const tableBody = document.querySelector("#stockTable tbody");
-        const discountInput = document.getElementById("discount");
-        const paidInput = document.getElementById("paidAmount");
         const subTotalEl = document.getElementById("subTotal");
+        const discountInput = document.getElementById("discount");
         const grandTotalEl = document.getElementById("grandTotal");
+        const paidInput = document.getElementById("paidAmount");
         const dueAmountEl = document.getElementById("dueAmount");
 
         function updateRowNumbers() {
@@ -39,6 +39,7 @@
             dueAmountEl.innerText = due.toFixed(2);
 
             // ✅ Update hidden inputs
+            document.getElementById("subTotalInput").value = subTotal.toFixed(2);
             document.getElementById("grandTotalInput").value = grandTotal.toFixed(2);
             document.getElementById("dueAmountInput").value = due.toFixed(2);
         }

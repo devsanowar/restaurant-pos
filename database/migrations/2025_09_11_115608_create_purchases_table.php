@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('purchases', function (Blueprint $table) {
@@ -18,6 +15,7 @@ return new class extends Migration
             $table->string('invoice')->nullable();
             $table->string('note')->nullable();
             $table->date('purchase_date');
+            $table->decimal('sub_total_price', 15, 2)->default(0.0);
             $table->decimal('total_price', 15, 2)->default(0.0);
             $table->decimal('discount', 12, 2)->default(0.0);
             $table->decimal('paid_amount', 15, 2)->default(0.0);
@@ -29,9 +27,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('purchases');

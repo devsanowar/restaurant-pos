@@ -113,13 +113,13 @@
                 </a>
             </li>
 
-            <!-- Stock Out-->
-            <li class="side-nav-item">
-                <a href="apps-stock-out.html" class="side-nav-link">
-                    <span class="menu-icon"><i class="ti ti-message"></i></span>
-                    <span class="menu-text"> Stock Out </span>
-                </a>
-            </li>
+{{--            <!-- Stock Out-->--}}
+{{--            <li class="side-nav-item">--}}
+{{--                <a href="apps-stock-out.html" class="side-nav-link">--}}
+{{--                    <span class="menu-icon"><i class="ti ti-message"></i></span>--}}
+{{--                    <span class="menu-text"> Stock Out </span>--}}
+{{--                </a>--}}
+{{--            </li>--}}
 
             <!-- Sales-->
             <li class="side-nav-item">
