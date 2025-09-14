@@ -113,13 +113,13 @@
                 </a>
             </li>
 
-            <!-- Stock Out-->
-            <li class="side-nav-item">
-                <a href="apps-stock-out.html" class="side-nav-link">
-                    <span class="menu-icon"><i class="ti ti-message"></i></span>
-                    <span class="menu-text"> Stock Out </span>
-                </a>
-            </li>
+{{--            <!-- Stock Out-->--}}
+{{--            <li class="side-nav-item">--}}
+{{--                <a href="apps-stock-out.html" class="side-nav-link">--}}
+{{--                    <span class="menu-icon"><i class="ti ti-message"></i></span>--}}
+{{--                    <span class="menu-text"> Stock Out </span>--}}
+{{--                </a>--}}
+{{--            </li>--}}
 
             <!-- Sales-->
             <li class="side-nav-item">
@@ -214,12 +214,12 @@
                         </li>
                         <li class="side-nav-item">
                             <a href="{{ route('admin.payroll.create') }}" class="side-nav-link">
-                                <span class="menu-text">Add Payroll</span>
+                                <span class="menu-text">Add Employe</span>
                             </a>
                         </li>
                         <li class="side-nav-item">
                             <a href="{{ route('admin.payroll.index') }}" class="side-nav-link">
-                                <span class="menu-text">View All Payroll</span>
+                                <span class="menu-text">View All Employe</span>
                             </a>
                         </li>
                         <li class="side-nav-item">
@@ -227,15 +227,10 @@
                                 <span class="menu-text">Add Attendance</span>
                             </a>
                         </li>
+
                         <li class="side-nav-item">
                             <a href="{{ route('admin.attendance.index') }}" class="side-nav-link">
                                 <span class="menu-text">All Attendance</span>
-                            </a>
-                        </li>
-
-                        <li class="side-nav-item">
-                            <a href="{{ route('admin.advance.payment.index') }}" class="side-nav-link">
-                                <span class="menu-text">Advance Payment</span>
                             </a>
                         </li>
 
@@ -250,6 +245,14 @@
                             </a>
                         </li>
 
+
+
+
+                        <li class="side-nav-item">
+                            <a href="{{ route('admin.advance.payment.index') }}" class="side-nav-link">
+                                <span class="menu-text">Advance Payment</span>
+                            </a>
+                        </li>
                         <li class="side-nav-item">
                             <a href="apps-payroll-add-paymenet.html" class="side-nav-link">
                                 <span class="menu-text">Add Payment </span>
@@ -260,6 +263,8 @@
                                 <span class="menu-text">All Payment</span>
                             </a>
                         </li>
+
+
                         <li class="side-nav-item">
                             <a href="apps-payroll-salary-report.html" class="side-nav-link">
                                 <span class="menu-text">Salary Report</span>

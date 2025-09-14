@@ -60,7 +60,6 @@
                                     <th>S/N</th>
                                     <th>Date</th>
                                     <th>Supplier</th>
-                                    <th>Item</th>
                                     <th>Subtotal</th>
                                     <th>Discount</th>
                                     <th>Grand Total</th>
@@ -78,10 +77,9 @@
                                         <td>{{ $loop->iteration }}</td>
                                         <td>{{ $purchase->purchase_date ?? '-' }}</td>
                                         <td>{{ $purchase->supplier->supplier_name ?? '-' }}</td>
-                                        <td>{{ $purchase->stockItem->supplier_name ?? '-' }}</td>
-                                        <td>{{ number_format($purchase->subtotal, 2) }}</td>
+                                        <td>{{ number_format($purchase->sub_total_price, 2) }}</td>
                                         <td>{{ number_format($purchase->discount, 2) }}</td>
-                                        <td>{{ number_format($purchase->grand_total, 2) }}</td>
+                                        <td>{{ number_format($purchase->total_price, 2) }}</td>
                                         <td>{{ number_format($purchase->paid_amount, 2) }}</td>
                                         <td>{{ number_format($purchase->due_amount, 2) }}</td>
 
@@ -104,11 +102,11 @@
                                         </td>
                                         <td class="pe-3">
                                             <div class="hstack gap-1 justify-content-end">
-{{--                                                <a href="{{ route('admin.purchase.show', $purchase->id) }}"--}}
-{{--                                                   class="btn btn-soft-primary btn-icon btn-sm rounded-circle"--}}
-{{--                                                   title="View">--}}
-{{--                                                    <i class="ti ti-eye"></i>--}}
-{{--                                                </a>--}}
+                                                <a href="{{ route('admin.purchase.show', $purchase->id) }}"
+                                                   class="btn btn-soft-primary btn-icon btn-sm rounded-circle"
+                                                   title="View">
+                                                    <i class="ti ti-eye"></i>
+                                                </a>
                                                 <a href="{{ route('admin.purchase.edit', $purchase->id) }}"
                                                    class="btn btn-soft-success btn-icon btn-sm rounded-circle"
                                                    title="Edit">

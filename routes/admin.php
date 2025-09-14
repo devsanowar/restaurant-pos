@@ -101,18 +101,6 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::delete('/permanantly-destroy-data/{id}', 'forceDelete')->name('forceDelete');
     });
 
-
-    // Purchase Management
-    Route::controller(PurchaseController::class)->prefix('purchase')->name('purchase.')->group(function () {
-        Route::get('/', 'index')->name('index');
-        Route::get('/create', 'create')->name('create');
-        Route::post('/', 'store')->name('store');
-        Route::get('/{id}/edit', 'edit')->name('edit');
-        Route::put('/{id}', 'update')->name('update');
-        Route::delete('/{id}', 'destroy')->name('destroy');
-    });
-
-
     // Stock Management
     Route::controller(StockController::class)->prefix('stock')->name('stock.')->group(function () {
         Route::get('/', 'index')->name('index');
@@ -126,8 +114,6 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         // Route::post('/restore-data', 'restoreData')->name('restore-data');
         // Route::delete('/permanantly-destroy-data/{id}', 'forceDelete')->name('forceDelete');
     });
-
-
 
     // Restaurant Table Management
     Route::controller(ResTableController::class)->prefix('res-table')->name('res-table.')->group(function () {
@@ -236,13 +222,14 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     // Advacne payment route
     Route::controller(AdvancePaymentController::class)->prefix('advance/payment')->name('advance.payment.')->group(function () {
         Route::get('/', 'index')->name('index');
-        Route::get('/create', 'create')->name('create');
         Route::post('/store', 'store')->name('store');
         Route::get('/{id}/edit', 'edit')->name('edit');
         Route::get('/{id}/show', 'show')->name('show');
         Route::put('/update/{id}', 'update')->name('update');
         Route::delete('/{id}', 'destroy')->name('destroy');
     });
+    Route::get('/get-salary/{employee_id}', [AdvancePaymentController::class, 'getSalary']);
+
     Route::get('/advance-payments/filter', [AdvancePaymentController::class, 'filter'])->name('advance.payment.filter');
 
 
@@ -260,6 +247,9 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         Route::get('sms-report', [SmsReportController::class, 'index'])->name('sms-report.index');
         Route::delete('destroy/{id}', [SmsReportController::class, 'destroy'])->name('sms-report.destroy');
     });
+
+    // Purchase
+    Route::resource('purchase', PurchaseController::class);
 
     // Product Category
     Route::resource('product-category', ProductCategoryController::class);

@@ -86,23 +86,23 @@
                                             <input type="hidden" name="items[{{ $item->stock_item_id }}][stock_item_id]" value="{{ $item->stock_item_id }}">
                                         </td>
                                         <td>
-                                            <input type="number" name="items[{{ $item->stock_item_id }}][item_qty]"
-                                                   class="form-control qty" value="{{ $item->item_qty }}" min="1">
+                                            <input type="number" name="items[{{ $item->stock_item_id }}][quantity]"
+                                                   class="form-control qty" value="{{ $item->quantity }}" min="1">
                                         </td>
                                         <td>
-                                            <select class="form-select unit" name="items[{{ $item->stock_item_id }}][item_unit]">
-                                                <option value="pcs" {{ $item->item_unit == 'pcs' ? 'selected' : '' }}>Pcs</option>
-                                                <option value="kg" {{ $item->item_unit == 'kg' ? 'selected' : '' }}>Kg</option>
-                                                <option value="ltr" {{ $item->item_unit == 'ltr' ? 'selected' : '' }}>Ltr</option>
+                                            <select class="form-select unit" name="items[{{ $item->stock_item_id }}][unit]">
+                                                <option value="pcs" {{ $item->unit == 'pcs' ? 'selected' : '' }}>Pcs</option>
+                                                <option value="kg" {{ $item->unit == 'kg' ? 'selected' : '' }}>Kg</option>
+                                                <option value="ltr" {{ $item->unit == 'ltr' ? 'selected' : '' }}>Ltr</option>
                                             </select>
                                         </td>
                                         <td>
-                                            <input type="number" name="items[{{ $item->stock_item_id }}][item_purchase_price]"
-                                                   class="form-control price" value="{{ $item->item_purchase_price }}" min="0">
+                                            <input type="number" name="items[{{ $item->stock_item_id }}][unit_price]"
+                                                   class="form-control price" value="{{ $item->unit_price }}" min="0">
                                         </td>
                                         <td>
                                             <input type="text" class="form-control total"
-                                                   value="{{ $item->item_qty * $item->item_purchase_price }}" readonly>
+                                                   value="{{ number_format($item->quantity * $item->unit_price, 2) }}" readonly>
                                         </td>
                                         <td class="text-center">
                                             <button type="button" class="btn btn-sm btn-danger removeRow">
@@ -117,26 +117,29 @@
 
                         <!-- Totals, Invoice, Note -->
                         <div class="row mt-4">
-                            <div class="col-md-4 offset-md-8">
+                            <div class="col-md-6 col-lg-12 col-xl-6 col-xxl-8">
+
+                            </div>
+                            <div class="col-md-6 col-lg-12 col-xl-6 col-xxl-4">
                                 <div class="card p-3 shadow-sm">
 
                                     <div class="d-flex justify-content-between gap-2 mb-2">
-                                        <div class="col-md-4">
+                                        <div class="col-md-6">
                                             <label class="form-label">Invoice No.</label>
                                             <input type="text" class="form-control" name="invoice_no" value="{{ $purchase->invoice_no }}">
                                         </div>
 
-                                        <div class="col-md-8">
+                                        <div class="col-md-6">
                                             <label class="form-label">Upload Invoice</label>
                                             <input type="file" class="form-control" name="invoice">
                                             @if ($purchase->invoice)
-                                                <small class="text-muted">Current: {{ $purchase->invoice }}</small>
+                                                <small class="text-muted">Current: {{ asset($purchase->invoice) }}</small>
                                             @endif
                                         </div>
                                     </div>
 
                                     <div class="d-flex justify-content-between gap-2 mb-2">
-                                        <div class="col-md-4">
+                                        <div class="col-md-6">
                                             <label class="form-label">Payment Method</label>
                                             <select name="payment_method" class="form-control">
                                                 <option value="cash" {{ $purchase->payment_method == 'cash' ? 'selected' : '' }}>Cash</option>
@@ -146,7 +149,7 @@
                                             </select>
                                         </div>
 
-                                        <div class="col-md-8">
+                                        <div class="col-md-6">
                                             <label class="form-label">Transaction No.</label>
                                             <input type="text" class="form-control" name="transaction_no" value="{{ $purchase->transaction_no }}">
                                         </div>
@@ -161,12 +164,12 @@
                                         <tbody>
                                         <tr>
                                             <th style="width:60%">Subtotal:</th>
-                                            <td><span id="subTotal">{{ $purchase->items->sum(fn($i) => $i->item_qty * $i->item_purchase_price) }}</span></td>
+                                            <td><span id="subTotal">{{ number_format($purchase->items->sum(fn($i) => $i->quantity * $i->unit_price), 2) }}</span></td>
                                         </tr>
                                         <tr>
                                             <th>Discount:</th>
                                             <td>
-                                                <input type="number" id="discount" name="discount" class="form-control" value="{{ $purchase->discount }}">
+                                                <input type="number" id="discount" name="discount" class="form-control" value="{{ number_format($purchase->discount, 2) }}">
                                             </td>
                                         </tr>
                                         <tr>
@@ -186,7 +189,7 @@
                                             <th>Due Amount:</th>
                                             <td>
                                                 <span id="dueAmount">{{ $purchase->due_amount }}</span>
-                                                <input type="hidden" id="dueAmountInput" name="due_amount" value="{{ $purchase->due_amount }}">
+                                                <input type="hidden" id="dueAmountInput" name="due_amount" value="{{ number_format($purchase->due_amount, 2) }}">
                                             </td>
                                         </tr>
                                         </tbody>
