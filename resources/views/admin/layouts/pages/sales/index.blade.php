@@ -202,7 +202,7 @@
 
                     <div class="d-flex justify-content-between fw-semibold mb-2" style="font-size:14px;">
                         <span>Total:</span>
-                        <span id="totalAmount">৳0</span>
+                        <span id="billAmount">৳0</span>
                     </div>
                     <div class="d-flex justify-content-between mb-3">
                         <label class="form-label mb-1">Paid</label>
@@ -210,7 +210,7 @@
                     </div>
                     <div class="d-flex justify-content-between fw-semibold mb-3" style="font-size:14px;">
                         <span>Return Amount:</span>
-                        <span id="dueAmount">BDT. 0</span>
+                        <span id="returnAmount">BDT. 0</span>
                     </div>
 
                     <div class="mb-3">
@@ -441,9 +441,9 @@
             tbody.innerHTML += row;
         });
 
-        document.getElementById('totalAmount').innerText = `BDT. ${total}.00`;
+        document.getElementById('billAmount').innerText = `BDT. ${total}.00`;
         const paid = parseFloat(document.getElementById('paidAmount').value) || 0;
-        document.getElementById('dueAmount').innerText = `BDT. ${total - paid}.00`;
+        document.getElementById('returnAmount').innerText = `BDT. ${total - paid}.00`;
     }
 
     // ✅ Update Due when Paid changes
@@ -668,9 +668,9 @@
             tbody.innerHTML += row;
         });
 
-        document.getElementById('totalAmount').innerText = `BDT. ${total}.00`;
+        document.getElementById('billAmount').innerText = `BDT. ${total}.00`;
         const paid = parseFloat(document.getElementById('paidAmount').value) || 0;
-        document.getElementById('dueAmount').innerText = `BDT. ${total - paid}.00`;
+        document.getElementById('returnAmount').innerText = `BDT. ${total - paid}.00`;
     }
 
     // ✅ Update Due when Paid changes

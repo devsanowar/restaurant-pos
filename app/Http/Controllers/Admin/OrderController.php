@@ -6,10 +6,16 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderItem;
-use Barryvdh\DomPDF\Facade\Pdf; // ✅ Use the correct facade
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class OrderController extends Controller
 {
+    public function index()
+    {
+        $orders = Order::orderBy('id', 'desc')->paginate(10);
+        return view('admin.layouts.pages.orders.index', compact('orders'));
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -53,6 +59,80 @@ class OrderController extends Controller
             'order_id'    => $order->id,
             'pdf'         => $pdfBase64,
         ]);
+    }
+
+    public function show(Order $order)
+    {
+        if (request()->ajax()) {
+            $order->load(['table', 'waiter', 'items']); // eager load relations
+            return response()->json([
+                'id'             => $order->id,
+                'date'           => $order->created_at->format('d F, Y'),
+                'table_number'   => $order->table->table_number ?? '-',
+                'waiter_name'    => $order->waiter->waiter_name ?? '-',
+                'customer_phone' => $order->customer_phone,
+                'total'          => $order->total,
+                'paid'           => $order->paid,
+                'due'            => $order->due,
+                'status'         => $order->status,
+                'items'          => $order->items->map(fn($item) => [
+                    'product_name' => $item->product_name,
+                    'price'        => $item->price,
+                    'quantity'     => $item->quantity,
+                    'subtotal'     => $item->subtotal,
+                ]),
+            ]);
+        }
+
+        return view('admin.layouts.pages.orders.show', compact('order'));
+    }
+
+    public function update(Request $request, Order $order)
+    {
+        $request->validate([
+            'paid' => 'required|numeric|min:0',
+        ]);
+
+        // Recalculate due
+        $paid = $request->paid;
+        $total = $order->total;
+        $due = $total - $paid;
+
+        // Update order
+        $order->update([
+            'paid' => $paid,
+            'due'  => $due,
+        ]);
+
+        // Reload relations for PDF
+        $order->load('table', 'waiter', 'items');
+
+        // Generate PDF receipt
+        $pdf = Pdf::loadView('admin.layouts.pages.orders.three_copies', [
+            'order' => $order,
+            'items' => $order->items,
+        ])->setPaper('a4', 'landscape');
+
+        $pdfBase64 = base64_encode($pdf->output());
+
+        // If AJAX request (modal form)
+        if ($request->ajax()) {
+            return response()->json([
+                'success'  => true,
+                'order_id' => $order->id,
+                'pdf'      => $pdfBase64,
+            ]);
+        }
+
+        // Fallback for normal form submit
+        return redirect()->back()->with('success', 'Order updated successfully.');
+    }
+
+    public function destroy(Order $order)
+    {
+        $order->delete();
+
+        return redirect()->route('admin.orders.index')->with('success', 'Order deleted successfully!');
     }
 
 }
