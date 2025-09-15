@@ -96,7 +96,7 @@
                     <td colspan="2" style="text-align: right; font-weight: bold">{{ $order->paid }}.00</td>
                 </tr>
                 <tr>
-                    <td colspan="3" style="text-align: right; font-weight: bold">Return Amount: </td>
+                    <td colspan="3" style="text-align: right; font-weight: bold">Due/Return Amount: </td>
                     <td colspan="2" style="text-align: right; font-weight: bold">{{ $order->due }}.00</td>
                 </tr>
             </tfoot>
@@ -139,7 +139,7 @@
                 <td colspan="2" style="text-align: right; font-weight: bold">{{ $order->paid }}.00</td>
             </tr>
             <tr>
-                <td colspan="3" style="text-align: right; font-weight: bold">Return Amount: </td>
+                <td colspan="3" style="text-align: right; font-weight: bold">Due/Return Amount: </td>
                 <td colspan="2" style="text-align: right; font-weight: bold">{{ $order->due }}.00</td>
             </tr>
             </tfoot>

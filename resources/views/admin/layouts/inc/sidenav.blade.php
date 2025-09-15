@@ -134,31 +134,12 @@
                 </a>
             </li>
 
-            <!-- Order -->
+            <!-- Orders-->
             <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#stock" aria-expanded="false" aria-controls="stock"
-                   class="side-nav-link">
+                <a href="{{ route('admin.orders.index') }}" class="side-nav-link">
                     <span class="menu-icon"><i class="ti ti-menu-order"></i></span>
-                    <span class="menu-text"> Order</span>
-                    <span class="menu-arrow"></span>
+                    <span class="menu-text"> Orders </span>
                 </a>
-                <div class="collapse" id="stock">
-                    <ul class="sub-menu">
-
-                        <li class="side-nav-item">
-                            <a href="{{ route('admin.stock.index') }}" class="side-nav-link">
-                                <span class="menu-text">All Stock</span>
-                            </a>
-                        </li>
-
-                        <li class="side-nav-item">
-                            <a href="{{ route('admin.stock-out.index') }}" class="side-nav-link">
-                                <span class="menu-text">Stock Out</span>
-                            </a>
-                        </li>
-
-                    </ul>
-                </div>
             </li>
 
             <!-- Table-->
