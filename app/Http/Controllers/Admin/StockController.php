@@ -14,7 +14,7 @@ class StockController extends Controller
 {
     public function index()
     {
-        $stocks = Stock::git ;
+        $stocks = Stock::git;
         return view('admin.layouts.pages.stock.index', compact('stocks'));
     }
 }
