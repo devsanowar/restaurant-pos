@@ -28,14 +28,14 @@ use App\Http\Controllers\Admin\SalesController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\SalaryController;
 use App\Http\Controllers\Admin\PurchaseController;
+use App\Http\Controllers\Admin\StockOutController;
 
 Route::get('/', [App\Http\Controllers\Admin\AdminLoginPageController::class, 'index'])->name('admin.login');
 
 Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
 
     // Admin Dashboard
-    Route::get('dashboard', [AdminDashboardController::class, 'index'])
-        ->name('dashboard');
+    Route::get('dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
     //Admin Settings
     Route::controller(AdminSettingController::class)->prefix('profile')->name('profile.')->group(function () {
@@ -114,6 +114,9 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         // Route::post('/restore-data', 'restoreData')->name('restore-data');
         // Route::delete('/permanantly-destroy-data/{id}', 'forceDelete')->name('forceDelete');
     });
+
+    // Purchase
+    Route::resource('stock-out', StockOutController::class);
 
     // Restaurant Table Management
     Route::controller(ResTableController::class)->prefix('res-table')->name('res-table.')->group(function () {
@@ -231,8 +234,6 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::get('/get-salary/{employee_id}', [AdvancePaymentController::class, 'getSalary']);
 
     Route::get('/advance-payments/filter', [AdvancePaymentController::class, 'filter'])->name('advance.payment.filter');
-
-
 
     // SMS Settings
     Route::get('sms-settings', [SmsSettingController::class, 'edit'])->name('sms-settings.edit');

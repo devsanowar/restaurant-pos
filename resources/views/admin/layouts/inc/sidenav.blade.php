@@ -66,22 +66,16 @@
                     <span class="menu-text"> Supplier </span>
                 </a>
             </li>
-            <!-- Stock -->
-            {{-- <li class="side-nav-item">
-                <a href="apps-stock.html" class="side-nav-link">
-                    <span class="menu-icon"><i class="ti ti-message"></i></span>
-                    <span class="menu-text"> Stock </span>
-                </a>
-            </li> --}}
 
+            <!-- Purchase -->
             <li class="side-nav-item">
-                <a data-bs-toggle="collapse" href="#sidebarInvoice" aria-expanded="false" aria-controls="sidebarInvoice"
+                <a data-bs-toggle="collapse" href="#purchase" aria-expanded="false" aria-controls="purchase"
                     class="side-nav-link">
                     <span class="menu-icon"><i class="ti ti-shopping-cart"></i></span>
                     <span class="menu-text"> Purchase</span>
                     <span class="menu-arrow"></span>
                 </a>
-                <div class="collapse" id="sidebarInvoice">
+                <div class="collapse" id="purchase">
                     <ul class="sub-menu">
                         <li class="side-nav-item">
                             <a href="{{ route('admin.stock.item.index') }}" class="side-nav-link">
@@ -107,27 +101,66 @@
 
             <!-- Stock -->
             <li class="side-nav-item">
-                <a href="{{ route('admin.stock.index') }}" class="side-nav-link">
-                    <span class="menu-icon"><i class="ti ti-message"></i></span>
-                    <span class="menu-text"> Stock </span>
+                <a data-bs-toggle="collapse" href="#stock" aria-expanded="false" aria-controls="stock"
+                    class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-package"></i></span>
+                    <span class="menu-text"> Stock</span>
+                    <span class="menu-arrow"></span>
                 </a>
-            </li>
+                <div class="collapse" id="stock">
+                    <ul class="sub-menu">
 
-{{--            <!-- Stock Out-->--}}
-{{--            <li class="side-nav-item">--}}
-{{--                <a href="apps-stock-out.html" class="side-nav-link">--}}
-{{--                    <span class="menu-icon"><i class="ti ti-message"></i></span>--}}
-{{--                    <span class="menu-text"> Stock Out </span>--}}
-{{--                </a>--}}
-{{--            </li>--}}
+                        <li class="side-nav-item">
+                            <a href="{{ route('admin.stock.index') }}" class="side-nav-link">
+                                <span class="menu-text">All Stock</span>
+                            </a>
+                        </li>
+
+                        <li class="side-nav-item">
+                            <a href="{{ route('admin.stock-out.index') }}" class="side-nav-link">
+                                <span class="menu-text">Stock Out</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+            </li>
 
             <!-- Sales-->
             <li class="side-nav-item">
                 <a href="{{ route('admin.sales.index') }}" class="side-nav-link" target="_blank">
-                    <span class="menu-icon"><i class="ti ti-message"></i></span>
+                    <span class="menu-icon"><i class="ti ti-shopping-bag"></i></span>
                     <span class="menu-text"> Sales </span>
                 </a>
             </li>
+
+            <!-- Order -->
+            <li class="side-nav-item">
+                <a data-bs-toggle="collapse" href="#stock" aria-expanded="false" aria-controls="stock"
+                   class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-menu-order"></i></span>
+                    <span class="menu-text"> Order</span>
+                    <span class="menu-arrow"></span>
+                </a>
+                <div class="collapse" id="stock">
+                    <ul class="sub-menu">
+
+                        <li class="side-nav-item">
+                            <a href="{{ route('admin.stock.index') }}" class="side-nav-link">
+                                <span class="menu-text">All Stock</span>
+                            </a>
+                        </li>
+
+                        <li class="side-nav-item">
+                            <a href="{{ route('admin.stock-out.index') }}" class="side-nav-link">
+                                <span class="menu-text">Stock Out</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+            </li>
+
             <!-- Table-->
             <li class="side-nav-item">
                 <a href="{{ route('admin.res-table.index') }}" class="side-nav-link">
