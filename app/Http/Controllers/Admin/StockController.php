@@ -3,12 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Stock;
-use App\Models\PurchaseItem;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\StockItem;
-use App\Models\Supplier;
-use Intervention\Image\Laravel\Facades\Image;
 
 class StockController extends Controller
 {
@@ -16,5 +11,12 @@ class StockController extends Controller
     {
         $stocks = Stock::orderBy('id', 'desc')->paginate(10);
         return view('admin.layouts.pages.stock.index', compact('stocks'));
+    }
+
+    public function destroy(Stock $stock)
+    {
+        $stock->delete();
+
+        return redirect()->route('admin.stock.index')->with('success', 'Stock item delete successfully!');
     }
 }
