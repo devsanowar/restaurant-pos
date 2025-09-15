@@ -241,6 +241,15 @@ class PurchaseController extends Controller
 
     public function destroy(Purchase $purchase)
     {
-        //
+        if ($purchase->invoice && file_exists(public_path('uploads/purchases/' . $purchase->invoice))) {
+            unlink(public_path('uploads/purchases/' . $purchase->invoice));
+        }
+
+        $purchase->items()->delete();
+
+        $purchase->delete();
+
+        return redirect()->route('admin.purchase.index')->with('success', 'Purchase deleted successfully!');
     }
+
 }

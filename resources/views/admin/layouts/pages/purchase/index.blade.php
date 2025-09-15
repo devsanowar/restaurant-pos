@@ -112,11 +112,20 @@
                                                    title="Edit">
                                                     <i class="ti ti-edit fs-16"></i>
                                                 </a>
-                                                <a href="javascript:void(0);"
-                                                   class="btn btn-soft-danger btn-icon btn-sm rounded-circle deleteBtn"
-                                                   data-id="{{ $purchase->id }}" title="Delete">
-                                                    <i class="ti ti-trash"></i>
-                                                </a>
+
+                                                <!-- Delete -->
+                                                <form action="{{ route('admin.purchase.destroy', $purchase->id) }}"
+                                                      method="POST"
+                                                      style="display:inline;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit"
+                                                            class="btn btn-soft-danger btn-icon btn-sm rounded-circle show_confirm"
+                                                            title="Delete">
+                                                        <i class="ti ti-trash"></i>
+                                                    </button>
+                                                </form>
+
                                             </div>
                                         </td>
                                     </tr>
@@ -198,37 +207,25 @@
     <script src="{{ asset('backend') }}/assets/js/sweetalert2.all.min.js"></script>
 
     <script>
-        $(document).on('click', '.deleteBtn', function() {
-            let id = $(this).data('id');
-            let url = "/admin/purchase/" + id;
+        $(document).ready(function() {
+            // Delete confirmation for dynamically loaded content
+            $(document).on('click', '.show_confirm', function(event) {
+                event.preventDefault();
+                let form = $(this).closest("form");
 
-            Swal.fire({
-                title: "Are you sure?",
-                text: "This record will be permanently deleted!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonText: "Yes, delete it!",
-                cancelButtonText: "Cancel",
-                confirmButtonColor: "#d33",
-                cancelButtonColor: "#3085d6",
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: url,
-                        type: "DELETE",
-                        data: {
-                            _token: "{{ csrf_token() }}"
-                        },
-                        success: function(response) {
-                            Swal.fire("Deleted!", response.message, "success");
-                            $("#row_" + id).remove();
-                            $("#recycleCount").text(response.deletedCount);
-                        },
-                        error: function(xhr) {
-                            Swal.fire("Error!", "Something went wrong.", "error");
-                        }
-                    });
-                }
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, delete it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
             });
         });
     </script>
