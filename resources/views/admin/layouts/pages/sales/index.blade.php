@@ -146,7 +146,19 @@
 <body>
 
 <div class="container my-5">
-    <h2 class="section-title">Restaurant Menu</h2>
+    <div class="d-flex align-items-center justify-content-between px-4">
+        <h2 class="section-title d-inline"> </h2>
+        <h2 class="section-title d-inline "> Restaurant Menu </h2>
+        <span>
+            <a class="btn btn-primary btn-sm d-flex align-items-center gap-1"
+               href="{{ route('admin.orders.index') }}"
+               target="_blank">
+                <i class="fas fa-list-alt"></i> All Orders
+            </a>
+        </span>
+
+    </div>
+
 
     <div class="category-wrapper">
         <button class="arrow-btn arrow-left" id="scrollLeft"><i class="fa-solid fa-angle-left"></i></button>
@@ -204,10 +216,12 @@
                         <span>Total:</span>
                         <span id="billAmount">৳0</span>
                     </div>
+
                     <div class="d-flex justify-content-between mb-3">
                         <label class="form-label mb-1">Paid</label>
                         <input type="text" class="form-control form-control-sm" id="paidAmount" placeholder="Received" value="" style="width: 150px; text-align: right">
                     </div>
+
                     <div class="d-flex justify-content-between fw-semibold mb-3" style="font-size:14px;">
                         <span>Return Amount:</span>
                         <span id="returnAmount">BDT. 0</span>
@@ -507,245 +521,6 @@
             Swal.fire('Error', err.message, 'error');
         }
     });
-
-    function b64toBlob(b64Data, contentType="application/pdf", sliceSize=512) {
-        const byteCharacters = atob(b64Data);
-        const byteArrays = [];
-        for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-            const slice = byteCharacters.slice(offset, offset + sliceSize);
-            const byteNumbers = new Array(slice.length);
-            for (let i = 0; i < slice.length; i++) {
-                byteNumbers[i] = slice.charCodeAt(i);
-            }
-            byteArrays.push(new Uint8Array(byteNumbers));
-        }
-        return new Blob(byteArrays, { type: contentType });
-    }
-
-    function b64toBlob(b64Data, contentType="application/pdf", sliceSize=512) {
-        const byteCharacters = atob(b64Data);
-        const byteArrays = [];
-        for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-            const slice = byteCharacters.slice(offset, offset + sliceSize);
-            const byteNumbers = new Array(slice.length);
-            for (let i = 0; i < slice.length; i++) {
-                byteNumbers[i] = slice.charCodeAt(i);
-            }
-            byteArrays.push(new Uint8Array(byteNumbers));
-        }
-        return new Blob(byteArrays, { type: contentType });
-    }
-
-</script>
-
-<script>
-    const productRow = document.getElementById('productRow');
-
-    document.querySelectorAll('.category-card').forEach(card => {
-        card.addEventListener('click', () => {
-            const categoryId = card.getAttribute('data-category-id');
-            const items = allProducts[categoryId] || [];
-            displayProducts(items);
-        });
-    });
-
-    function displayProducts(items) {
-        productRow.innerHTML = '';
-
-        if (items.length === 0) {
-            productRow.innerHTML = `<p class="text-danger text-center mt-3">No products available</p>`;
-            return;
-        }
-
-        items.forEach(item => {
-            const col = document.createElement('div');
-            col.className = 'col-6 col-md-3 mb-4';
-            col.innerHTML = `
-            <div class="card product-card shadow-sm h-100 text-center"
-                style="border-radius:14px; overflow:hidden; border: 1px solid #e6e6e6;">
-                <img src="${item.img}" class="card-img-top" alt="${item.name}"
-                     style="height:150px; object-fit:cover;">
-                <div class="card-body p-3">
-                    <h6 class="card-title mb-2" style="font-size:15px; font-weight:600; color:#333;">${item.name}</h6>
-                    <p class="card-text text-success fw-bold mb-3" style="font-size:14px;">BDT. ${item.price}</p>
-                    <button class="btn btn-add-to-cart w-100"
-                        data-name="${item.name}"
-                        data-price="${item.price}">Add</button>
-                </div>
-            </div>
-        `;
-            productRow.appendChild(col);
-        });
-
-        // re-apply add-to-cart button logic
-        styleAddButtons();
-        addCardHoverEffect();
-        attachAddButtonEvents();
-    }
-
-    // ✅ Click Event for Category Titles
-    document.querySelectorAll('.category-card .card-title').forEach(title => {
-        title.addEventListener('click', () => {
-            const category = title.innerText.trim();
-            const items = menuData[category] || [];
-            displayProducts(items, category);
-        });
-    });
-
-    let orderItems = [];
-
-    function styleAddButtons() {
-        document.querySelectorAll('.btn-add-to-cart').forEach(btn => {
-            btn.style.backgroundColor = '#465DFF';
-            btn.style.color = '#fff';
-            btn.style.border = 'none';
-            btn.style.borderRadius = '8px';
-            btn.style.fontSize = '14px';
-            btn.style.padding = '8px';
-            btn.style.transition = 'background 0.3s ease';
-            btn.addEventListener('mouseenter', () => btn.style.backgroundColor = '#2d44d9');
-            btn.addEventListener('mouseleave', () => btn.style.backgroundColor = '#465DFF');
-        });
-    }
-
-    function addCardHoverEffect() {
-        document.querySelectorAll('.product-card').forEach(card => {
-            card.addEventListener('mouseenter', () => {
-                card.style.transform = 'translateY(-5px)';
-                card.style.boxShadow = '0 8px 20px rgba(0,0,0,0.1)';
-            });
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = 'translateY(0)';
-                card.style.boxShadow = '0 4px 10px rgba(0,0,0,0.05)';
-            });
-        });
-    }
-
-    function attachAddButtonEvents() {
-        document.querySelectorAll('.btn-add-to-cart').forEach(btn => {
-            btn.addEventListener('click', () => {
-                // ✅ Show the order panel if hidden
-                const orderPanel = document.getElementById('orderPanel');
-                if (orderPanel.classList.contains('d-none')) {
-                    orderPanel.classList.remove('d-none');
-                    orderPanel.style.opacity = 0;
-                    setTimeout(() => {
-                        orderPanel.style.transition = 'opacity 0.3s ease';
-                        orderPanel.style.opacity = 1;
-                    }, 50);
-                }
-
-                const name = btn.getAttribute('data-name');
-                const price = parseFloat(btn.getAttribute('data-price'));
-
-                const existing = orderItems.find(item => item.name === name);
-                if (existing) {
-                    existing.qty += 1;
-                } else {
-                    orderItems.push({ name, price, qty: 1 });
-                }
-                updateOrderTable();
-            });
-        });
-    }
-
-    function updateOrderTable() {
-        const tbody = document.querySelector('#orderTable tbody');
-        tbody.innerHTML = '';
-        let total = 0;
-
-        orderItems.forEach((item, index) => {
-            total += item.price * item.qty;
-            const row = `
-            <tr>
-                <td>${index + 1}</td>
-                <td class="text-start">${item.name}</td>
-                <td>${item.qty}</td>
-                <td>৳ ${item.price}</td>
-                <td>৳ ${item.price * item.qty}</td>
-            </tr>
-        `;
-            tbody.innerHTML += row;
-        });
-
-        document.getElementById('billAmount').innerText = `BDT. ${total}.00`;
-        const paid = parseFloat(document.getElementById('paidAmount').value) || 0;
-        document.getElementById('returnAmount').innerText = `BDT. ${total - paid}.00`;
-    }
-
-    // ✅ Update Due when Paid changes
-    document.getElementById('paidAmount').addEventListener('input', updateOrderTable);
-
-    document.getElementById('saveOrderBtn').addEventListener('click', async () => {
-        if (orderItems.length === 0) {
-            Swal.fire('Error', 'No items in the order!', 'error');
-            return;
-        }
-
-        const tableId = document.getElementById('tableSelect').value;
-        const waiterId = document.getElementById('waiterSelect').value;
-        const phone = document.getElementById('customerPhone').value.trim();
-        const paid = parseFloat(document.getElementById('paidAmount').value) || 0;
-
-        if (!tableId || !waiterId || !phone) {
-            Swal.fire('Error', 'Please fill all required fields!', 'error');
-            return;
-        }
-
-        const total = orderItems.reduce((sum, item) => sum + item.price * item.qty, 0);
-        const due = total - paid;
-
-        try {
-            const res = await fetch("{{ route('admin.orders.store') }}", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
-                },
-                body: JSON.stringify({
-                    res_table_id: tableId,
-                    waiter_id: waiterId,
-                    customer_phone: phone,
-                    paid: paid,
-                    total: total,
-                    due: due,
-                    items: orderItems
-                })
-            });
-
-            if (!res.ok) {
-                const text = await res.text();
-                throw new Error('HTTP ' + res.status + ': ' + text);
-            }
-
-            const data = await res.json();
-
-            if (data.success) {
-                Swal.fire('Saved!', 'Order saved successfully!', 'success');
-
-                const pdfBlob = b64toBlob(data.pdf, "application/pdf");
-                const url = URL.createObjectURL(pdfBlob);
-                window.open(url, "_blank");
-            }
-        } catch (err) {
-            console.error(err);
-            Swal.fire('Error', err.message, 'error');
-        }
-    });
-
-    function b64toBlob(b64Data, contentType="application/pdf", sliceSize=512) {
-        const byteCharacters = atob(b64Data);
-        const byteArrays = [];
-        for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-            const slice = byteCharacters.slice(offset, offset + sliceSize);
-            const byteNumbers = new Array(slice.length);
-            for (let i = 0; i < slice.length; i++) {
-                byteNumbers[i] = slice.charCodeAt(i);
-            }
-            byteArrays.push(new Uint8Array(byteNumbers));
-        }
-        return new Blob(byteArrays, { type: contentType });
-    }
 
     function b64toBlob(b64Data, contentType="application/pdf", sliceSize=512) {
         const byteCharacters = atob(b64Data);

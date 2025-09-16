@@ -19,7 +19,9 @@
                         <div class="col-md-6">
                             <p><strong>Date:</strong> <span id="order-edit-date"></span></p>
                             <p><strong>Waiter:</strong> <span id="waiter-edit-name"></span></p>
-                            <p><strong>Status:</strong> <span class="btn btn-warning btn-sm badge" id="order-edit-status"></span></p>
+                            <p><strong>Status:</strong>
+                                <span id="order-edit-status"></span>
+                            </p>
                         </div>
                     </div>
 
