@@ -7,12 +7,16 @@ use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderItem;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 
 class OrderController extends Controller
 {
     public function index()
     {
-        $orders = Order::orderBy('id', 'desc')->paginate(10);
+        $orders = Order::whereDate('created_at', Carbon::today())
+            ->orderBy('id', 'desc')
+            ->paginate(10);
+
         return view('admin.layouts.pages.orders.index', compact('orders'));
     }
 
@@ -64,7 +68,7 @@ class OrderController extends Controller
     public function show(Order $order)
     {
         if (request()->ajax()) {
-            $order->load(['table', 'waiter', 'items']); // eager load relations
+            $order->load(['table', 'waiter', 'items']);
             return response()->json([
                 'id'             => $order->id,
                 'date'           => $order->created_at->format('d F, Y'),
@@ -74,13 +78,15 @@ class OrderController extends Controller
                 'total'          => $order->total,
                 'paid'           => $order->paid,
                 'due'            => $order->due,
-                'status'         => $order->status,
-                'items'          => $order->items->map(fn($item) => [
-                    'product_name' => $item->product_name,
-                    'price'        => $item->price,
-                    'quantity'     => $item->quantity,
-                    'subtotal'     => $item->subtotal,
-                ]),
+                'status'         => $order->due <= 0 ? 'Completed' : 'Pending',
+                'items'          => $order->items->map(function($item) {
+                    return [
+                        'product_name' => $item->product_name,
+                        'price'        => $item->price,
+                        'quantity'     => $item->quantity,
+                        'subtotal'     => $item->subtotal,
+                    ];
+                }),
             ]);
         }
 
