@@ -41,7 +41,7 @@
                                     @endforeach
                                 </ul>
                             </div>
-                    @endif
+                        @endif
 
                     <!-- Table -->
                         <div class="table-responsive">
@@ -76,7 +76,7 @@
                                         <td>{{ $order->paid }}</td>
                                         <td>{{ $order->due }}</td>
                                         <td>
-                                            @if($order->status == 'Completed')
+                                            @if($order->due <= 0)
                                                 <span class="btn btn-success btn-sm badge">Completed</span>
                                             @else
                                                 <span class="btn btn-warning btn-sm badge">Pending</span>
