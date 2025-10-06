@@ -91,4 +91,14 @@ class WaiterController extends Controller
             'message' => 'Waiter deleted successfully.',
         ]);
     }
+
+    public function getWaiters($table_id)
+    {
+        $waiters = Waiter::where('res_table_id', $table_id)
+            ->where('is_active', 1)
+            ->get();
+
+        return response()->json($waiters);
+    }
+
 }

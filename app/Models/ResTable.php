@@ -13,4 +13,9 @@ class ResTable extends Model
         return $this->belongsTo(Waiter::class, 'waiter_id');
     }
 
+    public function waiters()
+    {
+        return $this->hasMany(Waiter::class, 'res_table_id');
+    }
+
 }

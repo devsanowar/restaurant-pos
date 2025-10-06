@@ -289,14 +289,57 @@
                 </div>
             </li>
 
-
-            <!-- Reports-->
+            <!-- Report-->
             <li class="side-nav-item">
-                <a href="apps-reports.html" class="side-nav-link">
-                    <span class="menu-icon"><i class="ti ti-message"></i></span>
+                <a data-bs-toggle="collapse" href="#report" aria-expanded="false"
+                   aria-controls="report" class="side-nav-link">
+                    <span class="menu-icon"><i class="ti ti-report"></i></span>
                     <span class="menu-text"> Reports </span>
+                    <span class="menu-arrow"></span>
                 </a>
+                <div class="collapse" id="report">
+                    <ul class="sub-menu">
+
+                        <li class="side-nav-item">
+                            <a href="{{ route('admin.purchase.report') }}" class="side-nav-link">
+                                <span class="menu-text">Purchase Report</span>
+                            </a>
+                        </li>
+
+                        <li class="side-nav-item">
+                            <a href="{{ route('admin.stock.report') }}" class="side-nav-link">
+                                <span class="menu-text">Stock Report</span>
+                            </a>
+                        </li>
+
+                        <li class="side-nav-item">
+                            <a href="{{ route('admin.stockOut.report') }}" class="side-nav-link">
+                                <span class="menu-text">Stock Out Report</span>
+                            </a>
+                        </li>
+
+                        <li class="side-nav-item">
+                            <a href="{{ route('admin.sales.report') }}" class="side-nav-link">
+                                <span class="menu-text">Sales Report</span>
+                            </a>
+                        </li>
+
+                        <li class="side-nav-item">
+                            <a href="{{ route('admin.cost.report') }}" class="side-nav-link">
+                                <span class="menu-text">Costs Report</span>
+                            </a>
+                        </li>
+
+                        <li class="side-nav-item">
+                            <a href="{{ route('admin.others-income.report') }}" class="side-nav-link">
+                                <span class="menu-text">Others Income Report</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
             </li>
+
             <!-- Settings-->
             <li class="side-nav-item">
                 <a href="{{ route('admin.setting.index') }}" class="side-nav-link">
