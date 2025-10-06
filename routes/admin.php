@@ -29,6 +29,7 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\SalaryController;
 use App\Http\Controllers\Admin\PurchaseController;
 use App\Http\Controllers\Admin\StockOutController;
+use App\Http\Controllers\Admin\ReportController;
 
 Route::get('/', [App\Http\Controllers\Admin\AdminLoginPageController::class, 'index'])->name('admin.login');
 
@@ -269,5 +270,16 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
 
     // PDF download
     Route::get('orders/{order}/download', [OrderController::class, 'download'])->name('orders.download');
+
+    // Report Routes
+    Route::get('/purchase-report', [ReportController::class, 'purchase'])->name('purchase.report');
+    Route::get('/all-stock-report', [ReportController::class, 'stock'])->name('stock.report');
+    Route::get('/stock-out-report', [ReportController::class, 'stockOut'])->name('stockOut.report');
+    Route::get('/sales-report', [ReportController::class, 'sales'])->name('sales.report');
+    Route::get('/get-waiters/{table_id}', [WaiterController::class, 'getWaiters']);
+    Route::get('/cost-report', [ReportController::class, 'cost'])->name('cost.report');
+    Route::get('/get-fields/{categoryId}', [CostController::class, 'getFieldsByCategory']);
+    Route::get('/get-spenders/{fieldId}', [CostController::class, 'getSpendersByField']);
+    Route::get('/others-income-report', [ReportController::class, 'othersIncome'])->name('others-income.report');
 
 });

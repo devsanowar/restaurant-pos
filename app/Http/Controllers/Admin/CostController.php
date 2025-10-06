@@ -107,8 +107,6 @@ class CostController extends Controller
         return view('admin.layouts.pages.cost.recycle-bin', compact('costs', 'deletedCount'));
     }
 
-
-
     public function restoreData(Request $request)
     {
         $cost = Cost::onlyTrashed()->where('id', $request->id)->first();
